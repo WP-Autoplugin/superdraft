@@ -1,0 +1,100 @@
+/* Main container styling */
+div.form-field.term-suggest-wrap {
+	margin: 2em 0;
+	padding: 1em;
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* Header styling */
+.term-suggest-wrap h2 {
+	margin: 0 0 0.75em;
+	font-size: 1.3em;
+	font-weight: 600;
+	color: #1d2327;
+}
+
+/* Description text */
+.term-suggest-wrap p {
+	margin: 0 0 1.2em;
+	color: #50575e;
+	font-size: 13px;
+}
+
+/* Generate button styling */
+.term-suggest-wrap .button-secondary {
+	padding: 0.4em 1em;
+	height: auto;
+	font-size: 13px;
+	line-height: 1.4;
+	transition: all 0.2s ease;
+}
+
+.term-suggest-wrap .button-secondary:hover {
+	background: #f0f0f1;
+	border-color: #50575e;
+}
+
+/* Spinner alignment */
+.term-suggest-wrap .spinner {
+	float: none;
+	margin: 4px 0 0 10px;
+	vertical-align: middle;
+	opacity: 0;
+}
+
+.term-suggest-wrap .spinner.is-active {
+	opacity: 1;
+}
+
+/* Suggestions container */
+#superdraft-term-suggestions {
+	margin-top: 1.5em;
+	border: 1px solid #dcdcde;
+	border-radius: 3px;
+}
+
+/* Individual suggestion styling */
+.term-suggestion {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0.8em 1em;
+	border-bottom: 1px solid #dcdcde;
+	background: #f6f7f7;
+	transition: background 0.1s ease-in-out;
+}
+
+.term-suggestion span {
+	font-weight: bold;
+}
+
+.term-suggestion:hover {
+	background: #f0f0f1;
+}
+
+.term-suggestion:last-child {
+	border-bottom: none;
+}
+
+/* Add button styling */
+.term-suggestion .button-link {
+	color: #2271b1;
+	text-decoration: none;
+	cursor: pointer;
+	padding: 0.3em 0.5em;
+	font-size: 13px;
+	font-weight: 500;
+}
+
+.term-suggestion .button-link:hover {
+	color: #135e96;
+	text-decoration: underline;
+}
+
+/* Empty state styling */
+#superdraft-term-suggestions:empty {
+	display: none;
+}

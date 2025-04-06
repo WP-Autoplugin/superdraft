@@ -1,0 +1,211 @@
+/* Tab Navigation Styling */
+.tab-content {
+	padding: 20px;
+	background: #fff;
+	border: 1px solid #ccd0d4;
+	border-top: none;
+}
+
+.tab-content h3 {
+	margin-top: 0;
+}
+
+tr.superdraft-module-toggle-row:has(input:checked):first-child th,
+tr.superdraft-module-toggle-row:has(input:checked):first-child td {
+	border-bottom: 1px solid #ccd0d4;
+}
+
+tr.superdraft-module-toggle-row ~ tr {
+	visibility: collapse;
+}
+
+tr.superdraft-module-toggle-row:has(input:checked) ~ tr {
+	visibility: visible;
+}
+
+tr.superdraft-module-toggle-row.superdraft-smart-compose-enabled-row:has(input:not(:checked)) ~ tr {
+	visibility: collapse;
+}
+
+tr.superdraft-module-toggle-row.superdraft-smart-compose-enabled-row:has(input:checked) ~ tr {
+	visibility: visible;
+}
+
+/* Add a more specific selector to make sure the smart compose rows are hidden when the module is disabled */
+tr.superdraft-autocomplete-enabled-row:has(input:not(:checked)) ~ tr.superdraft-module-toggle-row.superdraft-smart-compose-enabled-row:has(input:checked) th,
+tr.superdraft-autocomplete-enabled-row:has(input:not(:checked)) ~ tr.superdraft-module-toggle-row.superdraft-smart-compose-enabled-row:has(input:checked) td {
+	border-bottom: none;
+}
+tr.superdraft-autocomplete-enabled-row:has(input:not(:checked)) ~ tr.superdraft-module-toggle-row.superdraft-smart-compose-enabled-row:has(input:checked) ~ tr {
+	visibility: collapse;
+}
+
+/* Custom Models Section Styling */
+#custom-models-list {
+	margin-bottom: 20px;
+}
+
+.custom-model-item {
+	background: #fff;
+	border: 1px solid #ccd0d4;
+	border-radius: 4px;
+	padding: 15px 15px 5px;
+	margin-bottom: 15px;
+	position: relative;
+}
+
+.custom-model-item strong {
+	font-size: 14px;
+	color: #1d2327;
+}
+
+.custom-model-item details {
+	margin: 10px 0;
+}
+
+.custom-model-item summary {
+	cursor: pointer;
+	color: #2271b1;
+	padding: 5px 0;
+}
+
+.custom-model-item summary:hover {
+	color: #135e96;
+}
+
+.custom-model-item p {
+	margin: 8px 0;
+	color: #50575e;
+}
+
+.custom-model-item .remove-model {
+	position: absolute;
+	right: 15px;
+	top: 12px;
+	color: #b32d2e;
+	border-color: #b32d2e;
+}
+
+.custom-model-item .remove-model:hover {
+	background: #b32d2e;
+	color: #fff;
+}
+
+/* Add Custom Model Form */
+#add-custom-model-form {
+	background: #f6f7f7;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	padding: 20px;
+	margin-bottom: 15px;
+}
+
+#add-custom-model-form input,
+#add-custom-model-form textarea {
+	margin-bottom: 15px;
+}
+
+#add-custom-model-form .button {
+	margin-top: 5px;
+}
+
+/* Description Text */
+.description {
+	color: #646970;
+	font-style: italic;
+	margin-top: 15px;
+}
+
+/* Input Focus States */
+#add-custom-model-form input:focus,
+#add-custom-model-form textarea:focus {
+	border-color: #2271b1;
+	box-shadow: 0 0 0 1px #2271b1;
+	outline: 2px solid transparent;
+}
+
+/* Nav Tab Wrapper */
+.nav-tab-wrapper {
+	border-bottom: 1px solid #c3c4c7;
+	padding-bottom: 0;
+	margin-bottom: 20px;
+	display: flex;
+	gap: 4px;
+}
+
+/* Individual Tabs */
+.nav-tab {
+	border: 1px solid #c3c4c7;
+	border-bottom: none;
+	padding: 8px 16px;
+	font-size: 14px;
+	line-height: 1.71428571;
+	font-weight: 500;
+	background: #f0f0f1;
+	color: #50575e;
+	text-decoration: none;
+	margin-left: 0;
+	margin-bottom: -1px;
+	position: relative;
+	border-radius: 4px 4px 0 0;
+}
+
+/* Hover State */
+.nav-tab:hover,
+.nav-tab:focus {
+	background-color: #fff;
+	color: #2271b1;
+	border-color: #c3c4c7;
+	outline: none;
+	box-shadow: none;
+}
+
+/* Active State */
+.nav-tab-active,
+.nav-tab-active:hover,
+.nav-tab-active:focus,
+.nav-tab-active:focus:active {
+	background: #fff;
+	color: #2271b1;
+	border-bottom: 2px solid #2271b1;
+	margin-bottom: -2px;
+}
+
+/* Focus State */
+.nav-tab:focus {
+	box-shadow: 0 0 0 1px #2271b1;
+	outline: 1px solid transparent;
+}
+
+/* Smaller Tabs */
+.nav-tab-small .nav-tab {
+	padding: 6px 14px;
+	font-size: 13px;
+}
+
+/* Remove float and add flex layout */
+@media screen and (min-width: 783px) {
+	.nav-tab-wrapper {
+		flex-wrap: wrap;
+	}
+
+	.nav-tab {
+		float: none;
+		display: inline-flex;
+		align-items: center;
+	}
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 782px) {
+	.nav-tab-wrapper {
+		flex-wrap: nowrap;
+		overflow-x: auto;
+		padding-bottom: 5px;
+	}
+
+	.nav-tab {
+		white-space: nowrap;
+		flex: 0 0 auto;
+	}
+}

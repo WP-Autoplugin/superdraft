@@ -1,0 +1,46 @@
+.editor-styles-wrapper .wp-block.ai-suggestion-loading {
+	position: relative;
+	overflow: hidden;
+}
+
+.editor-styles-wrapper .wp-block.ai-suggestion-loading::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(
+		90deg,
+		transparent,
+		rgba(255, 255, 255, 0.75),
+		transparent
+	);
+	animation: ai-suggestion-shine 1.5s infinite;
+}
+
+@keyframes ai-suggestion-shine {
+	0% {
+		transform: translateX(-100%);
+	}
+	100% {
+		transform: translateX(100%);
+	}
+}
+
+/* Smart Compose */
+.smart-compose-suggestion {
+	opacity: 0.6;
+  }
+
+.smart-compose-tooltip {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: #333;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    z-index: 100000;
+}

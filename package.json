@@ -1,0 +1,22 @@
+{
+  "name": "superdraft",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "wp-scripts start",
+    "build": "wp-scripts build",
+    "i18n": "wp i18n make-pot . ./languages/superdraft.pot --exclude=\"node_modules,vendor,src\" --domain=\"superdraft\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@wordpress/scripts": "^30.8.1"
+  },
+  "dependencies": {
+    "@wordpress/api-fetch": "^7.15.1",
+    "@wordpress/dom-ready": "^4.15.0",
+    "turndown": "^7.2.0"
+  }
+}

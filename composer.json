@@ -1,0 +1,20 @@
+{
+    "name": "wp-autoplugin/superdraft",
+    "description": "An AI-driven toolset for writers, enhancing your WordPress writing experience.",
+    "type": "wordpress-plugin",
+    "authors": [
+        {
+            "name": "Balazs Piller",
+            "email": "hello@wp-autoplugin.com"
+        }
+    ],
+    "require": {
+        "league/html-to-markdown": "^5.1",
+        "woocommerce/action-scheduler": "^3.9"
+    },
+    "autoload": {
+        "classmap": [
+            "includes/"
+        ]
+    }
+}

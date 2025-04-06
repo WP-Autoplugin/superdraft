@@ -1,0 +1,55 @@
+.superdraft-message-popup {
+	display: none;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background: #fff;
+	padding: 20px;
+	border-radius: 5px;
+	box-shadow: 0 0 10px rgba(0,0,0,0.3);
+	z-index: 100001;
+	max-width: 80%;
+	max-height: 80vh;
+	overflow-y: auto;
+}
+
+.superdraft-message-popup-overlay {
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0,0,0,0.5);
+	z-index: 100000;
+}
+
+.superdraft-message-popup-close {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	cursor: pointer;
+	font-size: 20px;
+	color: #666;
+}
+
+.superdraft-message-popup-content {
+	margin-top: 15px;
+	white-space: pre-wrap;
+	font-family: monospace;
+	line-height: 1.4;
+}
+
+.superdraft-message-popup-content .json-key {
+	color: #0451a5;
+	font-weight: bold;
+}
+
+.superdraft-message-popup-content .json-string {
+	color: #a31515;
+}
+
+.superdraft-message-popup-content .json-value {
+	color: #098658;
+}

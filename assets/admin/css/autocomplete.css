@@ -1,0 +1,24 @@
+.autocomplete-option-label .full-label {
+	display: none;
+}
+
+.autocomplete-option-label .truncated-label {
+	display: inline;
+}
+
+.is-selected .autocomplete-option-label .truncated-label {
+	display: none;
+}
+
+.is-selected .autocomplete-option-label .full-label {
+	display: inline;
+}
+
+.components-popover__content:has(.superdraft-autocompleter) {
+	width: 400px !important;
+	transform: translateY(100%);
+}
+
+.superdraft-autocompleter.is-selected {
+	white-space: normal;
+}

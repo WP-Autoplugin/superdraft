@@ -1,0 +1,89 @@
+/* Writing Tips Panel Styles */
+.superdraft-writing-tips-list {
+	margin: 16px 0;
+}
+
+.superdraft-writing-tip-item {
+	display: flex;
+	align-items: flex-start;
+	padding: 8px 0;
+	border-bottom: 1px solid #e0e0e0;
+	gap: 8px;
+}
+
+.superdraft-writing-tip-item:last-child {
+	border-bottom: none;
+}
+
+.superdraft-writing-tip-item span.superdraft-tip-text {
+	cursor: pointer;
+}
+
+/* Style for completed tips */
+.superdraft-writing-tip-item.completed span.superdraft-tip-text {
+	color: #646970;
+	text-decoration: line-through;
+}
+
+/* Checkbox styling */
+.superdraft-writing-tip-item .components-checkbox-control {
+	margin: 0;
+}
+
+.superdraft-writing-tip-item .components-checkbox-control__input {
+	margin-top: 3px;
+}
+
+/* Text content */
+.superdraft-writing-tip-item span {
+	flex: 1;
+	line-height: 1.4;
+	font-size: 13px;
+	color: #1e1e1e;
+	padding: 2px 0;
+}
+
+/* Button styling */
+.superdraft-writing-tip-item .components-button.has-icon {
+	min-width: 24px;
+	padding: 0;
+	height: 24px;
+	margin-left: 4px;
+}
+
+/* Edit state */
+.superdraft-writing-tip-item .components-text-control__input {
+	flex: 1;
+	min-height: 30px;
+	margin: -2px 0 0;
+}
+
+.superdraft-writing-tip-item .components-button.is-secondary {
+	height: 30px;
+	margin-left: 8px;
+}
+
+/* Empty state */
+.superdraft-writing-tips-panel p {
+	color: #646970;
+	font-style: italic;
+	margin: 8px 0;
+}
+
+/* Analyze button */
+.superdraft-writing-tips-panel .components-button.is-primary {
+	width: 100%;
+	justify-content: center;
+	margin-bottom: 0;
+}
+
+/* Make icons more visible on hover */
+.superdraft-writing-tip-edit:hover,
+.superdraft-writing-tip-delete:hover {
+	color: #135e96;
+}
+
+/* Delete icon specific styling */
+.superdraft-writing-tip-delete:hover {
+	color: #d63638;
+}

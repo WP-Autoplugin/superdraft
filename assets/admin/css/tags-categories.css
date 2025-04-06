@@ -1,0 +1,16 @@
+.superdraft-auto-select {
+	margin-top: 1em;
+	text-align: center;
+}
+
+.superdraft-auto-select button .dashicons {
+	margin-right: 8px;
+}
+
+.superdraft-auto-select-suggestions {
+	margin-top: 0.5em;
+}
+
+.superdraft-auto-select-suggestions ul {
+	margin-top: 0.5em;
+}

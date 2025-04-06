@@ -1,0 +1,6 @@
+/**
+ * Fix the menu icon. According to the WordPress.org plugin guidelines, this cannot be inlined.
+ */
+#toplevel_page_superdraft-settings .wp-menu-image {
+    background-size: 32px !important;
+}
