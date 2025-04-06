@@ -155,6 +155,8 @@ Override these by copying templates into your theme's `superdraft` directory, or
 
 Superdraft also comes with a number of filters and actions for advanced customization. For example, you can adjust request headers, customize prompt templates and variables, change intervals for bulk processes, and more.
 
+More information on these hooks can be found on the [GitHub](https://github.com/WP-Autoplugin/superdraft) page.
+
 == Requirements ==
 
 - WordPress 6.0 or higher
