@@ -1,0 +1,65 @@
+# .github/workflows/deploy.yml
+name: Deploy to WordPress.org
+
+on:
+  push:
+    tags:
+      - 'v*'  # triggers on tags like v1.2.3
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout GitHub repository
+        uses: actions/checkout@v4
+
+      - name: Extract version from tag
+        id: get_version
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+
+      - name: Install Subversion
+        run: sudo apt-get update && sudo apt-get install -y subversion
+
+      - name: Checkout WordPress.org SVN repo
+        run: |
+          svn checkout https://plugins.svn.wordpress.org/superdraft/ svn \
+            --username "${{ secrets.SVN_USERNAME }}" \
+            --password "${{ secrets.SVN_PASSWORD }}" \
+            --non-interactive --trust-server-cert
+
+      - name: Sync trunk (exclude src folder)
+        run: |
+          # Sync everything except the src folder
+          rsync -avz --delete --exclude 'src' . svn/trunk/
+          # Add any new files to SVN
+          svn add --force svn/trunk --auto-props --parents --depth infinity -q
+
+      - name: Sync assets to SVN root
+        run: |
+          # Sync assets folder to the SVN root assets folder
+          rsync -avz --delete assets/ svn/assets/
+          svn add --force svn/assets --auto-props --parents --depth infinity -q
+
+      - name: Show SVN status
+        run: svn status svn
+
+      - name: Commit changes to trunk (and assets)
+        run: |
+          cd svn
+          svn commit -m "Deploy version ${RELEASE_VERSION}" \
+            --username "${{ secrets.SVN_USERNAME }}" \
+            --password "${{ secrets.SVN_PASSWORD }}" \
+            --non-interactive --trust-server-cert
+
+      - name: Create SVN tag for the release
+        run: |
+          cd svn
+          svn copy trunk tags/${RELEASE_VERSION} \
+            --username "${{ secrets.SVN_USERNAME }}" \
+            --password "${{ secrets.SVN_PASSWORD }}" \
+            --non-interactive --trust-server-cert
+          svn commit -m "Tag version ${RELEASE_VERSION}" \
+            --username "${{ secrets.SVN_USERNAME }}" \
+            --password "${{ secrets.SVN_PASSWORD }}" \
+            --non-interactive --trust-server-cert
