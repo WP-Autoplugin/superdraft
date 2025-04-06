@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Superdraft
  * Description: A powerful AI-driven toolset that enhances your WordPress experience with smart automation, intelligent recommendations, and predictive features.
- * Version: 1.0.2
+ * Version: 1.0.3
  * Author: Balázs Piller
  * Author URI: https://wp-autoplugin.com
  * Text Domain: superdraft
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Define constants.
-define( 'SUPERDRAFT_VERSION', '1.0.2' );
+define( 'SUPERDRAFT_VERSION', '1.0.3' );
 define( 'SUPERDRAFT_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SUPERDRAFT_URL', plugin_dir_url( __FILE__ ) );
 
