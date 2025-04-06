@@ -28,10 +28,10 @@ jobs:
             --password "${{ secrets.SVN_PASSWORD }}" \
             --non-interactive --trust-server-cert
 
-      - name: Sync trunk (exclude src folder)
+      - name: Sync trunk (exclude src and SVN folders)
         run: |
-          # Sync everything except the src folder
-          rsync -avz --delete --exclude 'src' . svn/trunk/
+          # Sync everything except the src, .github, .git, and svn directories
+          rsync -avz --delete --exclude 'src' --exclude 'svn' --exclude '.github' --exclude '.git*' . svn/trunk/
           # Add any new files to SVN
           svn add --force svn/trunk --auto-props --parents --depth infinity -q
 

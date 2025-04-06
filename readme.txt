@@ -4,7 +4,7 @@ Contributors: pbalazs
 Tags: ai, openai, autocomplete, automation, writing
 Requires at least: 6.0
 Tested up to: 6.7
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: [https://www.gnu.org/licenses/gpl-3.0.html](https://www.gnu.org/licenses/gpl-3.0.html)
@@ -173,6 +173,6 @@ GPL-3.0 or later – [https://www.gnu.org/licenses/gpl-3.0.html](https://www.gnu
 
 == Changelog ==
 
-= 1.0.0 =
+= 1.0.1 =
 
 - Initial public release with full AI toolkit integration
