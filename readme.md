@@ -1,6 +1,6 @@
 # Superdraft AI Toolkit for WordPress
 
-Superdraft AI Toolkit is a free WordPress plugin that enhances your content creation workflow with AI-powered tools. It seamlessly integrates into the WordPress interface to provide intelligent content suggestions, writing assistance, and automated content organization features.
+Superdraft is a free WordPress plugin that enhances your content creation workflow with AI-powered tools. It seamlessly integrates into the WordPress interface to provide intelligent content suggestions, writing assistance, and automated content organization features.
 
 - AI-powered writing assistance and recommendations
 - Intelligent tag and category management
@@ -276,4 +276,4 @@ Contributions are welcome! Please feel free to submit issues or pull requests.
 
 ## License
 
-Superdraft AI Toolkit is licensed under the GPL-3.0 License.
+Superdraft is licensed under the GPL-3.0 License.

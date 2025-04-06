@@ -1,0 +1,10 @@
+src/
+.github/
+.gitignore
+composer.*
+phpcs.xml
+webpack.config.js
+readme.md
+package.json
+package-lock.json
+node_modules/
