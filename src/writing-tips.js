@@ -34,7 +34,8 @@ const WritingTipsPanel = () => {
 			return __('Analyze Now', 'superdraft');
 		}
 		return sprintf(
-			__('Update Checklist (%s/%s)', 'superdraft'),
+			// Translators: %1$s: completed count, %2$s: total count.
+			__('Update Checklist (%1$s/%2$s)', 'superdraft'),
 			completedCount,
 			totalCount
 		);

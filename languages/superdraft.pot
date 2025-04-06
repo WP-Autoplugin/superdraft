@@ -1,15 +1,15 @@
 # Copyright (C) 2025 Balázs Piller
-# This file is distributed under the GPL-2.0+.
+# This file is distributed under the GPL-3.0.
 msgid ""
 msgstr ""
-"Project-Id-Version: Superdraft 1.0.0\n"
+"Project-Id-Version: Superdraft 1.0.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/superdraft\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-02-23T03:23:17+00:00\n"
+"POT-Creation-Date: 2025-04-06T23:34:41+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: superdraft\n"
@@ -35,7 +35,7 @@ msgid "https://wp-autoplugin.com"
 msgstr ""
 
 #: includes/admin/class-admin.php:78
-#: includes/admin/class-admin.php:103
+#: includes/admin/class-admin.php:104
 msgid "Superdraft API Logs"
 msgstr ""
 
@@ -44,88 +44,97 @@ msgid "API Logs"
 msgstr ""
 
 #: includes/admin/class-admin.php:88
-#: includes/admin/class-admin.php:287
+#: includes/admin/class-admin.php:284
 msgid "Settings"
 msgstr ""
 
-#: includes/admin/class-admin.php:108
+#: includes/admin/class-admin.php:110
 msgid "Search Logs"
 msgstr ""
 
-#: includes/admin/class-admin.php:129
+#: includes/admin/class-admin.php:131
 msgid "Superdraft plugin settings"
 msgstr ""
 
-#: includes/admin/class-admin.php:142
+#: includes/admin/class-admin.php:144
 msgid "Superdraft API keys"
 msgstr ""
 
-#: includes/admin/class-admin.php:252
+#: includes/admin/class-admin.php:249
 msgid "Details"
 msgstr ""
 
-#: includes/admin/class-admin.php:253
+#: includes/admin/class-admin.php:250
 msgid "URL"
 msgstr ""
 
-#: includes/admin/class-admin.php:254
+#: includes/admin/class-admin.php:251
 msgid "Model Parameter"
 msgstr ""
 
-#: includes/admin/class-admin.php:255
+#: includes/admin/class-admin.php:252
 #: views/api-setup.php:45
 msgid "API Key"
 msgstr ""
 
-#: includes/admin/class-admin.php:256
+#: includes/admin/class-admin.php:253
 msgid "Headers"
 msgstr ""
 
-#: includes/admin/class-admin.php:257
+#: includes/admin/class-admin.php:254
 msgid "Remove"
 msgstr ""
 
-#: includes/admin/class-admin.php:258
+#: includes/admin/class-admin.php:255
 msgid "Please fill out all required fields."
 msgstr ""
 
-#: includes/admin/class-admin.php:259
+#: includes/admin/class-admin.php:256
 msgid "Are you sure you want to remove this model?"
 msgstr ""
 
-#: includes/admin/class-admin.php:260
+#: includes/admin/class-admin.php:257
 msgid "Error saving model"
 msgstr ""
 
-#: includes/admin/class-admin.php:302
+#: includes/admin/class-admin.php:318
+#: includes/admin/class-admin.php:356
+msgid "You do not have permission to do this."
+msgstr ""
+
+#: includes/admin/class-admin.php:324
 msgid "Invalid model data."
 msgstr ""
 
-#: includes/admin/class-admin.php:328
+#: includes/admin/class-admin.php:342
 msgid "Custom model added successfully."
 msgstr ""
 
-#: includes/admin/class-admin.php:343
+#: includes/admin/class-admin.php:362
 msgid "Invalid model index."
 msgstr ""
 
-#: includes/admin/class-admin.php:349
+#: includes/admin/class-admin.php:368
 msgid "Model not found."
 msgstr ""
 
-#: includes/admin/class-admin.php:364
+#: includes/admin/class-admin.php:383
 msgid "Custom model removed successfully."
 msgstr ""
 
-#: includes/admin/class-admin.php:491
+#: includes/admin/class-admin.php:521
 #: views/api-setup.php:34
 msgid "Custom Models"
 msgstr ""
 
-#: includes/admin/class-autocomplete.php:192
-#: includes/admin/class-tags-categories.php:419
+#: includes/admin/class-autocomplete.php:257
 #: includes/admin/class-writing-tips.php:160
 msgid "Invalid response format from API"
+msgstr ""
+
+#: includes/admin/class-autocomplete.php:342
+#: includes/api/class-custom-api.php:142
+msgid "Error communicating with the API."
 msgstr ""
 
 #: includes/admin/class-logs-list-table.php:45
@@ -156,6 +165,10 @@ msgstr ""
 msgid "Message"
 msgstr ""
 
+#: includes/admin/class-logs-list-table.php:106
+msgid "N/A"
+msgstr ""
+
 #: includes/admin/class-logs-list-table.php:111
 msgid "View Message"
 msgstr ""
@@ -176,51 +189,49 @@ msgstr ""
 msgid "Auto-select Tags"
 msgstr ""
 
-#: includes/admin/class-tags-categories.php:380
-msgid "Prompt template for taxonomy auto-select is not defined"
+#: includes/admin/class-tags-categories.php:392
+msgid "Invalid response format from API or no terms selected"
 msgstr ""
 
 #. translators: %s is the taxonomy name.
-#: includes/admin/class-tags-categories.php:472
+#: includes/admin/class-tags-categories.php:442
 msgid "Superdraft is processing auto-select for posts (%s)"
 msgstr ""
 
-#: includes/admin/class-tags-categories.php:473
-#: assets/admin/js/dist/tags-categories.js:5321
-#: assets/admin/js/dist/tags-categories.js:5169
+#: includes/admin/class-tags-categories.php:443
+#: assets/admin/js/dist/tags-categories.js:1
 msgid "Categories"
 msgstr ""
 
-#: includes/admin/class-tags-categories.php:473
-#: assets/admin/js/dist/tags-categories.js:5321
-#: assets/admin/js/dist/tags-categories.js:5169
+#: includes/admin/class-tags-categories.php:443
+#: assets/admin/js/dist/tags-categories.js:1
 msgid "Tags"
 msgstr ""
 
 #. translators: %1$d is the number of posts processed, %2$d is the total number of posts, %3$d is the percentage.
-#: includes/admin/class-tags-categories.php:483
+#: includes/admin/class-tags-categories.php:453
 msgid "Progress: %1$d of %2$d posts processed (%3$d%%)"
 msgstr ""
 
 #. translators: %s is the time remaining.
-#: includes/admin/class-tags-categories.php:493
+#: includes/admin/class-tags-categories.php:463
 msgid "Estimated completion in %s"
 msgstr ""
 
-#: includes/admin/class-tags-categories.php:502
+#: includes/admin/class-tags-categories.php:472
 msgid "Cancel Process"
 msgstr ""
 
 #. translators: %s: Taxonomy name
-#: includes/admin/class-tags-categories.php:553
+#: includes/admin/class-tags-categories.php:523
 msgid "Suggest New %s"
 msgstr ""
 
-#: includes/admin/class-tags-categories.php:556
+#: includes/admin/class-tags-categories.php:526
 msgid "AI-powered suggestions for new terms based on your content."
 msgstr ""
 
-#: includes/admin/class-tags-categories.php:558
+#: includes/admin/class-tags-categories.php:528
 msgid "Generate Suggestions"
 msgstr ""
 
@@ -230,10 +241,6 @@ msgstr ""
 
 #: includes/api/class-anthropic-api.php:176
 msgid "Error communicating with the Anthropic API."
-msgstr ""
-
-#: includes/api/class-custom-api.php:142
-msgid "Error communicating with the API."
 msgstr ""
 
 #: includes/api/class-google-gemini-api.php:154
@@ -284,240 +291,266 @@ msgstr ""
 msgid "Add any custom models you want to use with Superdraft. These models will be available in the model selection dropdown. The API must be compatible with the OpenAI API."
 msgstr ""
 
-#: views/page-settings.php:17
+#: views/page-settings.php:18
 msgid "Superdraft Settings"
 msgstr ""
 
-#: views/page-settings.php:20
-#: views/page-settings.php:47
+#: views/page-settings.php:22
+#: views/page-settings.php:49
 msgid "Auto Tags & Categories"
 msgstr ""
 
-#: views/page-settings.php:21
-#: assets/admin/js/dist/writing-tips.js:5472
-#: assets/admin/js/dist/writing-tips.js:5318
+#: views/page-settings.php:23
+#: assets/admin/js/dist/writing-tips.js:1
 msgid "Writing Tips"
 msgstr ""
 
-#: views/page-settings.php:22
+#: views/page-settings.php:24
 msgid "Autocomplete"
 msgstr ""
 
-#: views/page-settings.php:23
-#: views/page-settings.php:230
+#: views/page-settings.php:25
+#: views/page-settings.php:292
 msgid "API Setup"
 msgstr ""
 
-#: views/page-settings.php:48
+#: views/page-settings.php:50
 msgid "Suggest new tags and categories based on your content, and automatically choose the right tags and categories for your posts. Also works in bulk edit mode."
 msgstr ""
 
-#: views/page-settings.php:51
+#: views/page-settings.php:53
 msgid "Enable Auto Tags & Categories"
 msgstr ""
 
-#: views/page-settings.php:55
+#: views/page-settings.php:57
 msgid "Automatically categorize and tag posts using AI"
 msgstr ""
 
-#: views/page-settings.php:59
+#: views/page-settings.php:61
 msgid "Never Deselect Terms"
 msgstr ""
 
-#: views/page-settings.php:64
+#: views/page-settings.php:66
 msgid "When this option is enabled, the AI will never deselect terms that are already selected for a post, only suggest new ones"
 msgstr ""
 
-#: views/page-settings.php:68
+#: views/page-settings.php:70
 msgid "New Term Suggestions"
 msgstr ""
 
-#: views/page-settings.php:73
+#: views/page-settings.php:75
 msgid "Minimum number of terms to suggest when creating new tags/categories. Default: 3"
 msgstr ""
 
-#: views/page-settings.php:77
+#: views/page-settings.php:79
 msgid "Context for Suggestions"
 msgstr ""
 
-#: views/page-settings.php:82
+#: views/page-settings.php:84
 msgid "Number of post excerpts to use as context for generating suggestions. Default: 20"
 msgstr ""
 
-#: views/page-settings.php:86
-#: views/page-settings.php:130
-#: views/page-settings.php:219
+#: views/page-settings.php:88
+#: views/page-settings.php:146
+#: views/page-settings.php:236
 msgid "Select AI Model"
 msgstr ""
 
-#: views/page-settings.php:97
+#: views/page-settings.php:113
 msgid "AI Writing Tips"
 msgstr ""
 
-#: views/page-settings.php:98
+#: views/page-settings.php:114
 msgid "Get writing, SEO, and readability tips while editing your posts."
 msgstr ""
 
-#: views/page-settings.php:101
+#: views/page-settings.php:117
 msgid "Enable AI Writing Tips"
 msgstr ""
 
-#: views/page-settings.php:106
+#: views/page-settings.php:122
 msgid "Provide tips while editing"
 msgstr ""
 
-#: views/page-settings.php:110
+#: views/page-settings.php:126
 msgid "Minimum Tips"
 msgstr ""
 
-#: views/page-settings.php:116
+#: views/page-settings.php:132
 msgid "Minimum number of tips to generate. The AI may add more if needed."
 msgstr ""
 
-#: views/page-settings.php:120
+#: views/page-settings.php:136
 msgid "Auto-update Interval"
 msgstr ""
 
-#: views/page-settings.php:126
+#: views/page-settings.php:142
 msgid "Automatically update tips every X minutes while editing (only if content changes). Set to 0 to disable and update manually."
 msgstr ""
 
-#: views/page-settings.php:141
+#: views/page-settings.php:157
 msgid "Autocomplete for Post Contents"
 msgstr ""
 
-#: views/page-settings.php:142
+#: views/page-settings.php:158
 msgid "Get AI-powered autocomplete suggestions while writing your posts. Type the trigger prefix to see suggestions and continue typing a word to influence the suggestions."
 msgstr ""
 
-#: views/page-settings.php:145
+#: views/page-settings.php:161
 msgid "Enable AI Autocomplete"
 msgstr ""
 
-#: views/page-settings.php:150
+#: views/page-settings.php:166
 msgid "Provide autocomplete suggestions while writing content"
 msgstr ""
 
-#: views/page-settings.php:154
+#: views/page-settings.php:170
 msgid "Trigger Prefix"
 msgstr ""
 
-#: views/page-settings.php:160
+#: views/page-settings.php:176
 msgid "Character(s) that trigger autocomplete suggestions. Default: ~"
 msgstr ""
 
-#: views/page-settings.php:164
+#: views/page-settings.php:180
 msgid "Empty Search Suggestions"
 msgstr ""
 
-#: views/page-settings.php:171
+#: views/page-settings.php:187
 msgid "Show suggestions when only the trigger prefix is typed"
 msgstr ""
 
-#: views/page-settings.php:173
+#: views/page-settings.php:189
 msgid "When disabled, suggestions will only show when typing one or more characters after the trigger prefix."
 msgstr ""
 
-#: views/page-settings.php:177
+#: views/page-settings.php:193
 msgid "Number of Suggestions"
 msgstr ""
 
-#: views/page-settings.php:183
+#: views/page-settings.php:199
 msgid "Number of suggestions to show (1-10). Default: 3"
 msgstr ""
 
-#: views/page-settings.php:187
+#: views/page-settings.php:203
 msgid "Context Length"
 msgstr ""
 
-#: views/page-settings.php:193
+#: views/page-settings.php:209
 msgid "Small (2 blocks)"
 msgstr ""
 
-#: views/page-settings.php:198
+#: views/page-settings.php:214
 msgid "Large (6 blocks)"
 msgstr ""
 
-#: views/page-settings.php:203
+#: views/page-settings.php:219
 msgid "Full Post"
 msgstr ""
 
-#: views/page-settings.php:209
+#: views/page-settings.php:222
+msgid "Amount of text to use as context for generating suggestions."
+msgstr ""
+
+#: views/page-settings.php:226
 msgid "Debounce Delay"
 msgstr ""
 
-#: views/page-settings.php:215
+#: views/page-settings.php:232
 msgid "Delay in milliseconds before showing suggestions. Default: 500"
 msgstr ""
 
-#: assets/admin/js/dist/tags-categories.js:5332
-#: assets/admin/js/dist/tags-categories.js:5182
+#: views/page-settings.php:245
+msgid "Smart Compose"
+msgstr ""
+
+#: views/page-settings.php:248
+msgid "Smart Compose Settings"
+msgstr ""
+
+#: views/page-settings.php:254
+msgid "Enable Smart Compose (beta)"
+msgstr ""
+
+#: views/page-settings.php:256
+msgid "Provides real-time suggestions as you type in paragraph blocks."
+msgstr ""
+
+#: views/page-settings.php:261
+msgid "Smart Compose Model"
+msgstr ""
+
+#: views/page-settings.php:269
+msgid "Smart Compose Delay"
+msgstr ""
+
+#: views/page-settings.php:275
+msgid "Delay in milliseconds before showing Smart Compose suggestions. Default: 1500"
+msgstr ""
+
+#: views/page-settings.php:279
+msgid "Smart Compose Max Tokens"
+msgstr ""
+
+#: views/page-settings.php:285
+msgid "Maximum number of tokens to generate for Smart Compose suggestions. One token is generally one word or a few characters in English. Default: 10"
+msgstr ""
+
+#: assets/admin/js/dist/tags-categories.js:1
 msgid "No matching terms found."
 msgstr ""
 
 #. translators: %1$d: number of terms, %2$s: comma-separated list of term names
-#: assets/admin/js/dist/tags-categories.js:5351
-#: assets/admin/js/dist/tags-categories.js:5212
+#: assets/admin/js/dist/tags-categories.js:2
 msgid "Selected %1$d terms: %2$s"
 msgstr ""
 
 #. translators: %1$d: number of terms, %2$s: comma-separated list of term names
-#: assets/admin/js/dist/tags-categories.js:5352
-#: assets/admin/js/dist/tags-categories.js:5220
+#: assets/admin/js/dist/tags-categories.js:3
 msgid "Deselected %1$d terms: %2$s"
 msgstr ""
 
-#: assets/admin/js/dist/tags-categories.js:5362
-#: assets/admin/js/dist/tags-categories.js:5233
+#: assets/admin/js/dist/tags-categories.js:3
 msgid "Failed to auto-select terms."
 msgstr ""
 
-#: assets/admin/js/dist/tags-categories.js:5377
-#: assets/admin/js/dist/tags-categories.js:5249
+#: assets/admin/js/dist/tags-categories.js:3
 msgid "AI Auto-select"
 msgstr ""
 
-#: assets/admin/js/dist/writing-tips.js:5319
-#: assets/admin/js/dist/writing-tips.js:5159
-msgid "Analyze Now"
-msgstr ""
-
-#: assets/admin/js/dist/writing-tips.js:5321
-#: assets/admin/js/dist/writing-tips.js:5162
-msgid "Update Checklist (%s/%s)"
-msgstr ""
-
-#: assets/admin/js/dist/writing-tips.js:5480
-#: assets/admin/js/dist/writing-tips.js:5329
+#: assets/admin/js/dist/writing-tips.js:1
 msgid "Analyzing..."
 msgstr ""
 
-#: assets/admin/js/dist/writing-tips.js:5484
-#: assets/admin/js/dist/writing-tips.js:5336
+#: assets/admin/js/dist/writing-tips.js:1
+msgid "Analyze Now"
+msgstr ""
+
+#. Translators: %1$s: completed count, %2$s: total count.
+#: assets/admin/js/dist/writing-tips.js:4
+msgid "Update Checklist (%1$s/%2$s)"
+msgstr ""
+
+#: assets/admin/js/dist/writing-tips.js:4
 msgid "No tips yet."
 msgstr ""
 
-#: assets/admin/js/dist/writing-tips.js:5511
-#: assets/admin/js/dist/writing-tips.js:5371
+#: assets/admin/js/dist/writing-tips.js:4
 msgid "Save"
 msgstr ""
 
-#: assets/admin/js/dist/writing-tips.js:5520
-#: assets/admin/js/dist/writing-tips.js:5384
+#: assets/admin/js/dist/writing-tips.js:4
 msgid "Edit tip"
 msgstr ""
 
-#: assets/admin/js/dist/writing-tips.js:5529
-#: assets/admin/js/dist/writing-tips.js:5395
+#: assets/admin/js/dist/writing-tips.js:4
 msgid "Delete tip"
 msgstr ""
 
-#: assets/admin/js/dist/writing-tips.js:5542
-#: assets/admin/js/dist/writing-tips.js:5408
+#: assets/admin/js/dist/writing-tips.js:4
 msgid "Add a new item..."
 msgstr ""
 
-#: assets/admin/js/dist/writing-tips.js:5550
-#: assets/admin/js/dist/writing-tips.js:5416
+#: assets/admin/js/dist/writing-tips.js:4
 msgid "Add Item"
 msgstr ""
