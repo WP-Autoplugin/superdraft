@@ -39,6 +39,7 @@ register_activation_hook( __FILE__, [ 'Superdraft\Admin', 'set_default_options' 
  * Initialize the plugin.
  */
 function superdraft_init() {
+	load_plugin_textdomain( 'superdraft', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 	$admin = new Superdraft\Admin();
 }
 add_action( 'plugins_loaded', 'superdraft_init' );
