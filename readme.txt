@@ -4,7 +4,7 @@ Contributors: pbalazs
 Tags: ai, openai, autocomplete, automation, writing
 Requires at least: 6.0
 Tested up to: 6.7
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: [https://www.gnu.org/licenses/gpl-3.0.html](https://www.gnu.org/licenses/gpl-3.0.html)
@@ -172,6 +172,10 @@ Contributions are welcome via [GitHub](https://github.com/WP-Autoplugin/superdra
 GPL-3.0 or later – [https://www.gnu.org/licenses/gpl-3.0.html](https://www.gnu.org/licenses/gpl-3.0.html)
 
 == Changelog ==
+
+= 1.0.2 =
+
+- Fixed and updated translations
 
 = 1.0.1 =
 
