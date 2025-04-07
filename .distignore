@@ -1,6 +1,8 @@
 src/
 .github/
 .gitignore
+.git/
+svn/
 composer.*
 phpcs.xml
 webpack.config.js

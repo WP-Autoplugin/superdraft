@@ -29,10 +29,20 @@ jobs:
             --non-interactive --trust-server-cert
 
       - name: Sync trunk using .distignore
+        shell: bash
         run: |
           # Convert .distignore to rsync exclude args
           EXCLUDES=$(cat .distignore | sed 's/^/--exclude=/' | xargs)
-          rsync -avz --delete $EXCLUDES ./ svn/trunk/ || [[ $? == 24 ]]
+          
+          # Run rsync and allow exit code 24 (vanished files)
+          rsync -avz --delete $EXCLUDES ./ svn/trunk/
+          STATUS=$?
+          if [ "$STATUS" != "0" ] && [ "$STATUS" != "24" ]; then
+            echo "rsync failed with exit code $STATUS"
+            exit $STATUS
+          fi
+
+          # Add files to SVN
           svn add --force svn/trunk --auto-props --parents --depth infinity -q
 
       - name: Sync assets to SVN root
