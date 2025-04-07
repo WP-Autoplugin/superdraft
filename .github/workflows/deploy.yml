@@ -32,7 +32,7 @@ jobs:
         run: |
           # Convert .distignore to rsync exclude args
           EXCLUDES=$(cat .distignore | sed 's/^/--exclude=/' | xargs)
-          rsync -avz --delete $EXCLUDES ./ svn/trunk/
+          rsync -avz --delete $EXCLUDES ./ svn/trunk/ || [[ $? == 24 ]]
           svn add --force svn/trunk --auto-props --parents --depth infinity -q
 
       - name: Sync assets to SVN root
