@@ -417,6 +417,7 @@ class Admin {
 				'claude-3-haiku-20240307'    => 'Claude 3 Haiku-20240307',
 			],
 			'Google'    => [
+				'gemini-2.5-pro-exp-03-25'            => 'Gemini 2.5 Pro Experimental 03-25',
 				'gemini-2.0-pro-exp-02-05'            => 'Gemini 2.0 Pro Experimental 02-05',
 				'gemini-2.0-flash-thinking-exp'       => 'Gemini 2.0 Flash Thinking Experimental',
 				'gemini-2.0-flash-exp'                => 'Gemini 2.0 Flash Experimental',
@@ -428,19 +429,27 @@ class Admin {
 				'gemini-1.0-pro'                      => 'Gemini 1.0 Pro',
 			],
 			'xAI'       => [
-				'grok-2'                => 'Grok 2',
-				'grok-beta'             => 'Grok Beta',
-				'grok-2-1212'           => 'Grok 2-1212',
+				'grok-2'      => 'Grok 2',
+				'grok-beta'   => 'Grok Beta',
+				'grok-2-1212' => 'Grok 2-1212',
 			],
 		];
 
 		$custom_models = get_option( 'superdraft_custom_models', [] );
-		$group_label   = 'Custom Models'; // This is mapped to a translation later.
+		$group_label   = 'Custom Models'; // Note: this is mapped to a translation later.
 		if ( is_array( $custom_models ) && ! empty( $custom_models ) ) {
 			foreach ( $custom_models as $model ) {
 				self::$models[ $group_label ][ $model['name'] ] = $model['name'];
 			}
 		}
+
+		/**
+		 * Filter the models.
+		 *
+		 * @since 1.0.5
+		 * @param array $models The models.
+		 */
+		self::$models = apply_filters( 'superdraft_models', self::$models );
 
 		return self::$models;
 	}

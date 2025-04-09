@@ -256,6 +256,13 @@ $action (string) – The name of the bulk action being processed.
 $post_ids (array) – An array of post IDs involved in the bulk process.
 ```
 
+* `superdraft_models`
+Filter the list of available AI models, allowing you to add or modify the models that can be used with the plugin.
+Parameters:
+```
+$models (array) – The list of available AI models.
+```
+
 #### Action Hooks
 
 * `superdraft_bulk_process_completed`
@@ -273,6 +280,10 @@ Superdraft supports custom models: you can plug in any OpenAI-compatible API by 
 ## Contributing
 
 Contributions are welcome! Please feel free to submit issues or pull requests.
+
+### JS Build Process
+
+The JavaScript source files (located in the `src/` folder) are processed using Webpack. The build process starts from the entry points defined in `webpack.config.js` (e.g., `autocomplete.js`, `smartcompose.js`, etc.). This configuration is based on the default settings provided by the `@wordpress/scripts` package. A small adjustment is made to remove the Dependency Extraction plugin, ensuring that external dependencies (like various WordPress packages) remain external. The bundled, production-ready files are output to `/assets/admin/js/dist`, ready for use by the plugin.
 
 ## License
 

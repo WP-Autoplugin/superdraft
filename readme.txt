@@ -76,9 +76,7 @@ Extensive hooks (filters/actions) are provided for advanced customization:
 - Customize prompt templates and variables
 - Change intervals for bulk processes and more
 
-### JS Build Process (Technical)
-
-The JavaScript source files (located in the `src/` folder) are processed using Webpack. The build process starts from the entry points defined in `webpack.config.js` (e.g., `autocomplete.js`, `smartcompose.js`, etc.). This configuration is based on the default settings provided by the `@wordpress/scripts` package. A small adjustment is made to remove the Dependency Extraction plugin, ensuring that external dependencies (like various WordPress packages) remain external. The bundled, production-ready files are output to `/assets/admin/js/dist`, ready for use by the plugin.
+More information on these hooks can be found on the [GitHub](https://github.com/WP-Autoplugin/superdraft) page.
 
 == External Services ==
 
@@ -114,6 +112,10 @@ Superdraft offers the flexibility to set up custom API connections beyond the st
 
 **API Logging and Monitoring**  
 All API interactions are logged and accessible directly from your WordPress dashboard. This transparent logging system allows you to monitor exactly what content is being sent, to which endpoints, and when these transmissions occur. These comprehensive logs provide peace of mind and help troubleshoot any issues that may arise during operation.
+
+### JS Build Process (Technical)
+
+The plugin uses a custom Webpack configuration to bundle and minify JavaScript files. Please see [the GitHub page](https://github.com/WP-Autoplugin/superdraft) for details on the JS build process, and the source files used to create the final build. 
 
 == Installation ==
 
@@ -154,8 +156,6 @@ Superdraft provides extensive customization opportunities via prompt templates s
 Override these by copying templates into your theme's `superdraft` directory, or via provided hooks.
 
 Superdraft also comes with a number of filters and actions for advanced customization. For example, you can adjust request headers, customize prompt templates and variables, change intervals for bulk processes, and more.
-
-More information on these hooks can be found on the [GitHub](https://github.com/WP-Autoplugin/superdraft) page.
 
 == Requirements ==
 
