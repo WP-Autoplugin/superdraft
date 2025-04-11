@@ -10,7 +10,8 @@
     Button,
     TextareaControl,
     Panel,
-    PanelBody
+    PanelBody,
+    Spinner
   } = wp.components;
   const {
     useState
@@ -30,10 +31,37 @@
   // Higher order component to add our AI functionality to the Featured Image panel
   const withImageGeneration = createHigherOrderComponent(OriginalComponent => {
     return props => {
+      // Move isProcessing state up to be accessible for the overlay
+      const [isProcessing, setIsProcessing] = useState(false);
+
+      // Featured image overlay component that shows during processing
+      const FeaturedImageOverlay = () => {
+        if (!isProcessing) return null;
+        return wp.element.createElement('div', {
+          className: 'superdraft-image-processing-overlay',
+          style: {
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(255, 255, 255, 0.7)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 100
+          }
+        }, wp.element.createElement(Spinner), wp.element.createElement('p', {
+          style: {
+            marginTop: '10px'
+          }
+        }, __('Processing image...', 'superdraft')));
+      };
+
       // Our custom component to add after the original Featured Image component
       const ImageGenerationControls = () => {
         const [prompt, setPrompt] = useState('');
-        const [isProcessing, setIsProcessing] = useState(false);
         const [mode, setMode] = useState(null); // null, 'generate' or 'edit'
         const postId = select('core/editor').getEditedPostAttribute('id');
         const featuredImageId = select('core/editor').getEditedPostAttribute('featured_media');
@@ -126,7 +154,12 @@
       };
 
       // Render the original component followed by our custom controls
-      return wp.element.createElement(wp.element.Fragment, {}, wp.element.createElement(OriginalComponent, props), wp.element.createElement(ImageGenerationControls, null));
+      return wp.element.createElement(wp.element.Fragment, {}, wp.element.createElement('div', {
+        className: 'superdraft-featured-image-wrapper',
+        style: {
+          position: 'relative'
+        }
+      }, wp.element.createElement(OriginalComponent, props), wp.element.createElement(FeaturedImageOverlay)), wp.element.createElement(ImageGenerationControls, null));
     };
   }, 'withImageGeneration');
 
