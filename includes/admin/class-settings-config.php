@@ -119,8 +119,19 @@ class Settings_Config {
 				],
 				'smart_compose_max_tokens' => [
 					'type'     => 'integer',
-					'default'  => 10,
+					'default'  => 100,
 					'sanitize' => 'absint',
+				],
+			],
+			'images' => [
+				'enabled'    => [
+					'type'    => 'boolean',
+					'default' => false,
+				],
+				'image_model' => [
+					'type'     => 'string',
+					'default'  => 'gemini-2.0-flash-exp-image-generation',
+					'sanitize' => 'sanitize_text_field',
 				],
 			],
 		];

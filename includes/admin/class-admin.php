@@ -44,6 +44,7 @@ class Admin {
 			'tags_categories',
 			'writing_tips',
 			'autocomplete',
+			'images',
 		];
 		foreach ( $modules as $module ) {
 			$enabled = get_option( 'superdraft_settings', [] );
@@ -520,6 +521,15 @@ class Admin {
 	 * @return string The model select dropdown.
 	 */
 	public static function get_model_select( $module, $model_key = 'model' ) {
+		if ( 'images' === $module ) {
+			$settings = get_option( 'superdraft_settings', [] );
+			$selected = $settings['images']['image_model'] ?? 'gemini-2.0-flash-exp-image-generation';
+			$output  = '<select name="superdraft_settings[images][image_model]" class="regular-text superdraft-models">';
+			$output .= '<option value="gemini-2.0-flash-exp-image-generation"' . selected( $selected, 'gemini-2.0-flash-exp-image-generation', false ) . '>Gemini 2.0 Flash Experimental Image Generation</option>';
+			$output .= '</select>';
+			return $output;
+		}
+
 		$models   = self::get_models();
 		$settings = get_option( 'superdraft_settings', [] );
 
