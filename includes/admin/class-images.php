@@ -204,6 +204,10 @@ class Images {
 		$attach_data = wp_generate_attachment_metadata( $new_attachment_id, $file_path );
 		wp_update_attachment_metadata( $new_attachment_id, $attach_data );
 
+		// Store the prompt and original image ID as meta.
+		update_post_meta( $new_attachment_id, '_superdraft_image_prompt', $prompt );
+		update_post_meta( $new_attachment_id, '_superdraft_original_image_id', $featuredImageId );
+
 		// We set the new image as the featured image in the editor, in JS. No need to set it here.
 		return rest_ensure_response( [
 			'attachment_id' => $new_attachment_id,
@@ -265,6 +269,7 @@ class Images {
 			return $response;
 		}
 
+		// Log the API request.
 		\Superdraft\Admin::log_api_request( $api, [
 			'prompt' => $prompt,
 			'tool'   => 'image-prompt',
@@ -314,6 +319,12 @@ class Images {
 			return $response;
 		}
 
+		// Log the API request.
+		\Superdraft\Admin::log_api_request( $api, [
+			'prompt' => $prompt,
+			'tool'   => 'image-generation',
+		]);
+
 		// Decode the returned base64 image data.
 		$image_data = base64_decode( $response );
 		if ( ! $image_data ) {
@@ -333,7 +344,7 @@ class Images {
 			'post_mime_type' => $file_type['type'],
 			'post_title'     => sanitize_file_name( $file_name ),
 			'post_content'   => '',
-			'post_status'    => 'inherit'
+			'post_status'    => 'inherit',
 		];
 
 		$attachment_id = wp_insert_attachment( $attachment, $file_path, $post_id );
@@ -342,6 +353,9 @@ class Images {
 		}
 		$attach_data = wp_generate_attachment_metadata( $attachment_id, $file_path );
 		wp_update_attachment_metadata( $attachment_id, $attach_data );
+
+		// Store the prompt as meta
+		update_post_meta( $attachment_id, '_superdraft_image_prompt', $prompt );
 
 		// No need to set the image as the featured image in the editor, in JS.
 		return rest_ensure_response( [
