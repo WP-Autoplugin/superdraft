@@ -6,6 +6,7 @@
     const apiFetch = wp.apiFetch;
     const { select, dispatch } = wp.data;
     const { createHigherOrderComponent } = wp.compose;
+    const { createNotice } = dispatch('core/notices');
 
     // AutoGenerateButton component (unchanged)
     const AutoGenerateButton = memo( ( { setPrompt, disabled } ) => {
@@ -70,6 +71,34 @@
             dispatch( 'core/editor' ).editPost( { featured_media: newAttachmentId } );
         }, [] );
 
+        const handleError = useCallback((error) => {
+            let errorMessage = __('An unexpected error occurred.', 'superdraft');
+            
+            if (error.message) {
+                try {
+                    // Try to parse the error message if it contains JSON or specific format
+                    if (error.code === 'api_error') {
+                        // Extract the actual error message if possible
+                        const match = error.message.match(/\[message\] => (.+?)\n/);
+                        errorMessage = match ? match[1] : error.message;
+                    } else {
+                        errorMessage = error.message;
+                    }
+                } catch (e) {
+                    errorMessage = error.message;
+                }
+            }
+
+            createNotice(
+                'error',
+                errorMessage,
+                {
+                    isDismissible: true,
+                    type: 'snackbar'
+                }
+            );
+        }, []);
+
         const handleGenerateImage = useCallback( async () => {
             if ( !prompt ) return;
             setIsProcessing( true );
@@ -81,13 +110,20 @@
                 });
                 if ( response.attachment_id ) {
                     updateFeaturedImage( response.attachment_id );
+                    createNotice(
+                        'success',
+                        __('Image generated successfully.', 'superdraft'),
+                        {
+                            type: 'snackbar'
+                        }
+                    );
                 }
             } catch ( error ) {
-                console.error( 'Image generation error:', error );
+                handleError(error);
             } finally {
                 setIsProcessing( false );
             }
-        }, [ prompt, postId, updateFeaturedImage, setIsProcessing ] );
+        }, [ prompt, postId, updateFeaturedImage, setIsProcessing, handleError ] );
 
         const handleEditImage = useCallback( async () => {
             if ( !prompt || !featuredImageId ) return;
@@ -100,13 +136,20 @@
                 });
                 if ( response.attachment_id ) {
                     updateFeaturedImage( response.attachment_id );
+                    createNotice(
+                        'success',
+                        __('Image edited successfully.', 'superdraft'),
+                        {
+                            type: 'snackbar'
+                        }
+                    );
                 }
             } catch ( error ) {
-                console.error( 'Image editing error:', error );
+                handleError(error);
             } finally {
                 setIsProcessing( false );
             }
-        }, [ prompt, postId, featuredImageId, updateFeaturedImage, setIsProcessing ] );
+        }, [ prompt, postId, featuredImageId, updateFeaturedImage, setIsProcessing, handleError ] );
 
         const toggleMode = useCallback( ( newMode ) => {
             setMode( ( prevMode ) => {
@@ -129,7 +172,22 @@
                         onClick={ () => toggleMode( 'generate' ) }
                         style={{ marginRight: '8px' }}
                     >
-                        { __( 'Generate Image', 'superdraft' ) }
+                        { __( 'Generate', 'superdraft' ) }
+                        <svg 
+                            viewBox="0 0 24 24" 
+                            width="20" 
+                            height="20" 
+                            style={{ 
+                                marginLeft: '4px',
+                                transform: mode === 'generate' ? 'rotate(180deg)' : 'none',
+                                transition: 'transform 0.2s'
+                            }}
+                        >
+                            <path 
+                                fill="currentColor" 
+                                d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"
+                            />
+                        </svg>
                     </Button>
                     <Button
                         isSecondary={ mode !== 'edit' }
@@ -137,7 +195,22 @@
                         onClick={ () => toggleMode( 'edit' ) }
                         disabled={ !featuredImageId }
                     >
-                        { __( 'Edit Image', 'superdraft' ) }
+                        { __( 'Edit', 'superdraft' ) }
+                        <svg 
+                            viewBox="0 0 24 24" 
+                            width="20" 
+                            height="20" 
+                            style={{ 
+                                marginLeft: '4px',
+                                transform: mode === 'edit' ? 'rotate(180deg)' : 'none',
+                                transition: 'transform 0.2s'
+                            }}
+                        >
+                            <path 
+                                fill="currentColor" 
+                                d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"
+                            />
+                        </svg>
                     </Button>
                 </div>
                 { mode && (
@@ -161,7 +234,6 @@
                             isPrimary={ true }
                             onClick={ handleAction }
                             disabled={ isProcessing }
-                            style={{ marginTop: '8px' }}
                         >
                             { isProcessing
                                 ? __( 'Processing...', 'superdraft' )

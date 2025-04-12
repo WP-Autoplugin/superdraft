@@ -58,7 +58,20 @@ class Google_Gemini_Image_API extends API {
 			'Content-Type' => 'application/json',
 		];
 
+		/**
+		 * Filters the body of the request to the OpenAI API.
+		 *
+		 * @param array $body The body of the request.
+		 * @param object $this The current instance of the API class.
+		 */
 		$body = apply_filters( 'superdraft_api_request_body', $body, $this );
+
+		/**
+		 * Filters the headers of the request to the OpenAI API.
+		 *
+		 * @param array $headers The headers of the request.
+		 * @param object $this The current instance of the API class.
+		 */
 		$headers = apply_filters( 'superdraft_api_request_headers', $headers, $this );
 
 		$response = $this->request( $url, [

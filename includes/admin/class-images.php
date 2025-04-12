@@ -244,7 +244,7 @@ class Images {
 			'tool'   => 'image-prompt',
 		] );
 
-		return rest_ensure_response( [ 'prompt' => $response ] );
+		return rest_ensure_response( [ 'prompt' => trim( $response ) ] );
 	}
 
 	/**

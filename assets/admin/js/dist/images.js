@@ -4213,6 +4213,9 @@ __webpack_require__.r(__webpack_exports__);
   const {
     createHigherOrderComponent
   } = wp.compose;
+  const {
+    createNotice
+  } = dispatch('core/notices');
 
   // AutoGenerateButton component (unchanged)
   const AutoGenerateButton = memo(({
@@ -4281,6 +4284,27 @@ __webpack_require__.r(__webpack_exports__);
         featured_media: newAttachmentId
       });
     }, []);
+    const handleError = useCallback(error => {
+      let errorMessage = __('An unexpected error occurred.', 'superdraft');
+      if (error.message) {
+        try {
+          // Try to parse the error message if it contains JSON or specific format
+          if (error.code === 'api_error') {
+            // Extract the actual error message if possible
+            const match = error.message.match(/\[message\] => (.+?)\n/);
+            errorMessage = match ? match[1] : error.message;
+          } else {
+            errorMessage = error.message;
+          }
+        } catch (e) {
+          errorMessage = error.message;
+        }
+      }
+      createNotice('error', errorMessage, {
+        isDismissible: true,
+        type: 'snackbar'
+      });
+    }, []);
     const handleGenerateImage = useCallback(async () => {
       if (!prompt) return;
       setIsProcessing(true);
@@ -4295,13 +4319,16 @@ __webpack_require__.r(__webpack_exports__);
         });
         if (response.attachment_id) {
           updateFeaturedImage(response.attachment_id);
+          createNotice('success', __('Image generated successfully.', 'superdraft'), {
+            type: 'snackbar'
+          });
         }
       } catch (error) {
-        console.error('Image generation error:', error);
+        handleError(error);
       } finally {
         setIsProcessing(false);
       }
-    }, [prompt, postId, updateFeaturedImage, setIsProcessing]);
+    }, [prompt, postId, updateFeaturedImage, setIsProcessing, handleError]);
     const handleEditImage = useCallback(async () => {
       if (!prompt || !featuredImageId) return;
       setIsProcessing(true);
@@ -4317,13 +4344,16 @@ __webpack_require__.r(__webpack_exports__);
         });
         if (response.attachment_id) {
           updateFeaturedImage(response.attachment_id);
+          createNotice('success', __('Image edited successfully.', 'superdraft'), {
+            type: 'snackbar'
+          });
         }
       } catch (error) {
-        console.error('Image editing error:', error);
+        handleError(error);
       } finally {
         setIsProcessing(false);
       }
-    }, [prompt, postId, featuredImageId, updateFeaturedImage, setIsProcessing]);
+    }, [prompt, postId, featuredImageId, updateFeaturedImage, setIsProcessing, handleError]);
     const toggleMode = useCallback(newMode => {
       setMode(prevMode => {
         const nextMode = prevMode === newMode ? null : newMode;
@@ -4336,20 +4366,46 @@ __webpack_require__.r(__webpack_exports__);
     const handleAction = mode === 'generate' ? handleGenerateImage : handleEditImage;
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(Button, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(Button, {
           isSecondary: mode !== 'generate',
           isPrimary: mode === 'generate',
           onClick: () => toggleMode('generate'),
           style: {
             marginRight: '8px'
           },
-          children: __('Generate Image', 'superdraft')
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(Button, {
+          children: [__('Generate', 'superdraft'), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("svg", {
+            viewBox: "0 0 24 24",
+            width: "20",
+            height: "20",
+            style: {
+              marginLeft: '4px',
+              transform: mode === 'generate' ? 'rotate(180deg)' : 'none',
+              transition: 'transform 0.2s'
+            },
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
+              fill: "currentColor",
+              d: "M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"
+            })
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(Button, {
           isSecondary: mode !== 'edit',
           isPrimary: mode === 'edit',
           onClick: () => toggleMode('edit'),
           disabled: !featuredImageId,
-          children: __('Edit Image', 'superdraft')
+          children: [__('Edit', 'superdraft'), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("svg", {
+            viewBox: "0 0 24 24",
+            width: "20",
+            height: "20",
+            style: {
+              marginLeft: '4px',
+              transform: mode === 'edit' ? 'rotate(180deg)' : 'none',
+              transition: 'transform 0.2s'
+            },
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
+              fill: "currentColor",
+              d: "M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"
+            })
+          })]
         })]
       }), mode && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
         className: "superdraft-mode-controls",
@@ -4371,9 +4427,6 @@ __webpack_require__.r(__webpack_exports__);
           isPrimary: true,
           onClick: handleAction,
           disabled: isProcessing,
-          style: {
-            marginTop: '8px'
-          },
           children: isProcessing ? __('Processing...', 'superdraft') : mode === 'generate' ? __('Generate', 'superdraft') : __('Edit', 'superdraft')
         })]
       })]
