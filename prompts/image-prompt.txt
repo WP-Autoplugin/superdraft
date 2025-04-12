@@ -7,4 +7,9 @@ Generate a brief description for an image that would be suitable as a featured i
 ###
 The description should be vivid and capture the essence of the post. The description should be generic enough to apply to a wide range of topics, while still being engaging and visually appealing. Let your creativity shine through, and ensure the description is relevant to the content of the post. Do not go with the obvious, try to be creative and think outside the box. The image should evoke curiosity and interest, making it an ideal choice for a featured image on a blog post. Specify the type of image (e.g., photograph, illustration, etc.) and any key elements or themes that should be included. Favour photorealistic images. The description should be concise, ideally no more than 50 words, and should not include any specific details about the post itself.
 
+((?Generate a new, unique image description that is unlike any previous ones. It should be a fresh take on the concept of a featured image, providing a new perspective or angle that hasn't been explored before.
+
+Previous descriptions:
+{{previousPrompts}}
+))
 Only reply with the image description, without any additional text or formatting. The description should be in English and should not include any markdown or code formatting.

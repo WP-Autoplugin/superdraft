@@ -92,12 +92,31 @@ class Images {
 				'postId' => [
 					'type' => 'integer',
 				],
+				'postTitle' => [
+					'type'              => 'string',
+					'sanitize_callback' => 'sanitize_text_field',
+				],
+				'postContent' => [
+					'type'              => 'string',
+					'sanitize_callback' => 'wp_kses_post',
+				],
+				'postType' => [
+					'type'              => 'string',
+					'sanitize_callback' => 'sanitize_text_field',
+				],
+				'previousPrompts' => [
+					'type'  => 'array',
+					'items' => [
+						'type' => 'string'
+					],
+					'default' => []
+				],
 			],
 		] );
 	}
 
 	/**
-	 * Edit an image, save it, and set it as the featured image.
+	 * Edit an image, and save it.
 	 *
 	 * @param \WP_REST_Request $request The REST request.
 	 */
@@ -198,12 +217,12 @@ class Images {
 	 *
 	 * @param \WP_REST_Request $request The REST request.
 	 */
-	public function generate_prompt( $request ) { rest_ensure_response( [ 'prompt' => 'hello' ] );
-		$post_id      = $request->get_param( 'postId' );
+	public function generate_prompt( $request ) {
 		$post_id      = $request->get_param( 'postId' );
 		$post_title   = $request->get_param( 'postTitle' );
 		$post_content = $request->get_param( 'postContent' );
 		$post_type    = $request->get_param( 'postType' );
+		$previous_prompts = $request->get_param( 'previousPrompts' );
 
 		if ( ! $post_id || ! $post_title || ! $post_content || ! $post_type ) {
 			return new \WP_Error( 'missing_parameters', __( 'Missing parameters', 'superdraft' ) );
@@ -225,10 +244,17 @@ class Images {
 			return new \WP_Error( 'invalid_prompt', __( 'Invalid prompt template', 'superdraft' ) );
 		}
 
+		// Join previous prompts if they exist.
+		$prevPromptsText = '';
+		if ( is_array( $previous_prompts ) && ! empty( $previous_prompts ) ) {
+			$prevPromptsText = implode( "\n###\n", $previous_prompts );
+		}
+
 		$prompt = $api->replace_vars( $prompt_template, [
-			'postTitle'   => $post_title,
-			'postContent' => $post_content,
-			'postType'    => $post_type,
+			'postTitle'       => $post_title,
+			'postContent'     => $post_content,
+			'postType'        => $post_type,
+			'previousPrompts' => $prevPromptsText,
 		] );
 
 		// Set a high temperature for more creative responses.
@@ -248,7 +274,7 @@ class Images {
 	}
 
 	/**
-	 * Generate an image, save it, and set it as the featured image.
+	 * Generate an image, save it, and return the attachment ID.
 	 *
 	 * @param \WP_REST_Request $request The REST request.
 	 */
@@ -317,9 +343,7 @@ class Images {
 		$attach_data = wp_generate_attachment_metadata( $attachment_id, $file_path );
 		wp_update_attachment_metadata( $attachment_id, $attach_data );
 
-		// Set as featured image.
-		set_post_thumbnail( $post_id, $attachment_id );
-
+		// No need to set the image as the featured image in the editor, in JS.
 		return rest_ensure_response( [
 			'attachment_id' => $attachment_id,
 			'url'           => wp_get_attachment_url( $attachment_id ),
