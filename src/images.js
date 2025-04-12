@@ -1,10 +1,10 @@
 ( function( wp ) {
     const { addFilter } = wp.hooks;
     const { Button, TextareaControl, Spinner, Tooltip, IconButton } = wp.components;
-    const { useState, useCallback, memo } = wp.element;
+    const { useState, useCallback, memo, useEffect } = wp.element;
     const { __ } = wp.i18n;
     const apiFetch = wp.apiFetch;
-    const { select, dispatch } = wp.data;
+    const { select, dispatch, useSelect } = wp.data;
     const { createHigherOrderComponent } = wp.compose;
     const { createNotice } = dispatch('core/notices');
 
@@ -64,8 +64,16 @@
         const [ mode, setMode ] = useState( null );
         const [ prompt, setPrompt ] = useState( '' );
 
-        const postId = select( 'core/editor' ).getEditedPostAttribute( 'id' );
-        const featuredImageId = select( 'core/editor' ).getEditedPostAttribute( 'featured_media' );
+        const { postId, featuredImageId } = useSelect(state => ({
+            postId: select('core/editor').getEditedPostAttribute('id'),
+            featuredImageId: select('core/editor').getEditedPostAttribute('featured_media')
+        }), []);
+
+        // Add this effect to reset mode and prompt when featuredImageId changes
+        useEffect(() => {
+            setMode(null);
+            setPrompt('');
+        }, [featuredImageId]);
 
         const updateFeaturedImage = useCallback( ( newAttachmentId ) => {
             dispatch( 'core/editor' ).editPost( { featured_media: newAttachmentId } );
@@ -149,7 +157,7 @@
             } finally {
                 setIsProcessing( false );
             }
-        }, [ prompt, postId, featuredImageId, updateFeaturedImage, setIsProcessing, handleError ] );
+        }, [ prompt, featuredImageId, updateFeaturedImage, setIsProcessing, handleError ] );
 
         const toggleMode = useCallback( ( newMode ) => {
             setMode( ( prevMode ) => {

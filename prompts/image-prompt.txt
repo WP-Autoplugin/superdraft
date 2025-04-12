@@ -1,4 +1,4 @@
-Generate a brief description for an image that would be suitable as a featured image for a blog post with the following title and content:
+Generate a brief description for an image that would be suitable as a featured image for a blog post with the following {{postType}}:
 
 # {{postTitle}}
 

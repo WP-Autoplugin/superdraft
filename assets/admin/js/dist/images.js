@@ -4200,7 +4200,8 @@ __webpack_require__.r(__webpack_exports__);
   const {
     useState,
     useCallback,
-    memo
+    memo,
+    useEffect
   } = wp.element;
   const {
     __
@@ -4208,7 +4209,8 @@ __webpack_require__.r(__webpack_exports__);
   const apiFetch = wp.apiFetch;
   const {
     select,
-    dispatch
+    dispatch,
+    useSelect
   } = wp.data;
   const {
     createHigherOrderComponent
@@ -4277,8 +4279,19 @@ __webpack_require__.r(__webpack_exports__);
   }) => {
     const [mode, setMode] = useState(null);
     const [prompt, setPrompt] = useState('');
-    const postId = select('core/editor').getEditedPostAttribute('id');
-    const featuredImageId = select('core/editor').getEditedPostAttribute('featured_media');
+    const {
+      postId,
+      featuredImageId
+    } = useSelect(state => ({
+      postId: select('core/editor').getEditedPostAttribute('id'),
+      featuredImageId: select('core/editor').getEditedPostAttribute('featured_media')
+    }), []);
+
+    // Add this effect to reset mode and prompt when featuredImageId changes
+    useEffect(() => {
+      setMode(null);
+      setPrompt('');
+    }, [featuredImageId]);
     const updateFeaturedImage = useCallback(newAttachmentId => {
       dispatch('core/editor').editPost({
         featured_media: newAttachmentId
@@ -4353,7 +4366,7 @@ __webpack_require__.r(__webpack_exports__);
       } finally {
         setIsProcessing(false);
       }
-    }, [prompt, postId, featuredImageId, updateFeaturedImage, setIsProcessing, handleError]);
+    }, [prompt, featuredImageId, updateFeaturedImage, setIsProcessing, handleError]);
     const toggleMode = useCallback(newMode => {
       setMode(prevMode => {
         const nextMode = prevMode === newMode ? null : newMode;
