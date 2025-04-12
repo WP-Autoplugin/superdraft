@@ -521,7 +521,7 @@ class Admin {
 	 * @return string The model select dropdown.
 	 */
 	public static function get_model_select( $module, $model_key = 'model' ) {
-		if ( 'images' === $module ) {
+		if ( 'image_model' === $model_key ) {
 			$settings = get_option( 'superdraft_settings', [] );
 			$selected = $settings['images']['image_model'] ?? 'gemini-2.0-flash-exp-image-generation';
 			$output  = '<select name="superdraft_settings[images][image_model]" class="regular-text superdraft-models">';

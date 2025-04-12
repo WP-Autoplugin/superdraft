@@ -1,0 +1,21 @@
+.superdraft-prompt-wrapper {
+    position: relative;
+}
+
+.superdraft-auto-generate-button {
+    position: absolute;
+    top: 24px;
+    right: 0;
+    z-index: 10;
+    opacity: 0.3;
+}
+
+.superdraft-auto-generate-button:hover,
+.superdraft-auto-generate-button:disabled {
+    opacity: 1;
+}
+
+.superdraft-auto-generate-button svg {
+    width: 20px;
+    height: 20px;
+}

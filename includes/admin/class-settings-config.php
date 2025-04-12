@@ -124,13 +124,18 @@ class Settings_Config {
 				],
 			],
 			'images' => [
-				'enabled'    => [
+				'enabled' => [
 					'type'    => 'boolean',
 					'default' => false,
 				],
 				'image_model' => [
 					'type'     => 'string',
 					'default'  => 'gemini-2.0-flash-exp-image-generation',
+					'sanitize' => 'sanitize_text_field',
+				],
+				'prompt_model' => [
+					'type'     => 'string',
+					'default'  => 'gpt-4o-mini',
 					'sanitize' => 'sanitize_text_field',
 				],
 			],

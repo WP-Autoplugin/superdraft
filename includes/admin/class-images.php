@@ -82,6 +82,18 @@ class Images {
 			],
 		] );
 
+		register_rest_route( 'superdraft/v1', '/image/generate-prompt', [
+			'methods'  => 'POST',
+			'callback' => [ $this, 'generate_prompt' ],
+			'permission_callback' => function () {
+				return current_user_can( 'edit_posts' );
+			},
+			'args' => [
+				'postId' => [
+					'type' => 'integer',
+				],
+			],
+		] );
 	}
 
 	/**
@@ -93,15 +105,15 @@ class Images {
 		$post_id         = $request->get_param( 'postId' );
 		$featuredImageId = $request->get_param( 'featuredImageId' );
 		$prompt          = $request->get_param( 'prompt' );
-	
+
 		if ( ! $post_id || ! $featuredImageId || ! $prompt ) {
 			return new \WP_Error( 'missing_parameters', __( 'Missing postId, featuredImageId, or prompt', 'superdraft' ) );
 		}
-	
+
 		if ( ! current_user_can( 'edit_post', $post_id ) ) {
 			return new \WP_Error( 'permission_denied', __( 'You do not have permission to edit this post', 'superdraft' ) );
 		}
-	
+
 		$file_path = get_attached_file( $featuredImageId );
 		if ( ! file_exists( $file_path ) ) {
 			return new \WP_Error( 'file_not_found', __( 'Featured image file not found', 'superdraft' ) );
@@ -109,7 +121,7 @@ class Images {
 		$image_data   = file_get_contents( $file_path );
 		$image_base64 = base64_encode( $image_data );
 		$file_type    = wp_check_filetype( basename( $file_path ), null );
-	
+
 		$settings = get_option( 'superdraft_settings', [] );
 		if ( empty( $settings['images']['enabled'] ) ) {
 			return new \WP_Error( 'module_disabled', __( 'Image generation module is disabled', 'superdraft' ) );
@@ -119,11 +131,11 @@ class Images {
 		if ( empty( $google_api_key ) ) {
 			return new \WP_Error( 'missing_api_key', __( 'Google API key is missing', 'superdraft' ) );
 		}
-	
+
 		$api = new Google_Gemini_Image_API();
 		$api->set_api_key( $google_api_key );
 		$api->set_model( $image_model );
-	
+
 		$override_body = [
 			'contents' => [
 				[
@@ -142,17 +154,17 @@ class Images {
 				'responseModalities' => ['Text', 'Image']
 			],
 		];
-	
+
 		$response = $api->send_prompt( $prompt, '', $override_body );
 		if ( is_wp_error( $response ) ) {
 			return $response;
 		}
-	
+
 		$edited_image_data = base64_decode( $response );
 		if ( ! $edited_image_data ) {
 			return new \WP_Error( 'invalid_image_data', __( 'Failed to decode image data', 'superdraft' ) );
 		}
-	
+
 		$upload = wp_upload_bits( "superdraft-image-{$post_id}-edited-" . time() . '.png', null, $edited_image_data );
 		if ( $upload['error'] ) {
 			return new \WP_Error( 'upload_error', __( 'Failed to save edited image', 'superdraft' ) );
@@ -172,14 +184,68 @@ class Images {
 		}
 		$attach_data = wp_generate_attachment_metadata( $new_attachment_id, $file_path );
 		wp_update_attachment_metadata( $new_attachment_id, $attach_data );
-	
-		// Do NOT call set_post_thumbnail here.
+
+		// We set the new image as the featured image in the editor, in JS. No need to set it here.
 		return rest_ensure_response( [
 			'attachment_id' => $new_attachment_id,
 			'url'           => wp_get_attachment_url( $new_attachment_id ),
 			'message'       => __( 'Edited image generated successfully', 'superdraft' ),
 		] );
-	}	
+	}
+
+	/**
+	 * Generate a prompt for the image generation.
+	 *
+	 * @param \WP_REST_Request $request The REST request.
+	 */
+	public function generate_prompt( $request ) { rest_ensure_response( [ 'prompt' => 'hello' ] );
+		$post_id      = $request->get_param( 'postId' );
+		$post_id      = $request->get_param( 'postId' );
+		$post_title   = $request->get_param( 'postTitle' );
+		$post_content = $request->get_param( 'postContent' );
+		$post_type    = $request->get_param( 'postType' );
+
+		if ( ! $post_id || ! $post_title || ! $post_content || ! $post_type ) {
+			return new \WP_Error( 'missing_parameters', __( 'Missing parameters', 'superdraft' ) );
+		}
+
+		$post = get_post( $post_id );
+		if ( ! $post ) {
+			return new \WP_Error( 'invalid_post', __( 'Invalid post ID', 'superdraft' ) );
+		}
+		$settings = get_option( 'superdraft_settings', [] );
+		$prompt_model = $settings['images']['prompt_model'] ?? 'gpt-4o-mini';
+		$api = \Superdraft\Admin::get_api( $prompt_model );
+		if ( ! $api ) {
+			return new \WP_Error( 'invalid_model', __( 'Invalid prompt model', 'superdraft' ) );
+		}
+
+		$prompt_template = $api->get_prompt_template( 'image-prompt' );
+		if ( ! $prompt_template ) {
+			return new \WP_Error( 'invalid_prompt', __( 'Invalid prompt template', 'superdraft' ) );
+		}
+
+		$prompt = $api->replace_vars( $prompt_template, [
+			'postTitle'   => $post_title,
+			'postContent' => $post_content,
+			'postType'    => $post_type,
+		] );
+
+		// Set a high temperature for more creative responses.
+		$api->set_temperature( 1 );
+
+		$response = $api->send_prompt( $prompt );
+		if ( is_wp_error( $response ) ) {
+			return $response;
+		}
+
+		\Superdraft\Admin::log_api_request( $api, [
+			'prompt' => $prompt,
+			'tool'   => 'image-prompt',
+		] );
+
+		return rest_ensure_response( [ 'prompt' => $response ] );
+	}
 
 	/**
 	 * Generate an image, save it, and set it as the featured image.

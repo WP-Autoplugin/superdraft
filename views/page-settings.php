@@ -308,6 +308,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<?php echo wp_kses( \Superdraft\Admin::get_model_select( 'images', 'image_model' ), $allowed_html ); ?>
 					</td>
 				</tr>
+				<tr valign="top">
+					<th scope="row"><?php esc_html_e( 'Prompt Generator Model', 'superdraft' ); ?></th>
+					<td>
+						<?php echo wp_kses( \Superdraft\Admin::get_model_select( 'images', 'prompt_model' ), $allowed_html ); ?>
+					</td>
+				</tr>
 			</table>
 		</div>
 
