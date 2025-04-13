@@ -49,70 +49,82 @@ class Images {
 	 * Register REST endpoint for image generation.
 	 */
 	public function register_image_endpoint() {
-		register_rest_route( 'superdraft/v1', '/image/generate', [
-			'methods'  => 'POST',
-			'callback' => [ $this, 'generate_image' ],
-			'permission_callback' => function () {
-				return current_user_can( 'edit_posts' );
-			},
-			'args' => [
-				'postId' => [
-					'type' => 'integer',
-				],
-				'prompt' => [
-					'type'              => 'string',
-					'sanitize_callback' => 'sanitize_text_field',
-				],
-			],
-		] );
-
-		register_rest_route( 'superdraft/v1', '/image/edit', [
-			'methods'  => 'POST',
-			'callback' => [ $this, 'edit_image' ],
-			'permission_callback' => function () {
-				return current_user_can( 'edit_posts' );
-			},
-			'args' => [
-				'postId'          => [ 'type' => 'integer' ], // if needed for other checks
-				'featuredImageId' => [ 'type' => 'integer' ],
-				'prompt'          => [
-					'type'              => 'string',
-					'sanitize_callback' => 'sanitize_text_field',
-				],
-			],
-		] );
-
-		register_rest_route( 'superdraft/v1', '/image/generate-prompt', [
-			'methods'  => 'POST',
-			'callback' => [ $this, 'generate_prompt' ],
-			'permission_callback' => function () {
-				return current_user_can( 'edit_posts' );
-			},
-			'args' => [
-				'postId' => [
-					'type' => 'integer',
-				],
-				'postTitle' => [
-					'type'              => 'string',
-					'sanitize_callback' => 'sanitize_text_field',
-				],
-				'postContent' => [
-					'type'              => 'string',
-					'sanitize_callback' => 'wp_kses_post',
-				],
-				'postType' => [
-					'type'              => 'string',
-					'sanitize_callback' => 'sanitize_text_field',
-				],
-				'previousPrompts' => [
-					'type'  => 'array',
-					'items' => [
-						'type' => 'string'
+		register_rest_route(
+			'superdraft/v1',
+			'/image/generate',
+			[
+				'methods'             => 'POST',
+				'callback'            => [ $this, 'generate_image' ],
+				'permission_callback' => function () {
+					return current_user_can( 'edit_posts' );
+				},
+				'args'                => [
+					'postId' => [
+						'type' => 'integer',
 					],
-					'default' => []
+					'prompt' => [
+						'type'              => 'string',
+						'sanitize_callback' => 'sanitize_text_field',
+					],
 				],
-			],
-		] );
+			]
+		);
+
+		register_rest_route(
+			'superdraft/v1',
+			'/image/edit',
+			[
+				'methods'             => 'POST',
+				'callback'            => [ $this, 'edit_image' ],
+				'permission_callback' => function () {
+					return current_user_can( 'edit_posts' );
+				},
+				'args'                => [
+					'postId'          => [ 'type' => 'integer' ], // if needed for other checks
+					'featuredImageId' => [ 'type' => 'integer' ],
+					'prompt'          => [
+						'type'              => 'string',
+						'sanitize_callback' => 'sanitize_text_field',
+					],
+				],
+			]
+		);
+
+		register_rest_route(
+			'superdraft/v1',
+			'/image/generate-prompt',
+			[
+				'methods'             => 'POST',
+				'callback'            => [ $this, 'generate_prompt' ],
+				'permission_callback' => function () {
+					return current_user_can( 'edit_posts' );
+				},
+				'args'                => [
+					'postId'          => [
+						'type' => 'integer',
+					],
+					'postTitle'       => [
+						'type'              => 'string',
+						'sanitize_callback' => 'sanitize_text_field',
+					],
+					'postContent'     => [
+						'type'              => 'string',
+						'sanitize_callback' => 'wp_kses_post',
+					],
+					'postType'        => [
+						'type'              => 'string',
+						'sanitize_callback' => 'sanitize_text_field',
+					],
+					'previousPrompts' => [
+						'type'    => 'array',
+						'items'   => [
+							'type' => 'string',
+						],
+						'default' => [],
+					],
+				],
+			]
+		);
 	}
 
 	/**
@@ -156,7 +168,7 @@ class Images {
 		$api->set_model( $image_model );
 
 		$override_body = [
-			'contents' => [
+			'contents'         => [
 				[
 					'parts' => [
 						[ 'text' => $prompt ],
@@ -170,7 +182,7 @@ class Images {
 				],
 			],
 			'generationConfig' => [
-				'responseModalities' => ['Text', 'Image']
+				'responseModalities' => [ 'Text', 'Image' ],
 			],
 		];
 
@@ -188,18 +200,18 @@ class Images {
 		if ( $upload['error'] ) {
 			return new \WP_Error( 'upload_error', __( 'Failed to save edited image', 'superdraft' ) );
 		}
-		$file_path = $upload['file'];
-		$file_name = basename( $file_path );
-		$file_type = wp_check_filetype( $file_name, null );
-		$attachment = [
+		$file_path         = $upload['file'];
+		$file_name         = basename( $file_path );
+		$file_type         = wp_check_filetype( $file_name, null );
+		$attachment        = [
 			'post_mime_type' => $file_type['type'],
 			'post_title'     => sanitize_file_name( $file_name ),
 			'post_content'   => '',
-			'post_status'    => 'inherit'
+			'post_status'    => 'inherit',
 		];
 		$new_attachment_id = wp_insert_attachment( $attachment, $file_path, $post_id );
 		if ( ! function_exists( 'wp_generate_attachment_metadata' ) ) {
-			require_once( ABSPATH . 'wp-admin/includes/image.php' );
+			require_once ABSPATH . 'wp-admin/includes/image.php';
 		}
 		$attach_data = wp_generate_attachment_metadata( $new_attachment_id, $file_path );
 		wp_update_attachment_metadata( $new_attachment_id, $attach_data );
@@ -209,11 +221,13 @@ class Images {
 		update_post_meta( $new_attachment_id, '_superdraft_original_image_id', $featuredImageId );
 
 		// We set the new image as the featured image in the editor, in JS. No need to set it here.
-		return rest_ensure_response( [
-			'attachment_id' => $new_attachment_id,
-			'url'           => wp_get_attachment_url( $new_attachment_id ),
-			'message'       => __( 'Edited image generated successfully', 'superdraft' ),
-		] );
+		return rest_ensure_response(
+			[
+				'attachment_id' => $new_attachment_id,
+				'url'           => wp_get_attachment_url( $new_attachment_id ),
+				'message'       => __( 'Edited image generated successfully', 'superdraft' ),
+			]
+		);
 	}
 
 	/**
@@ -222,10 +236,10 @@ class Images {
 	 * @param \WP_REST_Request $request The REST request.
 	 */
 	public function generate_prompt( $request ) {
-		$post_id      = $request->get_param( 'postId' );
-		$post_title   = $request->get_param( 'postTitle' );
-		$post_content = $request->get_param( 'postContent' );
-		$post_type    = $request->get_param( 'postType' );
+		$post_id          = $request->get_param( 'postId' );
+		$post_title       = $request->get_param( 'postTitle' );
+		$post_content     = $request->get_param( 'postContent' );
+		$post_type        = $request->get_param( 'postType' );
 		$previous_prompts = $request->get_param( 'previousPrompts' );
 
 		if ( ! $post_id || ! $post_title || ! $post_content || ! $post_type ) {
@@ -236,9 +250,9 @@ class Images {
 		if ( ! $post ) {
 			return new \WP_Error( 'invalid_post', __( 'Invalid post ID', 'superdraft' ) );
 		}
-		$settings = get_option( 'superdraft_settings', [] );
+		$settings     = get_option( 'superdraft_settings', [] );
 		$prompt_model = $settings['images']['prompt_model'] ?? 'gpt-4o-mini';
-		$api = \Superdraft\Admin::get_api( $prompt_model );
+		$api          = \Superdraft\Admin::get_api( $prompt_model );
 		if ( ! $api ) {
 			return new \WP_Error( 'invalid_model', __( 'Invalid prompt model', 'superdraft' ) );
 		}
@@ -254,12 +268,15 @@ class Images {
 			$prevPromptsText = implode( "\n###\n", $previous_prompts );
 		}
 
-		$prompt = $api->replace_vars( $prompt_template, [
-			'postTitle'       => $post_title,
-			'postContent'     => $post_content,
-			'postType'        => $post_type,
-			'previousPrompts' => $prevPromptsText,
-		] );
+		$prompt = $api->replace_vars(
+			$prompt_template,
+			[
+				'postTitle'       => $post_title,
+				'postContent'     => $post_content,
+				'postType'        => $post_type,
+				'previousPrompts' => $prevPromptsText,
+			]
+		);
 
 		// Set a high temperature for more creative responses.
 		$api->set_temperature( 1 );
@@ -270,10 +287,13 @@ class Images {
 		}
 
 		// Log the API request.
-		\Superdraft\Admin::log_api_request( $api, [
-			'prompt' => $prompt,
-			'tool'   => 'image-prompt',
-		] );
+		\Superdraft\Admin::log_api_request(
+			$api,
+			[
+				'prompt' => $prompt,
+				'tool'   => 'image-prompt',
+			]
+		);
 
 		return rest_ensure_response( [ 'prompt' => trim( $response ) ] );
 	}
@@ -320,10 +340,13 @@ class Images {
 		}
 
 		// Log the API request.
-		\Superdraft\Admin::log_api_request( $api, [
-			'prompt' => $prompt,
-			'tool'   => 'image-generation',
-		]);
+		\Superdraft\Admin::log_api_request(
+			$api,
+			[
+				'prompt' => $prompt,
+				'tool'   => 'image-generation',
+			]
+		);
 
 		// Decode the returned base64 image data.
 		$image_data = base64_decode( $response );
@@ -337,9 +360,9 @@ class Images {
 			return new \WP_Error( 'upload_error', __( 'Failed to save generated image', 'superdraft' ) );
 		}
 
-		$file_path = $upload['file'];
-		$file_name = basename( $file_path );
-		$file_type = wp_check_filetype( $file_name, null );
+		$file_path  = $upload['file'];
+		$file_name  = basename( $file_path );
+		$file_type  = wp_check_filetype( $file_name, null );
 		$attachment = [
 			'post_mime_type' => $file_type['type'],
 			'post_title'     => sanitize_file_name( $file_name ),
@@ -349,7 +372,7 @@ class Images {
 
 		$attachment_id = wp_insert_attachment( $attachment, $file_path, $post_id );
 		if ( ! function_exists( 'wp_generate_attachment_metadata' ) ) {
-			require_once( ABSPATH . 'wp-admin/includes/image.php' );
+			require_once ABSPATH . 'wp-admin/includes/image.php';
 		}
 		$attach_data = wp_generate_attachment_metadata( $attachment_id, $file_path );
 		wp_update_attachment_metadata( $attachment_id, $attach_data );
@@ -358,10 +381,12 @@ class Images {
 		update_post_meta( $attachment_id, '_superdraft_image_prompt', $prompt );
 
 		// No need to set the image as the featured image in the editor, in JS.
-		return rest_ensure_response( [
-			'attachment_id' => $attachment_id,
-			'url'           => wp_get_attachment_url( $attachment_id ),
-			'message'       => __( 'Featured image generated and set successfully', 'superdraft' ),
-		] );
+		return rest_ensure_response(
+			[
+				'attachment_id' => $attachment_id,
+				'url'           => wp_get_attachment_url( $attachment_id ),
+				'message'       => __( 'Featured image generated and set successfully', 'superdraft' ),
+			]
+		);
 	}
 }

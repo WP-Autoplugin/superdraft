@@ -59,7 +59,7 @@ class Autocomplete {
 		);
 
 		// Only load Smart Compose if it's enabled in settings.
-		$settings = get_option( 'superdraft_settings', [] );
+		$settings              = get_option( 'superdraft_settings', [] );
 		$smart_compose_enabled = isset( $settings['autocomplete']['smart_compose_enabled'] ) ?
 			(bool) $settings['autocomplete']['smart_compose_enabled'] : false;
 

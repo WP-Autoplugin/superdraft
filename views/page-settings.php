@@ -90,21 +90,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<td>
 						<?php
 							$allowed_html = [
-								'select' => [
-									'name' => true,
+								'select'   => [
+									'name'  => true,
 									'class' => true,
 								],
 								'optgroup' => [
 									'label' => true,
 									'class' => true,
 								],
-								'option' => [
-									'value' => true,
+								'option'   => [
+									'value'    => true,
 									'selected' => true,
 								],
 							];
 							echo wp_kses( self::get_model_select( 'tags_categories' ), $allowed_html );
-						?>
+							?>
 					</td>
 				</tr>
 			</table>
