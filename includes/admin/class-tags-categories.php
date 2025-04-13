@@ -377,15 +377,15 @@ class Tags_Categories {
 		$taxonomy     = $request->get_param( 'taxonomy' );
 		$available    = $request->get_param( 'availableTerms' );
 
-		// Use the existing method to avoid code duplication
+		// Use the existing method to avoid code duplication.
 		$selected_terms = $this->auto_select_via_ai( $post_title, $post_content, $taxonomy, $available );
 
-		// Handle errors if auto_select_via_ai returns WP_Error
+		// Handle errors if auto_select_via_ai returns WP_Error.
 		if ( is_wp_error( $selected_terms ) ) {
 			return $selected_terms;
 		}
 
-		// If we got an empty array and it's not a WP_Error, consider it an error
+		// If we got an empty array and it's not a WP_Error, consider it an error.
 		if ( empty( $selected_terms ) ) {
 			return new \WP_Error(
 				'invalid_response',

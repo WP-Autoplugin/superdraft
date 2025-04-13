@@ -80,7 +80,7 @@ class Images {
 					return current_user_can( 'edit_posts' );
 				},
 				'args'                => [
-					'postId'          => [ 'type' => 'integer' ], // if needed for other checks
+					'postId'          => [ 'type' => 'integer' ],
 					'featuredImageId' => [ 'type' => 'integer' ],
 					'prompt'          => [
 						'type'              => 'string',
@@ -133,11 +133,11 @@ class Images {
 	 * @param \WP_REST_Request $request The REST request.
 	 */
 	public function edit_image( $request ) {
-		$post_id         = $request->get_param( 'postId' );
-		$featuredImageId = $request->get_param( 'featuredImageId' );
-		$prompt          = $request->get_param( 'prompt' );
+		$post_id           = $request->get_param( 'postId' );
+		$featured_image_id = $request->get_param( 'featuredImageId' );
+		$prompt            = $request->get_param( 'prompt' );
 
-		if ( ! $post_id || ! $featuredImageId || ! $prompt ) {
+		if ( ! $post_id || ! $featured_image_id || ! $prompt ) {
 			return new \WP_Error( 'missing_parameters', __( 'Missing postId, featuredImageId, or prompt', 'superdraft' ) );
 		}
 
@@ -145,12 +145,12 @@ class Images {
 			return new \WP_Error( 'permission_denied', __( 'You do not have permission to edit this post', 'superdraft' ) );
 		}
 
-		$file_path = get_attached_file( $featuredImageId );
+		$file_path = get_attached_file( $featured_image_id );
 		if ( ! file_exists( $file_path ) ) {
 			return new \WP_Error( 'file_not_found', __( 'Featured image file not found', 'superdraft' ) );
 		}
-		$image_data   = file_get_contents( $file_path );
-		$image_base64 = base64_encode( $image_data );
+		$image_data   = file_get_contents( $file_path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- We're reading a file.
+		$image_base64 = base64_encode( $image_data ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode -- We need to encode the image data to send to the API.
 		$file_type    = wp_check_filetype( basename( $file_path ), null );
 
 		$settings = get_option( 'superdraft_settings', [] );
@@ -191,7 +191,7 @@ class Images {
 			return $response;
 		}
 
-		$edited_image_data = base64_decode( $response );
+		$edited_image_data = base64_decode( $response ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- We need to decode the image data returned from the API.
 		if ( ! $edited_image_data ) {
 			return new \WP_Error( 'invalid_image_data', __( 'Failed to decode image data', 'superdraft' ) );
 		}
@@ -218,7 +218,7 @@ class Images {
 
 		// Store the prompt and original image ID as meta.
 		update_post_meta( $new_attachment_id, '_superdraft_image_prompt', $prompt );
-		update_post_meta( $new_attachment_id, '_superdraft_original_image_id', $featuredImageId );
+		update_post_meta( $new_attachment_id, '_superdraft_original_image_id', $featured_image_id );
 
 		// We set the new image as the featured image in the editor, in JS. No need to set it here.
 		return rest_ensure_response(
@@ -263,9 +263,9 @@ class Images {
 		}
 
 		// Join previous prompts if they exist.
-		$prevPromptsText = '';
+		$previous_prompts_text = '';
 		if ( is_array( $previous_prompts ) && ! empty( $previous_prompts ) ) {
-			$prevPromptsText = implode( "\n###\n", $previous_prompts );
+			$previous_prompts_text = implode( "\n###\n", $previous_prompts );
 		}
 
 		$prompt = $api->replace_vars(
@@ -274,7 +274,7 @@ class Images {
 				'postTitle'       => $post_title,
 				'postContent'     => $post_content,
 				'postType'        => $post_type,
-				'previousPrompts' => $prevPromptsText,
+				'previousPrompts' => $previous_prompts_text,
 			]
 		);
 
@@ -349,7 +349,7 @@ class Images {
 		);
 
 		// Decode the returned base64 image data.
-		$image_data = base64_decode( $response );
+		$image_data = base64_decode( $response ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- We need to decode the image data returned from the API.
 		if ( ! $image_data ) {
 			return new \WP_Error( 'invalid_image_data', __( 'Failed to decode image data', 'superdraft' ) );
 		}
@@ -377,7 +377,7 @@ class Images {
 		$attach_data = wp_generate_attachment_metadata( $attachment_id, $file_path );
 		wp_update_attachment_metadata( $attachment_id, $attach_data );
 
-		// Store the prompt as meta
+		// Store the prompt as meta.
 		update_post_meta( $attachment_id, '_superdraft_image_prompt', $prompt );
 
 		// No need to set the image as the featured image in the editor, in JS.

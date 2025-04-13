@@ -1,4 +1,11 @@
 <?php
+/**
+ * Google Gemini Image API class for Superdraft.
+ *
+ * @package Superdraft
+ * @since 1.1.0
+ */
+
 namespace Superdraft;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -9,13 +16,38 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Google Gemini Image API class.
  */
 class Google_Gemini_Image_API extends API {
+	/**
+	 * Selected model.
+	 *
+	 * @var string
+	 */
 	protected $model;
-	protected $api_url     = 'https://generativelanguage.googleapis.com/v1beta/models';
+
+	/**
+	 * API base URL.
+	 *
+	 * @var string
+	 */
+	protected $api_url = 'https://generativelanguage.googleapis.com/v1beta/models';
+
+	/**
+	 * Temperature parameter (default).
+	 *
+	 * @var float
+	 */
 	protected $temperature = 0.2;
-	protected $max_tokens  = 8192;
+
+	/**
+	 * Max tokens parameter (default).
+	 *
+	 * @var int
+	 */
+	protected $max_tokens = 8192;
 
 	/**
 	 * Set the model.
+	 *
+	 * @param string $model The model.
 	 */
 	public function set_model( $model ) {
 		$this->model = sanitize_text_field( $model );
@@ -23,6 +55,12 @@ class Google_Gemini_Image_API extends API {
 
 	/**
 	 * Send an image generation prompt.
+	 *
+	 * @param string $prompt         The user prompt.
+	 * @param string $system_message Optional system message.
+	 * @param array  $override_body  Optional body to override the default request body.
+	 *
+	 * @return string|WP_Error The response from the API or an error.
 	 */
 	public function send_prompt( $prompt, $system_message = '', $override_body = [] ) {
 		$prompt = $this->trim_prompt( $prompt );
@@ -91,7 +129,7 @@ class Google_Gemini_Image_API extends API {
 		if ( empty( $data['candidates'][0]['content']['parts'] ) ) {
 			return new \WP_Error(
 				'api_error',
-				__( 'Error communicating with the Google Gemini Image API.', 'superdraft' ) . "\n" . print_r( $data, true )
+				__( 'Error communicating with the Google Gemini Image API.', 'superdraft' ) . "\n" . print_r( $data, true ) // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r -- We show the API response for debugging.
 			);
 		}
 
