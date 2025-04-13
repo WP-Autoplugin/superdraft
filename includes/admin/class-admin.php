@@ -429,9 +429,10 @@ class Admin {
 				'gemini-1.0-pro'                      => 'Gemini 1.0 Pro',
 			],
 			'xAI'       => [
+				'grok-3'      => 'Grok 3',
+				'grok-3-mini' => 'Grok 3 Mini',
 				'grok-2'      => 'Grok 2',
 				'grok-beta'   => 'Grok Beta',
-				'grok-2-1212' => 'Grok 2-1212',
 			],
 		];
 

@@ -20,6 +20,7 @@ This plugin provides:
 - AI-powered writing assistance and recommendations
 - Intelligent tag and category management
 - Smart autocomplete for faster content creation
+- AI-powered image generation and editing
 - Support for numerous AI models (including free, locally hosted, and custom models)
 - Detailed logging, customization, and multilingual support
 
@@ -51,6 +52,15 @@ Intelligent, context-aware suggestions triggered by customizable prefixes. Featu
 
 - Customizable prefix triggers
 - Adjustable suggestion count and context lengths
+
+### Image Generation & Editing
+
+Create and edit featured images directly in the post editor using AI technology. Features:
+
+- Text-to-image generation with custom prompts
+- Smart prompt generation from post content
+- Precise image editing with targeted area modifications
+- WordPress media library integration
 
 ### Smart Compose
 
@@ -141,7 +151,8 @@ Yes, it supports multilingual prompts and interfaces.
 2. Bulk editing tags/categories
 3. AI autocomplete in action
 4. Smart compose inline suggestions
-5. Comprehensive logging and usage statistics
+5. Image generation and editing interface
+6. Comprehensive logging and usage statistics
 
 == Advanced Customization ==
 
