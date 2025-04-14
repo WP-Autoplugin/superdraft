@@ -13,6 +13,8 @@ return array(
     'Superdraft\\Autocomplete' => $baseDir . '/includes/admin/class-autocomplete.php',
     'Superdraft\\Custom_API' => $baseDir . '/includes/api/class-custom-api.php',
     'Superdraft\\Google_Gemini_API' => $baseDir . '/includes/api/class-google-gemini-api.php',
+    'Superdraft\\Google_Gemini_Image_API' => $baseDir . '/includes/api/class-google-gemini-image-api.php',
+    'Superdraft\\Images' => $baseDir . '/includes/admin/class-images.php',
     'Superdraft\\Logger' => $baseDir . '/includes/admin/class-logger.php',
     'Superdraft\\Logs_List_Table' => $baseDir . '/includes/admin/class-logs-list-table.php',
     'Superdraft\\OpenAI_API' => $baseDir . '/includes/api/class-openai-api.php',

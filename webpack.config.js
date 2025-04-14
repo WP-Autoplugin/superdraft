@@ -10,6 +10,7 @@ entry: {
 	smartcompose: './src/smartcompose.js',
 	'writing-tips': './src/writing-tips.js',
 	'tags-categories': './src/tags-categories.js',
+	'images': './src/images.js',
 	},
 	output: {
 		path: __dirname + '/assets/admin/js/dist',

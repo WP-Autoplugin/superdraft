@@ -28,6 +28,8 @@ class ComposerStaticInit4c4a7fe56440a8470f10947ab07cdc06
         'Superdraft\\Autocomplete' => __DIR__ . '/../..' . '/includes/admin/class-autocomplete.php',
         'Superdraft\\Custom_API' => __DIR__ . '/../..' . '/includes/api/class-custom-api.php',
         'Superdraft\\Google_Gemini_API' => __DIR__ . '/../..' . '/includes/api/class-google-gemini-api.php',
+        'Superdraft\\Google_Gemini_Image_API' => __DIR__ . '/../..' . '/includes/api/class-google-gemini-image-api.php',
+        'Superdraft\\Images' => __DIR__ . '/../..' . '/includes/admin/class-images.php',
         'Superdraft\\Logger' => __DIR__ . '/../..' . '/includes/admin/class-logger.php',
         'Superdraft\\Logs_List_Table' => __DIR__ . '/../..' . '/includes/admin/class-logs-list-table.php',
         'Superdraft\\OpenAI_API' => __DIR__ . '/../..' . '/includes/api/class-openai-api.php',

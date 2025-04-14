@@ -5,6 +5,7 @@ Superdraft is a free WordPress plugin that enhances your content creation workfl
 - AI-powered writing assistance and recommendations
 - Intelligent tag and category management
 - Smart autocomplete for faster content creation
+- AI-powered image generation and editing
 - Support for many AI models, including free options
 - Comprehensive logging and customization options
 
@@ -111,6 +112,27 @@ Inline sentence completion that works as you type, similar to Gmail's Smart Comp
 *Inline sentence completion in the block editor:*
 
 <img src="assets/screenshot-smart-compose.png" alt="Smart Compose" width="800">
+
+</details>
+
+### Image Generation & Editing
+
+Generate and edit featured images directly in the post editor using AI. Features include:
+
+- Text-to-image generation with customizable prompts
+- Smart prompt generation based on post title and content
+- Targeted image editing capabilities:
+  - Modify specific areas or objects in the image
+  - Adjust style, lighting, and composition
+  - Regenerate portions while keeping others intact
+- Seamless integration with WordPress media library
+
+<details>
+<summary>View Screenshot</summary>
+
+*Image generation and editing interface in the post editor:*
+
+<img src="assets/screenshot-edit-image.png" alt="Image Generation & Editing" width="800">
 
 </details>
 

@@ -4,12 +4,12 @@ Contributors: pbalazs
 Tags: ai, openai, autocomplete, automation, writing
 Requires at least: 6.0
 Tested up to: 6.7
-Stable tag: 1.0.4
+Stable tag: 1.1.0
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: [https://www.gnu.org/licenses/gpl-3.0.html](https://www.gnu.org/licenses/gpl-3.0.html)
 
-A free WordPress plugin providing AI-powered writing assistance, smart tagging, autocomplete, and content recommendations for better workflow.
+A free WordPress plugin providing AI-powered writing assistance, image generation and editing, smart tagging, autocomplete, and content recommendations for better workflow.
 
 == Description ==
 
@@ -20,6 +20,7 @@ This plugin provides:
 - AI-powered writing assistance and recommendations
 - Intelligent tag and category management
 - Smart autocomplete for faster content creation
+- AI-powered image generation and editing
 - Support for numerous AI models (including free, locally hosted, and custom models)
 - Detailed logging, customization, and multilingual support
 
@@ -51,6 +52,15 @@ Intelligent, context-aware suggestions triggered by customizable prefixes. Featu
 
 - Customizable prefix triggers
 - Adjustable suggestion count and context lengths
+
+### Image Generation & Editing
+
+Create and edit featured images directly in the post editor using AI technology. Features:
+
+- Text-to-image generation with custom prompts
+- Smart prompt generation from post content
+- Precise image editing with targeted area modifications
+- WordPress media library integration
 
 ### Smart Compose
 
@@ -141,7 +151,8 @@ Yes, it supports multilingual prompts and interfaces.
 2. Bulk editing tags/categories
 3. AI autocomplete in action
 4. Smart compose inline suggestions
-5. Comprehensive logging and usage statistics
+5. Image generation and editing interface
+6. Comprehensive logging and usage statistics
 
 == Advanced Customization ==
 
@@ -172,6 +183,12 @@ Contributions are welcome via [GitHub](https://github.com/WP-Autoplugin/superdra
 GPL-3.0 or later – [https://www.gnu.org/licenses/gpl-3.0.html](https://www.gnu.org/licenses/gpl-3.0.html)
 
 == Changelog ==
+
+= 1.1.0 =
+
+- Added image generating and editing capabilities in the post editor
+- Added support for new models: Grok 3, Grok 3 Mini, Gemini 2.5 Pro
+- Minor bug fixes and improvements
 
 = 1.0.4 =
 

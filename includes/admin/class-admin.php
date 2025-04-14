@@ -44,6 +44,7 @@ class Admin {
 			'tags_categories',
 			'writing_tips',
 			'autocomplete',
+			'images',
 		];
 		foreach ( $modules as $module ) {
 			$enabled = get_option( 'superdraft_settings', [] );
@@ -66,7 +67,6 @@ class Admin {
 			'manage_options',
 			'superdraft-settings',
 			[ $this, 'render_settings_page' ],
-
 			// This is the contents of the SVG icon, base64-encoded (assets/admin/images/superdraft-icon.svg).
 			'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDI2NyA0MjY3IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbDpzcGFjZT0icHJlc2VydmUiIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBzdHJva2UtbWl0ZXJsaW1pdD0iMiI+PHBhdGggZD0iTTE4MjkgMjAwMGEzNzcxIDM3NzEgMCAwIDAtNjM3IDE0MjVsLTktNDJjLTktMTcyIDE1LTM0NSA3MS01MDggNC00MiAxNy03OSAzNC0xMTdhODQyIDg0MiAwIDAgMS0xMDUtNjgzYzUwLTE5NiAxNDItMzY3IDI3NS01MTJsLTggMTk1Yy03IDE1OSAzNiAzMTYgMTIxIDQ1MHYtMzNjLTE5LTE3Ny0yMi0zNTYtOC01MzMgMTYtMTM0IDcwLTI1MCAxNTgtMzQ2YTg2MiA4NjIgMCAwIDEgNDIxLTI2M2MtNTAgNzAtODYgMTUwLTEwNCAyMzRhOTc1IDk3NSAwIDAgMC0yMSAzNzVsNC01IDgtNDljNy01MyAxOC0xMDQgMzQtMTU1YTc2NyA3NjcgMCAwIDEgMjE2LTQwOCA3NzUgNzc1IDAgMCAxIDQ2Ny0xODdjMTEzLTExIDIyNi02IDMzNyAxNiA2NyAyNDYgMzQgNDc5LTkxIDcwMGE3MzYgNzM2IDAgMCAxLTQyOSAzMDhjLTExMyAzMC0yMjEgNDYtMzM0IDU5IDE1OSAzNyAzMjEgMzMgNDg0LTEzbDEwMC00MSA0IDRhNjg4IDY4OCAwIDAgMS0yNzUgMjcxYy0xODIgOTQtMzgwIDE1NC01ODQgMTc1bDcxIDEyIDYzIDhjMTQxIDEzIDI3OS00IDQxMi00NWw5IDRhNzcwIDc3MCAwIDAgMS0yODQgMjIxYy0xNDEgNjItMjkxIDEwMC00NDEgMTEyIDk1IDMzIDIwMCA1MCAzMDggNTRsNTAgNWMtOCA0LTggOCAwIDEyYTc2MCA3NjAgMCAwIDEtNzA4IDE3NWMxMTItMzA0IDI2Mi01OTIgNDQ1LTg1NGw1LTdjMTk5LTI3NiA0MzEtNTI4IDY5MS03NTFsLTgtNWEzMTM0IDMxMzQgMCAwIDAtNzQyIDc0MloiIGZpbGw9IiMwMzAzMDMiLz48L3N2Zz4=',
 			100
@@ -429,9 +429,10 @@ class Admin {
 				'gemini-1.0-pro'                      => 'Gemini 1.0 Pro',
 			],
 			'xAI'       => [
+				'grok-3'      => 'Grok 3',
+				'grok-3-mini' => 'Grok 3 Mini',
 				'grok-2'      => 'Grok 2',
 				'grok-beta'   => 'Grok Beta',
-				'grok-2-1212' => 'Grok 2-1212',
 			],
 		];
 
@@ -520,6 +521,15 @@ class Admin {
 	 * @return string The model select dropdown.
 	 */
 	public static function get_model_select( $module, $model_key = 'model' ) {
+		if ( 'image_model' === $model_key ) {
+			$settings = get_option( 'superdraft_settings', [] );
+			$selected = $settings['images']['image_model'] ?? 'gemini-2.0-flash-exp-image-generation';
+			$output   = '<select name="superdraft_settings[images][image_model]" class="regular-text superdraft-models">';
+			$output  .= '<option value="gemini-2.0-flash-exp-image-generation"' . selected( $selected, 'gemini-2.0-flash-exp-image-generation', false ) . '>Gemini 2.0 Flash Experimental Image Generation</option>';
+			$output  .= '</select>';
+			return $output;
+		}
+
 		$models   = self::get_models();
 		$settings = get_option( 'superdraft_settings', [] );
 

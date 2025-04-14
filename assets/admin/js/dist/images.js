@@ -5107,76 +5107,6 @@ function canConvert (input) {
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (TurndownService);
 
 
-/***/ }),
-
-/***/ "@wordpress/api-fetch":
-/*!******************************!*\
-  !*** external "wp.apiFetch" ***!
-  \******************************/
-/***/ ((module) => {
-
-module.exports = wp.apiFetch;
-
-/***/ }),
-
-/***/ "@wordpress/components":
-/*!********************************!*\
-  !*** external "wp.components" ***!
-  \********************************/
-/***/ ((module) => {
-
-module.exports = wp.components;
-
-/***/ }),
-
-/***/ "@wordpress/data":
-/*!**************************!*\
-  !*** external "wp.data" ***!
-  \**************************/
-/***/ ((module) => {
-
-module.exports = wp.data;
-
-/***/ }),
-
-/***/ "@wordpress/editor":
-/*!****************************!*\
-  !*** external "wp.editor" ***!
-  \****************************/
-/***/ ((module) => {
-
-module.exports = wp.editor;
-
-/***/ }),
-
-/***/ "@wordpress/element":
-/*!*****************************!*\
-  !*** external "wp.element" ***!
-  \*****************************/
-/***/ ((module) => {
-
-module.exports = wp.element;
-
-/***/ }),
-
-/***/ "@wordpress/i18n":
-/*!**************************!*\
-  !*** external "wp.i18n" ***!
-  \**************************/
-/***/ ((module) => {
-
-module.exports = wp.i18n;
-
-/***/ }),
-
-/***/ "@wordpress/plugins":
-/*!*****************************!*\
-  !*** external "wp.plugins" ***!
-  \*****************************/
-/***/ ((module) => {
-
-module.exports = wp.plugins;
-
 /***/ })
 
 /******/ 	});
@@ -5209,18 +5139,6 @@ module.exports = wp.plugins;
 /******/ 	}
 /******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	(() => {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = (module) => {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				() => (module['default']) :
-/******/ 				() => (module);
-/******/ 			__webpack_require__.d(getter, { a: getter });
-/******/ 			return getter;
-/******/ 		};
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
@@ -5262,319 +5180,338 @@ module.exports = wp.plugins;
 var __webpack_exports__ = {};
 // This entry needs to be wrapped in an IIFE because it needs to be isolated against other modules in the chunk.
 (() => {
-/*!*****************************!*\
-  !*** ./src/writing-tips.js ***!
-  \*****************************/
+/*!***********************!*\
+  !*** ./src/images.js ***!
+  \***********************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_plugins__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/plugins */ "@wordpress/plugins");
-/* harmony import */ var _wordpress_plugins__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_plugins__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_editor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/editor */ "@wordpress/editor");
-/* harmony import */ var _wordpress_editor__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_editor__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
-/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/api-fetch */ "@wordpress/api-fetch");
-/* harmony import */ var _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var turndown__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! turndown */ "./node_modules/turndown/lib/turndown.browser.es.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var turndown__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! turndown */ "./node_modules/turndown/lib/turndown.browser.es.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 
 
-
-
-
-
-
-
-
-const WritingTipsPanel = () => {
-  const meta = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_4__.useSelect)(select => select('core/editor').getEditedPostAttribute('meta'), []);
+(function (wp) {
   const {
-    editPost
-  } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_4__.useDispatch)('core/editor');
+    addFilter
+  } = wp.hooks;
+  const {
+    Button,
+    TextareaControl,
+    Spinner,
+    Tooltip,
+    IconButton
+  } = wp.components;
+  const {
+    useState,
+    useCallback,
+    memo,
+    useEffect
+  } = wp.element;
+  const {
+    __
+  } = wp.i18n;
+  const apiFetch = wp.apiFetch;
+  const {
+    select,
+    dispatch,
+    useSelect
+  } = wp.data;
+  const {
+    createHigherOrderComponent
+  } = wp.compose;
+  const {
+    createNotice
+  } = dispatch('core/notices');
 
-  // Our tips are stored in the "superdraft_writing_tips" meta key.
-  const initialTips = meta?.superdraft_writing_tips || [];
-  const [tips, setTips] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_5__.useState)(initialTips);
-  const [newTipText, setNewTipText] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_5__.useState)('');
-  const [editingTipId, setEditingTipId] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_5__.useState)(null);
-  const [editingText, setEditingText] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_5__.useState)('');
-  const [isAnalyzing, setIsAnalyzing] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_5__.useState)(false);
-  const [lastContent, setLastContent] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_5__.useState)('');
-  const [autoUpdateTimer, setAutoUpdateTimer] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_5__.useState)(null);
+  // In-memory prompt storage.
+  let generatedPrompts = [];
 
-  // Get settings via wp_localize_script
-  const settings = window.superdraftSettings?.writing_tips || {};
-  const autoUpdateInterval = parseInt(settings.auto_update || 0) * 60 * 1000; // Convert minutes to ms
-
-  // Button text
-  const completedCount = tips.filter(tip => tip.completed).length;
-  const totalCount = tips.length;
-  const getButtonText = () => {
-    if (totalCount === 0) {
-      return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Analyze Now', 'superdraft');
-    }
-    return (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.sprintf)(
-    // Translators: %1$s: completed count, %2$s: total count.
-    (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Update Checklist (%1$s/%2$s)', 'superdraft'), completedCount, totalCount);
-  };
-
-  // Keep local tips in sync if meta changes externally.
-  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_5__.useEffect)(() => {
-    if (JSON.stringify(tips) !== JSON.stringify(initialTips)) {
-      setTips(initialTips);
-    }
-  }, [initialTips]);
-
-  // Whenever our `tips` state changes, update the post meta so that hitting "Save" persists them.
-  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_5__.useEffect)(() => {
-    editPost({
-      meta: {
-        ...meta,
-        superdraft_writing_tips: tips,
-        // Add nonce to the form data
-        superdraft_writing_tips_nonce: settings.nonce
-      }
-    });
-  }, [tips]);
-
-  // Monitor content changes and trigger auto-update
-  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_5__.useEffect)(() => {
-    const currentContent = wp.data.select('core/editor').getEditedPostContent();
-    if (autoUpdateInterval > 0 && currentContent !== lastContent) {
-      setLastContent(currentContent);
-
-      // Clear existing timer
-      if (autoUpdateTimer) {
-        clearTimeout(autoUpdateTimer);
-      }
-
-      // Set new timer
-      const timer = setTimeout(() => {
-        handleAnalyzeNow();
-      }, autoUpdateInterval);
-      setAutoUpdateTimer(timer);
-    }
-    return () => {
-      if (autoUpdateTimer) {
-        clearTimeout(autoUpdateTimer);
-      }
-    };
-  }, [wp.data.select('core/editor').getEditedPostContent()]);
-
-  /**
-   * "Analyze Now" button -> fetch suggestions from our custom REST endpoint.
-   */
-  const handleAnalyzeNow = async () => {
-    setIsAnalyzing(true);
-    try {
-      const postTitle = wp.data.select('core/editor').getEditedPostAttribute('title');
-      const postContent = wp.data.select('core/editor').getEditedPostAttribute('content');
-      const postType = wp.data.select('core/editor').getEditedPostAttribute('type');
+  // AutoGenerateButton component (modified to use Markdown)
+  const AutoGenerateButton = memo(({
+    setPrompt,
+    disabled
+  }) => {
+    const [isGeneratingPrompt, setIsGeneratingPrompt] = useState(false);
+    const handleAutoGeneratePrompt = useCallback(async () => {
+      setIsGeneratingPrompt(true);
+      const postId = select('core/editor').getEditedPostAttribute('id');
+      const postTitle = select('core/editor').getEditedPostAttribute('title');
+      const postContent = select('core/editor').getEditedPostAttribute('content');
+      const postType = select('core/editor').getEditedPostAttribute('type');
 
       // Initialize Turndown
-      const turndownService = new turndown__WEBPACK_IMPORTED_MODULE_7__["default"]({
+      const turndownService = new turndown__WEBPACK_IMPORTED_MODULE_0__["default"]({
         headingStyle: 'atx',
         codeBlockStyle: 'fenced'
       });
 
       // Convert HTML content to Markdown
       const markdown = turndownService.turndown(postContent);
-      const response = await _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_6___default()({
-        path: '/superdraft/v1/writing-tips/analyze',
-        method: 'POST',
-        data: {
-          postTitle,
-          postContent: markdown,
-          postType,
-          currentTips: tips,
-          // Include current tips in the request
-          minTips: parseInt(settings.min_tips || 5) // Add minTips parameter
+      try {
+        const response = await apiFetch({
+          path: '/superdraft/v1/image/generate-prompt',
+          method: 'POST',
+          data: {
+            postId,
+            postTitle,
+            postContent: markdown,
+            postType,
+            previousPrompts: generatedPrompts
+          }
+        });
+        if (response.prompt) {
+          setPrompt(response.prompt);
+          // Add the newly generated prompt to our in-memory list.
+          generatedPrompts.push(response.prompt);
         }
+      } catch (error) {
+        console.error('Error generating prompt:', error);
+      } finally {
+        setIsGeneratingPrompt(false);
+      }
+    }, [setPrompt]);
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(Tooltip, {
+      text: __('Auto-generate prompt', 'superdraft'),
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(IconButton, {
+        className: "superdraft-auto-generate-button",
+        icon: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("svg", {
+          fill: "currentColor",
+          version: "1.1",
+          xmlns: "http://www.w3.org/2000/svg",
+          viewBox: "0 0 32.318 32.318",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("g", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("path", {
+              d: "M30.537,7.366l-4.244-4.242c-0.586-0.586-1.534-0.586-2.12,0L1.781,25.514c-0.281,0.281-0.439,0.664-0.439,1.062 s0.158,0.777,0.439,1.062l4.242,4.24c0.293,0.293,0.678,0.439,1.062,0.439c0.384,0,0.768-0.146,1.061-0.439L30.539,9.488 c0.279-0.281,0.438-0.663,0.438-1.061S30.816,7.647,30.537,7.366z M22.052,13.729l-2.121-2.121l5.304-5.303l2.121,2.121 L22.052,13.729z M2.493,6c0-0.829,0.671-1.5,1.5-1.5h3v-3c0-0.829,0.671-1.5,1.5-1.5c0.828,0,1.5,0.671,1.5,1.5v3h3 c0.828,0,1.5,0.671,1.5,1.5c0,0.829-0.672,1.5-1.5,1.5h-3v3c0,0.829-0.672,1.5-1.5,1.5c-0.829,0-1.5-0.671-1.5-1.5v-3h-3 C3.165,7.5,2.493,6.829,2.493,6z"
+            })
+          })
+        }),
+        onClick: handleAutoGeneratePrompt,
+        disabled: disabled || isGeneratingPrompt
+      })
+    });
+  });
+
+  // ImageGenerationControls component
+  const ImageGenerationControls = memo(({
+    isProcessing,
+    setIsProcessing
+  }) => {
+    const [mode, setMode] = useState(null);
+    const [prompt, setPrompt] = useState('');
+    const {
+      postId,
+      featuredImageId
+    } = useSelect(state => ({
+      postId: select('core/editor').getEditedPostAttribute('id'),
+      featuredImageId: select('core/editor').getEditedPostAttribute('featured_media')
+    }), []);
+
+    // Reset mode and prompt when featuredImageId changes.
+    useEffect(() => {
+      setMode(null);
+      setPrompt('');
+    }, [featuredImageId]);
+    const updateFeaturedImage = useCallback(newAttachmentId => {
+      dispatch('core/editor').editPost({
+        featured_media: newAttachmentId
       });
-      // Merge new tips with existing ones, avoiding duplicates
-      // New tips have priority over existing ones, meaning they can overwrite them
-      const mergedTips = [...tips.filter(tip => !response.some(newTip => newTip.text === tip.text)), ...response];
-      setTips(mergedTips);
-    } catch (err) {
-      console.error('Error analyzing tips:', err);
-    } finally {
-      setIsAnalyzing(false);
-    }
-  };
-
-  /**
-   * Add new tip manually.
-   */
-  const handleAddTip = () => {
-    if (newTipText.trim()) {
-      const newTip = {
-        id: 'tip_' + Date.now(),
-        text: newTipText.trim(),
-        completed: false
-      };
-      setTips([...tips, newTip]);
-      setNewTipText('');
-    }
-  };
-
-  /**
-   * Toggle completion of a tip.
-   */
-  const toggleTipCompletion = tipId => {
-    const updated = tips.map(tip => {
-      if (tip.id === tipId) {
-        return {
-          ...tip,
-          completed: !tip.completed
-        };
+    }, []);
+    const handleError = useCallback(error => {
+      let errorMessage = __('An unexpected error occurred.', 'superdraft');
+      if (error.message) {
+        try {
+          if (error.code === 'api_error') {
+            const match = error.message.match(/\[message\] => (.+?)\n/);
+            errorMessage = match ? match[1] : error.message;
+          } else {
+            errorMessage = error.message;
+          }
+        } catch (e) {
+          errorMessage = error.message;
+        }
       }
-      return tip;
-    });
-    setTips(updated);
-  };
-
-  /**
-   * Delete a tip.
-   */
-  const deleteTip = tipId => {
-    const updated = tips.filter(tip => tip.id !== tipId);
-    setTips(updated);
-  };
-
-  /**
-   * Update tip text (in-place editing).
-   */
-  const updateTipText = (tipId, newText) => {
-    const updated = tips.map(tip => {
-      if (tip.id === tipId) {
-        return {
-          ...tip,
-          text: newText
-        };
+      createNotice('error', errorMessage, {
+        isDismissible: true,
+        type: 'snackbar'
+      });
+    }, []);
+    const handleGenerateImage = useCallback(async () => {
+      if (!prompt) return;
+      setIsProcessing(true);
+      try {
+        const response = await apiFetch({
+          path: '/superdraft/v1/image/generate',
+          method: 'POST',
+          data: {
+            postId,
+            prompt
+          }
+        });
+        if (response.attachment_id) {
+          updateFeaturedImage(response.attachment_id);
+          createNotice('success', __('Image generated successfully.', 'superdraft'), {
+            type: 'snackbar'
+          });
+        }
+      } catch (error) {
+        handleError(error);
+      } finally {
+        setIsProcessing(false);
       }
-      return tip;
-    });
-    setTips(updated);
-  };
-
-  // Add this new handler
-  const handleKeyDown = (event, callback) => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      callback();
-    }
-  };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(_wordpress_editor__WEBPACK_IMPORTED_MODULE_2__.PluginDocumentSettingPanel, {
-    name: "superdraft-writing-tips-panel",
-    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Writing Tips', 'superdraft'),
-    className: "superdraft-writing-tips-panel",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
-      isPrimary: true,
-      onClick: handleAnalyzeNow,
-      icon: totalCount > 0 ? "update" : "analytics",
-      isBusy: isAnalyzing,
-      disabled: isAnalyzing,
-      children: isAnalyzing ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Analyzing...', 'superdraft') : getButtonText()
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-      className: "superdraft-writing-tips-list",
-      children: [tips.length === 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("p", {
-        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('No tips yet.', 'superdraft')
-      }), tips.map(tip => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-        className: `superdraft-writing-tip-item ${tip.completed ? 'completed' : ''}`,
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.CheckboxControl, {
-          checked: tip.completed,
-          onChange: () => toggleTipCompletion(tip.id),
+    }, [prompt, postId, updateFeaturedImage, setIsProcessing, handleError]);
+    const handleEditImage = useCallback(async () => {
+      if (!prompt || !featuredImageId) return;
+      setIsProcessing(true);
+      try {
+        const response = await apiFetch({
+          path: '/superdraft/v1/image/edit',
+          method: 'POST',
+          data: {
+            postId,
+            featuredImageId,
+            prompt
+          }
+        });
+        if (response.attachment_id) {
+          updateFeaturedImage(response.attachment_id);
+          createNotice('success', __('Image edited successfully.', 'superdraft'), {
+            type: 'snackbar'
+          });
+        }
+      } catch (error) {
+        handleError(error);
+      } finally {
+        setIsProcessing(false);
+      }
+    }, [prompt, featuredImageId, updateFeaturedImage, setIsProcessing, handleError]);
+    const toggleMode = useCallback(newMode => {
+      setMode(prevMode => {
+        const nextMode = prevMode === newMode ? null : newMode;
+        if (prevMode !== nextMode) {
+          setPrompt('');
+        }
+        return nextMode;
+      });
+    }, []);
+    const handleAction = mode === 'generate' ? handleGenerateImage : handleEditImage;
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.Fragment, {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(Button, {
+          isSecondary: mode !== 'generate',
+          isPrimary: mode === 'generate',
+          onClick: () => toggleMode('generate'),
           style: {
             marginRight: '8px'
-          }
-        }), editingTipId === tip.id ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("textarea", {
-            className: "superdraft-tip-text",
-            value: editingText,
-            onChange: e => setEditingText(e.target.value),
-            onKeyDown: e => {
-              if (e.key === 'Enter' && e.ctrlKey) {
-                updateTipText(tip.id, editingText);
-                setEditingTipId(null);
-              }
+          },
+          children: [__('Generate', 'superdraft'), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("svg", {
+            viewBox: "0 0 24 24",
+            width: "20",
+            height: "20",
+            style: {
+              marginLeft: '4px',
+              transform: mode === 'generate' ? 'rotate(180deg)' : 'none',
+              transition: 'transform 0.2s'
             },
-            rows: "4"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
-            isSecondary: true,
-            onClick: () => {
-              updateTipText(tip.id, editingText);
-              setEditingTipId(null);
-            },
-            children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Save', 'superdraft')
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("path", {
+              fill: "currentColor",
+              d: "M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"
+            })
           })]
-        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
-            className: "superdraft-tip-text",
-            onClick: () => toggleTipCompletion(tip.id),
-            children: tip.text
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.IconButton, {
-            icon: "edit",
-            label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Edit tip', 'superdraft'),
-            onClick: () => {
-              setEditingTipId(tip.id);
-              setEditingText(tip.text);
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(Button, {
+          isSecondary: mode !== 'edit',
+          isPrimary: mode === 'edit',
+          onClick: () => toggleMode('edit'),
+          disabled: !featuredImageId,
+          children: [__('Edit', 'superdraft'), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("svg", {
+            viewBox: "0 0 24 24",
+            width: "20",
+            height: "20",
+            style: {
+              marginLeft: '4px',
+              transform: mode === 'edit' ? 'rotate(180deg)' : 'none',
+              transition: 'transform 0.2s'
             },
-            className: "superdraft-writing-tip-edit"
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("path", {
+              fill: "currentColor",
+              d: "M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"
+            })
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.IconButton, {
-          icon: "trash",
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Delete tip', 'superdraft'),
-          onClick: () => deleteTip(tip.id),
-          className: "superdraft-writing-tip-delete"
         })]
-      }, tip.id))]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-      style: {
-        marginTop: '1em'
-      },
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.TextControl, {
-        className: "superdraft-new-tip-input",
-        value: newTipText,
-        onChange: setNewTipText,
-        placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Add a new item...', 'superdraft'),
-        onKeyDown: e => handleKeyDown(e, handleAddTip)
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
-        isSecondary: true,
-        onClick: handleAddTip,
-        style: {
-          marginTop: '0.5em'
-        },
-        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Add Item', 'superdraft')
+      }), mode && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+        className: "superdraft-mode-controls",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+          className: "superdraft-prompt-wrapper",
+          style: {
+            position: 'relative'
+          },
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(TextareaControl, {
+            label: __('Prompt', 'superdraft'),
+            value: prompt,
+            onChange: setPrompt,
+            help: mode === 'generate' ? __('Enter a description for the new featured image', 'superdraft') : __('Describe the changes for your current image', 'superdraft')
+          }), mode === 'generate' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(AutoGenerateButton, {
+            setPrompt: setPrompt,
+            disabled: isProcessing
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(Button, {
+          isPrimary: true,
+          onClick: handleAction,
+          disabled: isProcessing,
+          children: isProcessing ? __('Processing...', 'superdraft') : mode === 'generate' ? __('Generate', 'superdraft') : __('Edit', 'superdraft')
+        })]
       })]
-    })]
+    });
   });
-};
 
-// Conditionally register the plugin based on editor context
-const ConditionalWritingTipsPlugin = () => {
-  // Check if we're in the Site Editor
-  const isInSiteEditor = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_4__.useSelect)(select => {
-    // The presence of core/edit-site store indicates we're in the Site Editor
-    return !!select('core/edit-site');
-  }, []);
+  // Higher-Order Component
+  const withImageGeneration = createHigherOrderComponent(OriginalComponent => {
+    return memo(props => {
+      const [isProcessing, setIsProcessing] = useState(false);
+      const FeaturedImageOverlay = () => {
+        if (!isProcessing) return null;
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+          className: "superdraft-image-processing-overlay",
+          style: {
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(255, 255, 255, 0.7)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 100
+          },
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(Spinner, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("p", {
+            style: {
+              marginTop: '10px'
+            },
+            children: __('Processing image...', 'superdraft')
+          })]
+        });
+      };
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.Fragment, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+          className: "superdraft-featured-image-wrapper",
+          style: {
+            position: 'relative'
+          },
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(OriginalComponent, {
+            ...props
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(FeaturedImageOverlay, {})]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(ImageGenerationControls, {
+          isProcessing: isProcessing,
+          setIsProcessing: setIsProcessing
+        })]
+      });
+    });
+  }, 'withImageGeneration');
 
-  // Don't render the panel in the Site Editor
-  if (isInSiteEditor) {
-    return null;
-  }
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(WritingTipsPanel, {});
-};
-(0,_wordpress_plugins__WEBPACK_IMPORTED_MODULE_1__.registerPlugin)('superdraft-writing-tips', {
-  render: ConditionalWritingTipsPlugin,
-  icon: null
-});
+  // Apply the filter
+  addFilter('editor.PostFeaturedImage', 'superdraft/with-image-generation', withImageGeneration);
+})(window.wp);
 })();
 
 /******/ })()
 ;
-//# sourceMappingURL=writing-tips.js.map
+//# sourceMappingURL=images.js.map

@@ -22,6 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<a href="#tags-categories" class="nav-tab nav-tab-active"><?php esc_html_e( 'Auto Tags & Categories', 'superdraft' ); ?></a>
 		<a href="#writing-tips" class="nav-tab"><?php esc_html_e( 'Writing Tips', 'superdraft' ); ?></a>
 		<a href="#autocomplete" class="nav-tab"><?php esc_html_e( 'Autocomplete', 'superdraft' ); ?></a>
+		<a href="#images" class="nav-tab"><?php esc_html_e( 'Image Generation', 'superdraft' ); ?></a>
 		<a href="#api-setup" class="nav-tab"><?php esc_html_e( 'API Setup', 'superdraft' ); ?></a>
 	</h2>
 	<form method="post" action="options.php" id="superdraft-settings-form">
@@ -89,21 +90,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<td>
 						<?php
 							$allowed_html = [
-								'select' => [
-									'name' => true,
+								'select'   => [
+									'name'  => true,
 									'class' => true,
 								],
 								'optgroup' => [
 									'label' => true,
 									'class' => true,
 								],
-								'option' => [
-									'value' => true,
+								'option'   => [
+									'value'    => true,
 									'selected' => true,
 								],
 							];
 							echo wp_kses( self::get_model_select( 'tags_categories' ), $allowed_html );
-						?>
+							?>
 					</td>
 				</tr>
 			</table>
@@ -283,6 +284,34 @@ if ( ! defined( 'ABSPATH' ) ) {
 							value="<?php echo esc_attr( $settings['autocomplete']['smart_compose_max_tokens'] ?? 10 ); ?>" 
 							min="1" max="1000" />
 						<p class="description"><?php esc_html_e( 'Maximum number of tokens to generate for Smart Compose suggestions. One token is generally one word or a few characters in English. Default: 10', 'superdraft' ); ?></p>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<div id="images" class="tab-content" style="display:none;">
+			<h3><?php esc_html_e( 'AI Image Generation', 'superdraft' ); ?></h3>
+			<p class="description"><?php esc_html_e( 'Generate a featured image for your post using AI based on a textual prompt.', 'superdraft' ); ?></p>
+			<table class="form-table">
+				<tr valign="top" class="superdraft-image-generation-enabled-row superdraft-module-toggle-row">
+					<th scope="row"><?php esc_html_e( 'Enable AI Image Generation', 'superdraft' ); ?></th>
+					<td>
+						<input type="checkbox" id="superdraft_image_generation_enabled"
+							name="superdraft_settings[images][enabled]" 
+							value="1" <?php checked( 1, $settings['images']['enabled'] ?? false, true ); ?> />
+						<label for="superdraft_image_generation_enabled"><?php esc_html_e( 'Generate featured images using AI', 'superdraft' ); ?></label>
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row"><?php esc_html_e( 'Select Image Model', 'superdraft' ); ?></th>
+					<td>
+						<?php echo wp_kses( \Superdraft\Admin::get_model_select( 'images', 'image_model' ), $allowed_html ); ?>
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row"><?php esc_html_e( 'Prompt Generator Model', 'superdraft' ); ?></th>
+					<td>
+						<?php echo wp_kses( \Superdraft\Admin::get_model_select( 'images', 'prompt_model' ), $allowed_html ); ?>
 					</td>
 				</tr>
 			</table>

@@ -70,57 +70,73 @@ class Settings_Config {
 				],
 			],
 			'autocomplete'    => [
-				'enabled'        => [
+				'enabled'                  => [
 					'type'    => 'boolean',
 					'default' => false,
 				],
-				'model'          => [
+				'model'                    => [
 					'type'     => 'string',
 					'default'  => 'gpt-4o-mini',
 					'sanitize' => 'sanitize_text_field',
 				],
-				'prefix'         => [
+				'prefix'                   => [
 					'type'     => 'string',
 					'default'  => '~',
 					'sanitize' => 'sanitize_text_field',
 				],
-				'suggestions'    => [
+				'suggestions'              => [
 					'type'     => 'integer',
 					'default'  => 3,
 					'sanitize' => 'intval',
 				],
-				'empty_search'   => [
+				'empty_search'             => [
 					'type'    => 'boolean',
 					'default' => true,
 				],
-				'context_length' => [
+				'context_length'           => [
 					'type'     => 'integer',
 					'default'  => 1,
 					'sanitize' => 'intval',
 				],
-				'debounce_delay' => [
+				'debounce_delay'           => [
 					'type'     => 'integer',
 					'default'  => 500,
 					'sanitize' => 'absint',
 				],
-				'smart_compose_enabled' => [
+				'smart_compose_enabled'    => [
 					'type'    => 'boolean',
 					'default' => false,
 				],
-				'smart_compose_model'   => [
+				'smart_compose_model'      => [
 					'type'     => 'string',
 					'default'  => 'gpt-4o-mini',
 					'sanitize' => 'sanitize_text_field',
 				],
-				'smart_compose_delay'   => [
+				'smart_compose_delay'      => [
 					'type'     => 'integer',
 					'default'  => 500,
 					'sanitize' => 'absint',
 				],
 				'smart_compose_max_tokens' => [
 					'type'     => 'integer',
-					'default'  => 10,
+					'default'  => 100,
 					'sanitize' => 'absint',
+				],
+			],
+			'images'          => [
+				'enabled'      => [
+					'type'    => 'boolean',
+					'default' => false,
+				],
+				'image_model'  => [
+					'type'     => 'string',
+					'default'  => 'gemini-2.0-flash-exp-image-generation',
+					'sanitize' => 'sanitize_text_field',
+				],
+				'prompt_model' => [
+					'type'     => 'string',
+					'default'  => 'gpt-4o-mini',
+					'sanitize' => 'sanitize_text_field',
 				],
 			],
 		];
