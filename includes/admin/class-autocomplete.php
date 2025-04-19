@@ -30,6 +30,8 @@ class Autocomplete {
 		add_action( 'enqueue_block_editor_assets', [ $this, 'enqueue_editor_assets' ] );
 		add_action( 'rest_api_init', [ $this, 'register_autocomplete_endpoint' ] );
 		add_action( 'rest_api_init', [ $this, 'register_smartcompose_endpoint' ] );
+
+		add_action( 'enqueue_block_assets', [ $this, 'enqueue_iframe_styles' ] );
 	}
 
 	/**
@@ -51,13 +53,6 @@ class Autocomplete {
 			SUPERDRAFT_VERSION
 		);
 
-		wp_enqueue_style(
-			'superdraft-autocomplete-editor-css',
-			SUPERDRAFT_URL . 'assets/admin/css/autocomplete-editor.css',
-			[],
-			SUPERDRAFT_VERSION
-		);
-
 		// Only load Smart Compose if it's enabled in settings.
 		$settings              = get_option( 'superdraft_settings', [] );
 		$smart_compose_enabled = isset( $settings['autocomplete']['smart_compose_enabled'] ) ?
@@ -73,6 +68,20 @@ class Autocomplete {
 			);
 		}
 	}
+
+	/**
+	 * Enqueue iframe styles for the editor.
+	 */
+	public function enqueue_iframe_styles() {
+		if ( is_admin() ) {
+			wp_enqueue_style(
+				'superdraft-autocomplete-editor-css',
+				SUPERDRAFT_URL . 'assets/admin/css/autocomplete-editor.css',
+				[],
+				SUPERDRAFT_VERSION
+			);
+		}
+	}	
 
 	/**
 	 * Register the autocomplete endpoint.

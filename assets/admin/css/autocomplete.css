@@ -21,4 +21,5 @@
 
 .superdraft-autocompleter.is-selected {
 	white-space: normal;
+	height: auto;
 }
