@@ -524,9 +524,12 @@ class Admin {
 		if ( 'image_model' === $model_key ) {
 			$settings = get_option( 'superdraft_settings', [] );
 			$selected = $settings['images']['image_model'] ?? 'gemini-2.0-flash-exp-image-generation';
-			$output   = '<select name="superdraft_settings[images][image_model]" class="regular-text superdraft-models">';
-			$output  .= '<option value="gemini-2.0-flash-exp-image-generation"' . selected( $selected, 'gemini-2.0-flash-exp-image-generation', false ) . '>Gemini 2.0 Flash Experimental Image Generation</option>';
-			$output  .= '</select>';
+
+			$output  = '<select name="superdraft_settings[images][image_model]" class="regular-text superdraft-models">';
+			$output .= '<option value="gemini-2.0-flash-exp-image-generation"' . selected( $selected, 'gemini-2.0-flash-exp-image-generation', false ) . '>Gemini 2.0 Flash Exp – Image</option>';
+			$output .= '<option value="dall-e-3"' . selected( $selected, 'dall-e-3', false ) . '>DALL·E 3</option>';
+			$output .= '</select>';
+
 			return $output;
 		}
 

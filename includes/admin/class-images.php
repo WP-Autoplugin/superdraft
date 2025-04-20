@@ -133,6 +133,14 @@ class Images {
 	 * @param \WP_REST_Request $request The REST request.
 	 */
 	public function edit_image( $request ) {
+		$settings   = get_option( 'superdraft_settings', [] );
+		$image_model = $settings['images']['image_model'] ?? 'gemini-2.0-flash-exp-image-generation';
+
+		// Bail out if current model isn't Gemini (other models don't support editing).
+		if ( strpos( $image_model, 'gemini' ) !== 0 ) {
+			return new \WP_Error( 'edit_not_supported', __( 'The selected image model does not support editing.', 'superdraft' ) );
+		}
+
 		$post_id           = $request->get_param( 'postId' );
 		$featured_image_id = $request->get_param( 'featuredImageId' );
 		$prompt            = $request->get_param( 'prompt' );
@@ -320,18 +328,28 @@ class Images {
 			return new \WP_Error( 'module_disabled', __( 'Image generation module is disabled', 'superdraft' ) );
 		}
 
-		$image_model = ! empty( $settings['images']['image_model'] )
-			? $settings['images']['image_model']
-			: 'gemini-2.0-flash-exp-image-generation';
+		$image_model = $settings['images']['image_model'] ?? 'gemini-2.0-flash-exp-image-generation';
 
-		$google_api_key = get_option( 'superdraft_api_keys', [] )['google'] ?? '';
-		if ( empty( $google_api_key ) ) {
-			return new \WP_Error( 'missing_api_key', __( 'Google API key is missing', 'superdraft' ) );
+		if ( strpos( $image_model, 'gemini' ) === 0 ) {
+			$api_key = get_option( 'superdraft_api_keys', [] )['google'] ?? '';
+			if ( empty( $api_key ) ) {
+				return new \WP_Error( 'missing_api_key', __( 'Google API key is missing', 'superdraft' ) );
+			}
+			$api = new Google_Gemini_Image_API();
+			$api->set_api_key( $api_key );
+
+		} elseif ( strpos( $image_model, 'dall-e' ) === 0 ) {
+			$api_key = get_option( 'superdraft_api_keys', [] )['openai'] ?? '';
+			if ( empty( $api_key ) ) {
+				return new \WP_Error( 'missing_api_key', __( 'OpenAI API key is missing', 'superdraft' ) );
+			}
+			$api = new OpenAI_Image_API();
+			$api->set_api_key( $api_key );
+
+		} else {
+			return new \WP_Error( 'invalid_model', __( 'Invalid image model selected', 'superdraft' ) );
 		}
 
-		// Use our new Image API class.
-		$api = new Google_Gemini_Image_API();
-		$api->set_api_key( $google_api_key );
 		$api->set_model( $image_model );
 
 		$response = $api->send_prompt( $prompt );

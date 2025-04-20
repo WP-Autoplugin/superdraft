@@ -13,6 +13,13 @@ import TurndownService from 'turndown';
 	// In-memory prompt storage.
 	let generatedPrompts = [];
 
+	// Does the currently‑selected backend model support editing?
+	const editSupported =
+		typeof superdraftSettings     !== 'undefined' &&
+		superdraftSettings.images     &&
+		superdraftSettings.images.image_model &&
+		superdraftSettings.images.image_model.startsWith( 'gemini' ); // only Gemini for now
+
 	// AutoGenerateButton component (modified to use Markdown)
 	const AutoGenerateButton = memo( ( { setPrompt, disabled } ) => {
 		const [ isGeneratingPrompt, setIsGeneratingPrompt ] = useState( false );
@@ -90,6 +97,9 @@ import TurndownService from 'turndown';
 			postId: select( 'core/editor' ).getEditedPostAttribute( 'id' ),
 			featuredImageId: select( 'core/editor' ).getEditedPostAttribute( 'featured_media' )
 		}), [] );
+
+		// Disable “edit” entirely if model can’t do it.
+		const canEdit = editSupported && featuredImageId;
 
 		// Reset mode and prompt when featuredImageId changes.
 		useEffect( () => {
@@ -215,29 +225,32 @@ import TurndownService from 'turndown';
 							/>
 						</svg>
 					</Button>
-					<Button
-						isSecondary={ mode !== 'edit' }
-						isPrimary={ mode === 'edit' }
-						onClick={ () => toggleMode( 'edit' ) }
-						disabled={ ! featuredImageId }
-					>
-						{ __( 'Edit', 'superdraft' ) }
-						<svg 
-							viewBox="0 0 24 24" 
-							width="20" 
-							height="20" 
-							style={ { 
-								marginLeft: '4px',
-								transform: mode === 'edit' ? 'rotate(180deg)' : 'none',
-								transition: 'transform 0.2s'
-							} }
+
+					{ editSupported && (
+						<Button
+							isSecondary={ mode !== 'edit' }
+							isPrimary={ mode === 'edit' }
+							onClick={ () => toggleMode( 'edit' ) }
+							disabled={ ! featuredImageId }
 						>
-							<path 
-								fill="currentColor" 
-								d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"
-							/>
-						</svg>
-					</Button>
+							{ __( 'Edit', 'superdraft' ) }
+							<svg 
+								viewBox="0 0 24 24" 
+								width="20" 
+								height="20" 
+								style={ { 
+									marginLeft: '4px',
+									transform: mode === 'edit' ? 'rotate(180deg)' : 'none',
+									transition: 'transform 0.2s'
+								} }
+							>
+								<path 
+									fill="currentColor" 
+									d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"
+								/>
+							</svg>
+						</Button>
+					) }
 				</div>
 				{ mode && (
 					<div className="superdraft-mode-controls">

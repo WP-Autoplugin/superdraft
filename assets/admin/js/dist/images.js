@@ -5224,6 +5224,9 @@ __webpack_require__.r(__webpack_exports__);
   // In-memory prompt storage.
   let generatedPrompts = [];
 
+  // Does the currently‑selected backend model support editing?
+  const editSupported = typeof superdraftSettings !== 'undefined' && superdraftSettings.images && superdraftSettings.images.image_model && superdraftSettings.images.image_model.startsWith('gemini'); // only Gemini for now
+
   // AutoGenerateButton component (modified to use Markdown)
   const AutoGenerateButton = memo(({
     setPrompt,
@@ -5303,6 +5306,9 @@ __webpack_require__.r(__webpack_exports__);
       postId: select('core/editor').getEditedPostAttribute('id'),
       featuredImageId: select('core/editor').getEditedPostAttribute('featured_media')
     }), []);
+
+    // Disable “edit” entirely if model can’t do it.
+    const canEdit = editSupported && featuredImageId;
 
     // Reset mode and prompt when featuredImageId changes.
     useEffect(() => {
@@ -5415,7 +5421,7 @@ __webpack_require__.r(__webpack_exports__);
               d: "M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"
             })
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(Button, {
+        }), editSupported && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(Button, {
           isSecondary: mode !== 'edit',
           isPrimary: mode === 'edit',
           onClick: () => toggleMode('edit'),

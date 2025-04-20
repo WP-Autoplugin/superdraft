@@ -18,6 +18,7 @@ return array(
     'Superdraft\\Logger' => $baseDir . '/includes/admin/class-logger.php',
     'Superdraft\\Logs_List_Table' => $baseDir . '/includes/admin/class-logs-list-table.php',
     'Superdraft\\OpenAI_API' => $baseDir . '/includes/api/class-openai-api.php',
+    'Superdraft\\OpenAI_Image_API' => $baseDir . '/includes/api/class-openai-image-api.php',
     'Superdraft\\Settings_Config' => $baseDir . '/includes/admin/class-settings-config.php',
     'Superdraft\\Tags_Categories' => $baseDir . '/includes/admin/class-tags-categories.php',
     'Superdraft\\Writing_Tips' => $baseDir . '/includes/admin/class-writing-tips.php',
