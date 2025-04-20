@@ -346,6 +346,16 @@ class Images {
 			$api->set_model( $image_model );
 
 			$response = $api->send_prompt( $prompt );
+
+			// Log the API request.
+			\Superdraft\Admin::log_api_request(
+				$api,
+				[
+					'prompt' => $prompt,
+					'tool'   => 'image-generation',
+				]
+			);
+
 			if ( is_wp_error( $response ) ) {
 				return $response;
 			}
@@ -363,6 +373,16 @@ class Images {
 			$api->set_model( $image_model );
 
 			$response = $api->send_prompt( $prompt );
+
+			// Log the API request.
+			\Superdraft\Admin::log_api_request(
+				$api,
+				[
+					'prompt' => $prompt,
+					'tool'   => 'image-generation',
+				]
+			);
+
 			if ( is_wp_error( $response ) ) {
 				return $response;
 			}
