@@ -522,12 +522,41 @@ class Admin {
 	 */
 	public static function get_model_select( $module, $model_key = 'model' ) {
 		if ( 'image_model' === $model_key ) {
+			$image_models = [
+				'Google'    => [
+					'gemini-2.0-flash-exp-image-generation' => 'Gemini 2.0 Flash Experimental',
+				],
+				'Replicate' => [
+					'google/imagen-3'                => 'Imagen 3',
+					'google/imagen-3-fast'           => 'Imagen 3 (fast)',
+					'black-forest-labs/flux-1.1-pro' => 'Flux 1.1 Pro',
+					'black-forest-labs/flux-dev'     => 'Flux Dev',
+					'black-forest-labs/flux-schnell' => 'Flux Schnell',
+					'black-forest-labs/flux-pro'     => 'Flux Pro',
+					'recraft-ai/recraft-v3'          => 'Recraft v3',
+					'ideogram-ai/ideogram-v2a'       => 'Ideogram v2a',
+				],
+			];
+
 			$settings = get_option( 'superdraft_settings', [] );
-			$selected = $settings['images']['image_model'] ?? 'gemini-2.0-flash-exp-image-generation';
-			$output   = '<select name="superdraft_settings[images][image_model]" class="regular-text superdraft-models">';
-			$output  .= '<option value="gemini-2.0-flash-exp-image-generation"' . selected( $selected, 'gemini-2.0-flash-exp-image-generation', false ) . '>Gemini 2.0 Flash Experimental Image Generation</option>';
-			$output  .= '</select>';
-			return $output;
+			$selected = $settings['images']['image_model'] ??
+				'gemini-2.0-flash-exp-image-generation';
+
+			$out = '<select name="superdraft_settings[images][image_model]" ' .
+				'class="regular-text superdraft-models">' . "\n";
+
+			foreach ( $image_models as $provider => $models ) {
+				$out .= '<optgroup label="' . esc_attr( $provider ) . '">' . "\n";
+				foreach ( $models as $value => $label ) {
+					$out .= '<option value="' . esc_attr( $value ) . '" ' .
+						selected( $selected, $value, false ) . '>' .
+						esc_html( $label ) . '</option>' . "\n";
+				}
+				$out .= '</optgroup>' . "\n";
+			}
+
+			$out .= '</select>';
+			return $out;
 		}
 
 		$models   = self::get_models();

@@ -59,8 +59,9 @@ Create and edit featured images directly in the post editor using AI technology.
 
 - Text-to-image generation with custom prompts
 - Smart prompt generation from post content
-- Precise image editing with targeted area modifications
+- Precise image editing with targeted area modifications (through Google's Gemini API)
 - WordPress media library integration
+- Support for various image generation models
 
 ### Smart Compose
 
@@ -163,6 +164,7 @@ Superdraft provides extensive customization opportunities via prompt templates s
 - `autocomplete.txt`: Autocomplete suggestions
 - `smartcompose.txt`: Inline sentence completions
 - `writing-tips.txt`: Content improvement and writing advice
+- `image-prompt.txt`: Generate image prompts based on the post title and content
 
 Override these by copying templates into your theme's `superdraft` directory, or via provided hooks.
 

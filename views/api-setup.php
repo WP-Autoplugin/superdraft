@@ -31,7 +31,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<td><input type="password" name="superdraft_api_keys[xai]" value="<?php echo esc_attr( get_option( 'superdraft_api_keys' )['xai'] ); ?>" class="large-text" /></td>
 	</tr>
 	<tr valign="top">
-		<th scope="row"><?php esc_html_e( 'Custom Models', 'superdraft' ); ?></th>
+		<th scope="row"><?php esc_html_e( 'Replicate API Token', 'superdraft' ); ?></th>
+		<td>
+			<input type="password"
+				name="superdraft_api_keys[replicate]"
+				value="<?php echo esc_attr( get_option( 'superdraft_api_keys' )['replicate'] ); ?>"
+				class="large-text" />
+			<p class="description">
+				<?php
+				// translators: %s: replicate.com link.
+				printf(
+					esc_html__( 'The Replicate API offers a variety of models for image generation. You can find more information at %s.', 'superdraft' ),
+					'<a href="https://replicate.com" target="_blank" rel="noopener noreferrer">replicate.com</a>'
+				);
+				?>
+				<?php esc_html_e( 'For image generation only (no editing).', 'superdraft' ); ?>
+			</p>
+		</td>
+	</tr>
+
+	<tr valign="top">
+		<th scope="row"><?php esc_html_e( 'Custom Language Models', 'superdraft' ); ?></th>
 		<td>
 			<div id="custom-models-list">
 				<!-- List will be populated via JS -->

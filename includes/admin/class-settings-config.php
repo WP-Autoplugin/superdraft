@@ -169,6 +169,11 @@ class Settings_Config {
 				'default'  => '',
 				'sanitize' => 'sanitize_text_field',
 			],
+			'replicate'  => [
+				'type'     => 'string',
+				'default'  => '',
+				'sanitize' => 'sanitize_text_field',
+			],
 		];
 	}
 

@@ -133,6 +133,16 @@ class Images {
 	 * @param \WP_REST_Request $request The REST request.
 	 */
 	public function edit_image( $request ) {
+		$image_model = get_option( 'superdraft_settings', [] )['images']['image_model']
+			?? 'gemini-2.0-flash-exp-image-generation';
+
+		if ( str_contains( $image_model, '/' ) ) { // Replicate model selected.
+			return new \WP_Error(
+				'replicate_edit_not_supported',
+				__( 'Image editing is not available for Replicate models.', 'superdraft' )
+			);
+		}
+
 		$post_id           = $request->get_param( 'postId' );
 		$featured_image_id = $request->get_param( 'featuredImageId' );
 		$prompt            = $request->get_param( 'prompt' );
@@ -320,36 +330,46 @@ class Images {
 			return new \WP_Error( 'module_disabled', __( 'Image generation module is disabled', 'superdraft' ) );
 		}
 
-		$image_model = ! empty( $settings['images']['image_model'] )
-			? $settings['images']['image_model']
-			: 'gemini-2.0-flash-exp-image-generation';
+		$image_model = $settings['images']['image_model']
+			?? 'gemini-2.0-flash-exp-image-generation';
 
-		$google_api_key = get_option( 'superdraft_api_keys', [] )['google'] ?? '';
-		if ( empty( $google_api_key ) ) {
-			return new \WP_Error( 'missing_api_key', __( 'Google API key is missing', 'superdraft' ) );
+		$is_replicate = str_contains( $image_model, '/' );   // Crude but reliable here.
+
+		if ( $is_replicate ) {
+			$replicate_key = get_option( 'superdraft_api_keys', [] )['replicate'] ?? '';
+			if ( empty( $replicate_key ) ) {
+				return new \WP_Error( 'missing_api_key', __( 'Replicate API key is missing', 'superdraft' ) );
+			}
+
+			$api = new Replicate_Image_API();
+			$api->set_api_key( $replicate_key );
+			$api->set_model( $image_model );
+
+			$response = $api->send_prompt( $prompt );
+			if ( is_wp_error( $response ) ) {
+				return $response;
+			}
+
+			$image_data = $response; // Already raw bytes.
+
+		} else { // Google Gemini.
+			$google_key = get_option( 'superdraft_api_keys', [] )['google'] ?? '';
+			if ( empty( $google_key ) ) {
+				return new \WP_Error( 'missing_api_key', __( 'Google API key is missing', 'superdraft' ) );
+			}
+
+			$api = new Google_Gemini_Image_API();
+			$api->set_api_key( $google_key );
+			$api->set_model( $image_model );
+
+			$response = $api->send_prompt( $prompt );
+			if ( is_wp_error( $response ) ) {
+				return $response;
+			}
+
+			$image_data = base64_decode( $response ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- We need to decode the image data returned from the API.
 		}
 
-		// Use our new Image API class.
-		$api = new Google_Gemini_Image_API();
-		$api->set_api_key( $google_api_key );
-		$api->set_model( $image_model );
-
-		$response = $api->send_prompt( $prompt );
-		if ( is_wp_error( $response ) ) {
-			return $response;
-		}
-
-		// Log the API request.
-		\Superdraft\Admin::log_api_request(
-			$api,
-			[
-				'prompt' => $prompt,
-				'tool'   => 'image-generation',
-			]
-		);
-
-		// Decode the returned base64 image data.
-		$image_data = base64_decode( $response ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- We need to decode the image data returned from the API.
 		if ( ! $image_data ) {
 			return new \WP_Error( 'invalid_image_data', __( 'Failed to decode image data', 'superdraft' ) );
 		}

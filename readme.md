@@ -126,6 +126,7 @@ Generate and edit featured images directly in the post editor using AI. Features
   - Adjust style, lighting, and composition
   - Regenerate portions while keeping others intact
 - Seamless integration with WordPress media library
+- Support for various image generation models
 
 <details>
 <summary>View Screenshot</summary>
@@ -188,6 +189,7 @@ You can find the following prompt templates in the `prompts` directory:
 - `autocomplete.txt`: Suggestions for text completion in the block editor based on the context around the cursor
 - `smartcompose.txt`: Suggestions for inline sentence completion in the block editor based on the context before the cursor
 - `writing-tips.txt`: Writing tips and content improvement suggestions
+- `image-prompt.txt`: Generate image prompts based on the post title and content
 
 To override the default prompts, copy the desired prompt file to your theme or child theme's `superdraft` directory. Superdraft will automatically load the custom prompt file if it exists. Optionally, you can use the `superdraft_prompt_directories` filter to add additional directories to search for prompt files, or use the other prompt-related filters to customize the prompt loading process (see the code examples below).
 

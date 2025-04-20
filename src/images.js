@@ -86,6 +86,9 @@ import TurndownService from 'turndown';
 		const [ mode, setMode ] = useState( null );
 		const [ prompt, setPrompt ] = useState( '' );
 
+		const imageModel   = window.superdraftSettings?.images?.image_model || '';
+		const isReplicate  = imageModel.includes('/');
+
 		const { postId, featuredImageId } = useSelect( state => ({
 			postId: select( 'core/editor' ).getEditedPostAttribute( 'id' ),
 			featuredImageId: select( 'core/editor' ).getEditedPostAttribute( 'featured_media' )
@@ -215,29 +218,31 @@ import TurndownService from 'turndown';
 							/>
 						</svg>
 					</Button>
-					<Button
-						isSecondary={ mode !== 'edit' }
-						isPrimary={ mode === 'edit' }
-						onClick={ () => toggleMode( 'edit' ) }
-						disabled={ ! featuredImageId }
-					>
-						{ __( 'Edit', 'superdraft' ) }
-						<svg 
-							viewBox="0 0 24 24" 
-							width="20" 
-							height="20" 
-							style={ { 
-								marginLeft: '4px',
-								transform: mode === 'edit' ? 'rotate(180deg)' : 'none',
-								transition: 'transform 0.2s'
-							} }
+					{ ! isReplicate && (
+						<Button
+							isSecondary={ mode !== 'edit' }
+							isPrimary={ mode === 'edit' }
+							onClick={ () => toggleMode( 'edit' ) }
+							disabled={ ! featuredImageId }
 						>
-							<path 
-								fill="currentColor" 
-								d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"
-							/>
-						</svg>
-					</Button>
+							{ __( 'Edit', 'superdraft' ) }
+							<svg 
+								viewBox="0 0 24 24" 
+								width="20" 
+								height="20" 
+								style={ { 
+									marginLeft: '4px',
+									transform: mode === 'edit' ? 'rotate(180deg)' : 'none',
+									transition: 'transform 0.2s'
+								} }
+							>
+								<path 
+									fill="currentColor" 
+									d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"
+								/>
+							</svg>
+						</Button>
+					) }
 				</div>
 				{ mode && (
 					<div className="superdraft-mode-controls">

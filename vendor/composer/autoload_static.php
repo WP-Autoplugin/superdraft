@@ -33,6 +33,7 @@ class ComposerStaticInit4c4a7fe56440a8470f10947ab07cdc06
         'Superdraft\\Logger' => __DIR__ . '/../..' . '/includes/admin/class-logger.php',
         'Superdraft\\Logs_List_Table' => __DIR__ . '/../..' . '/includes/admin/class-logs-list-table.php',
         'Superdraft\\OpenAI_API' => __DIR__ . '/../..' . '/includes/api/class-openai-api.php',
+        'Superdraft\\Replicate_Image_API' => __DIR__ . '/../..' . '/includes/api/class-replicate-image-api.php',
         'Superdraft\\Settings_Config' => __DIR__ . '/../..' . '/includes/admin/class-settings-config.php',
         'Superdraft\\Tags_Categories' => __DIR__ . '/../..' . '/includes/admin/class-tags-categories.php',
         'Superdraft\\Writing_Tips' => __DIR__ . '/../..' . '/includes/admin/class-writing-tips.php',
