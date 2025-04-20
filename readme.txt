@@ -4,7 +4,7 @@ Contributors: pbalazs
 Tags: ai, openai, autocomplete, automation, writing
 Requires at least: 6.0
 Tested up to: 6.7
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: [https://www.gnu.org/licenses/gpl-3.0.html](https://www.gnu.org/licenses/gpl-3.0.html)
@@ -59,9 +59,9 @@ Create and edit featured images directly in the post editor using AI technology.
 
 - Text-to-image generation with custom prompts
 - Smart prompt generation from post content
-- Precise image editing with targeted area modifications (through Google's Gemini API)
+- Precise image editing with instructions-based modifications (through Google's Gemini API)
 - WordPress media library integration
-- Support for various image generation models
+- Support for various image generation models including Imagen 3, Flux, Recraft, and more
 
 ### Smart Compose
 
@@ -185,6 +185,12 @@ Contributions are welcome via [GitHub](https://github.com/WP-Autoplugin/superdra
 GPL-3.0 or later – [https://www.gnu.org/licenses/gpl-3.0.html](https://www.gnu.org/licenses/gpl-3.0.html)
 
 == Changelog ==
+
+= 1.1.1 =
+- Added support for more image generation models through the Replicate API
+- Added support for new models: o3, o4-mini, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gemini-2.5-flash-preview
+- Fixed minor visual bugs in the post editor
+- Fixed PHP warnings sometimes appearing in the logs
 
 = 1.1.0 =
 
