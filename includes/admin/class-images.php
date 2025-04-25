@@ -170,10 +170,11 @@ class Images {
 			$api = new OpenAI_Image_API();
 			$api->set_api_key( $openai_key );
 			$api->set_model( $image_model );
-			// Pass the file path directly for OpenAI edit
-			$response = $api->edit_image( $prompt, [ $file_path ] );
+			// Pass the single file path directly.
+			$response = $api->edit_image( $prompt, $file_path ); // Pass single path string.
 
-		} elseif ( str_starts_with( $image_model, 'gemini-' ) ) { // Check for Gemini models
+		} elseif ( str_starts_with( $image_model, 'gemini-' ) ) { // Check for Gemini models.
+
 			$google_key = $api_keys['google'] ?? '';
 			if ( empty( $google_key ) ) {
 				return new \WP_Error( 'missing_api_key', __( 'Google API key is missing', 'superdraft' ) );
@@ -226,7 +227,6 @@ class Images {
 		}
 		// --- End API determination ---
 
-
 		if ( is_wp_error( $response ) ) {
 			// Log the failed request if API object exists
 			if ( $api ) {
@@ -235,7 +235,7 @@ class Images {
 					[
 						'prompt'  => $prompt, // Log prompt even on failure
 						'tool'    => 'image-edit-error',
-						'message' => wp_json_encode( [ 'error' => $response->get_error_message() ] ), // Log error
+						'message' => wp_json_encode( [ 'error' => $response->get_error_message(), 'code' => $response->get_error_code() ] ), // Log error message and code
 					]
 				);
 			}
@@ -275,6 +275,8 @@ class Images {
 		];
 		$new_attachment_id = wp_insert_attachment( $attachment, $file_path, $post_id );
 		if ( is_wp_error( $new_attachment_id ) ) {
+			// Attempt to clean up the uploaded file if attachment creation failed
+			wp_delete_file( $file_path );
 			return $new_attachment_id;
 		}
 		if ( ! function_exists( 'wp_generate_attachment_metadata' ) ) {
