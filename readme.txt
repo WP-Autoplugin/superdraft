@@ -3,13 +3,13 @@
 Contributors: pbalazs
 Tags: ai, openai, autocomplete, automation, writing
 Requires at least: 6.0
-Tested up to: 6.7
-Stable tag: 1.1.1
+Tested up to: 6.8
+Stable tag: 1.1.2
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: [https://www.gnu.org/licenses/gpl-3.0.html](https://www.gnu.org/licenses/gpl-3.0.html)
 
-A free WordPress plugin providing AI-powered writing assistance, image generation and editing, smart tagging, autocomplete, and content recommendations for better workflow.
+A free WordPress plugin providing AI-powered writing assistance, image generation and editing, smart tagging, and autocomplete for better workflow.
 
 == Description ==
 
@@ -27,7 +27,7 @@ This plugin provides:
 **Plugin Highlights**:
 
 - **Free and Open Source** – No ads, accounts, or limitations
-- **BYOK (Bring Your Own Key)** – Use your own API key from any OpenAI-compatible provider
+- **BYOK (Bring Your Own Key)** – Use your own API key, do not pay a middleman
 - **Flexible AI Models** – Supports 30+ AI models and can be extended with custom models
 - **Feature-Specific Models** – Set distinct AI models for specific functions
 - **Multilingual** – Plugin interface and AI prompts are fully translatable
@@ -55,11 +55,11 @@ Intelligent, context-aware suggestions triggered by customizable prefixes. Featu
 
 ### Image Generation & Editing
 
-Create and edit featured images directly in the post editor using AI technology. Features:
+Create and edit featured images directly in the post editor using AI technology, just like in ChatGPT. Features:
 
 - Text-to-image generation with custom prompts
 - Smart prompt generation from post content
-- Precise image editing with instructions-based modifications (through Google's Gemini API)
+- Precise image editing with instructions-based modifications (through Google’s free Gemini API, or OpenAI’s advanced GPT image generator)
 - WordPress media library integration
 - Support for various image generation models including Imagen 3, Flux, Recraft, and more
 
@@ -185,6 +185,9 @@ Contributions are welcome via [GitHub](https://github.com/WP-Autoplugin/superdra
 GPL-3.0 or later – [https://www.gnu.org/licenses/gpl-3.0.html](https://www.gnu.org/licenses/gpl-3.0.html)
 
 == Changelog ==
+
+= 1.1.2 =
+- Added support for new image generation model: GPT-image-1
 
 = 1.1.1 =
 - Added support for more image generation models through the Replicate API

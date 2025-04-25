@@ -81,7 +81,7 @@ class Autocomplete {
 				SUPERDRAFT_VERSION
 			);
 		}
-	}	
+	}
 
 	/**
 	 * Register the autocomplete endpoint.

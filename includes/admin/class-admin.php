@@ -531,6 +531,9 @@ class Admin {
 				'Google'    => [
 					'gemini-2.0-flash-exp-image-generation' => 'Gemini 2.0 Flash Experimental',
 				],
+				'OpenAI'    => [
+					'gpt-image-1' => 'GPT Image 1',
+				],
 				'Replicate' => [
 					'google/imagen-3'                => 'Imagen 3',
 					'google/imagen-3-fast'           => 'Imagen 3 (fast)',

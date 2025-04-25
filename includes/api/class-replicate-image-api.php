@@ -33,6 +33,8 @@ class Replicate_Image_API extends API {
 
 	/**
 	 * Set model.
+	 *
+	 * @param string $model Model name.
 	 */
 	public function set_model( $model ) {
 		$this->model = sanitize_text_field( $model );
@@ -89,6 +91,7 @@ class Replicate_Image_API extends API {
 		if ( ! empty( $data['error'] ) ) {
 			return new \WP_Error(
 				'api_error',
+				// translators: %s: error message.
 				sprintf( __( 'Replicate API error: %s', 'superdraft' ), $data['error'] )
 			);
 		}
@@ -112,7 +115,7 @@ class Replicate_Image_API extends API {
 			return new \WP_Error( 'api_error', __( 'Failed to download generated image.', 'superdraft' ) );
 		}
 
-		return wp_remote_retrieve_body( $image_response );  // raw PNG/JPG bytes
+		return wp_remote_retrieve_body( $image_response );  // raw PNG/JPG bytes.
 	}
 
 	/**
