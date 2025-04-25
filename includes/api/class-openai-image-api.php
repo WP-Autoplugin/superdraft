@@ -57,7 +57,7 @@ class OpenAI_Image_API extends API {
 		$body = [
 			'model'  => $this->model,
 			'prompt' => $prompt,
-			// Add other parameters like 'n', 'size', 'quality', 'style' if needed later
+			// Add other parameters like 'n', 'size', 'quality', 'style' if needed later.
 		];
 
 		// Merge override_body if provided.
@@ -76,7 +76,7 @@ class OpenAI_Image_API extends API {
 		$response = $this->request(
 			$this->generation_url,
 			[
-				'timeout' => 100, // Image generation can take longer
+				'timeout' => 100, // Image generation can take longer.
 				'headers' => $headers,
 				'body'    => wp_json_encode( $body ),
 			]
@@ -91,6 +91,7 @@ class OpenAI_Image_API extends API {
 
 		if ( isset( $data['error'] ) ) {
 			$error_message = isset( $data['error']['message'] ) ? $data['error']['message'] : __( 'Unknown API error', 'superdraft' );
+			// translators: %s: error message.
 			return new \WP_Error( 'api_error', sprintf( __( 'OpenAI API Error: %s', 'superdraft' ), $error_message ) );
 		}
 
@@ -101,14 +102,14 @@ class OpenAI_Image_API extends API {
 			);
 		}
 
-		// Decode the base64 image data
+		// Decode the base64 image data.
 		$image_data = base64_decode( $data['data'][0]['b64_json'] ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
 
 		if ( false === $image_data ) {
 			return new \WP_Error( 'decode_error', __( 'Failed to decode base64 image data from OpenAI.', 'superdraft' ) );
 		}
 
-		return $image_data; // Return raw image bytes
+		return $image_data; // Return raw image bytes.
 	}
 
 	/**
@@ -123,63 +124,62 @@ class OpenAI_Image_API extends API {
 	 */
 	public function edit_image( $prompt, $image_path, $override_form_params = [] ) {
 
-		// Essential check for CURLFile (PHP 5.5+) as this method relies on it
+		// Essential check for CURLFile (PHP 5.5+) as this method relies on it.
 		if ( ! class_exists( 'CURLFile' ) ) {
 			return new \WP_Error( 'curlfile_missing', __( 'PHP 5.5+ with CURLFile support is required for reliable image editing with wp_remote_post.', 'superdraft' ) );
 		}
-		// Check if cURL itself is available via WP_Http
-        if ( ! wp_http_supports( ['curl'] ) ) {
-             // Although the hook wouldn't run, good to check proactively
-             // You could potentially implement the fsockopen fallback from the gist here if needed
-             return new \WP_Error( 'curl_transport_missing', __( 'The cURL transport for WP_Http is not available, cannot guarantee multipart upload.', 'superdraft' ) );
-        }
 
+		// Check if cURL itself is available via WP_Http.
+		if ( ! wp_http_supports( [ 'curl' ] ) ) {
+			// Although the hook wouldn't run, good to check proactively.
+			return new \WP_Error( 'curl_transport_missing', __( 'The cURL transport for WP_Http is not available, cannot guarantee multipart upload.', 'superdraft' ) );
+		}
 
 		if ( empty( $image_path ) ) {
 			return new \WP_Error( 'missing_image', __( 'No reference image path provided for editing.', 'superdraft' ) );
 		}
+
 		if ( ! file_exists( $image_path ) ) {
+			// translators: %s: image path.
 			return new \WP_Error( 'file_not_found', sprintf( __( 'Reference image file not found: %s', 'superdraft' ), $image_path ) );
 		}
 
-		// --- Prepare Body Array for wp_remote_post ---
 		$body_args = [
 			'model'  => $this->model,
 			'prompt' => $prompt,
 		];
 
-		// Add the image using CURLFile
-		$mime_type = mime_content_type( $image_path );
-		$filename  = basename( $image_path );
+		// Add the image using CURLFile.
+		$mime_type          = mime_content_type( $image_path );
+		$filename           = basename( $image_path );
 		$body_args['image'] = new \CURLFile( $image_path, $mime_type, $filename );
 
-		// Merge overrides
+		// Merge overrides.
 		if ( ! empty( $override_form_params ) && is_array( $override_form_params ) ) {
-			foreach ($override_form_params as $key => $value) {
-				// Ensure overrides don't conflict with essential fields or the file
-				if ( ! in_array($key, ['model', 'prompt', 'image'], true) ) {
-					$body_args[$key] = $value;
+			foreach ( $override_form_params as $key => $value ) {
+				// Ensure overrides don't conflict with essential fields or the file.
+				if ( ! in_array( $key, [ 'model', 'prompt', 'image' ], true ) ) {
+					$body_args[ $key ] = $value;
 				}
 			}
 		}
 
-		// Apply filters to the body array *before* passing it to the hook/wp_remote_post
+		// Apply filters to the body array *before* passing it to the hook/wp_remote_post.
 		$body_args = apply_filters( 'superdraft_openai_image_edit_api_request_body', $body_args, $this );
 
-		// --- Prepare Headers for wp_remote_post ---
+		// Prepare Headers for wp_remote_post.
 		$headers = [
 			'Authorization' => 'Bearer ' . $this->api_key,
-			// IMPORTANT: Do NOT set 'Content-Type: multipart/form-data' here.
-			// Let the hook ensure cURL handles it correctly.
+			// IMPORTANT: We should not set 'Content-Type: multipart/form-data' here.
+			// We let the hook ensure cURL handles it correctly.
 		];
-		// Apply filters to headers
+		// Apply filters to headers.
 		$headers = apply_filters( 'superdraft_openai_image_edit_api_request_headers', $headers, $this );
 
-
-		// --- Set up the Hook Function (adapted from Gist) ---
+		// Set up the Hook Function.
 		// We need this anonymous function to pass $body_args into the hook's scope.
-		$curl_hook_function = function( $handle, $r, $url ) use ( $body_args ) {
-			// Check if the body arguments contain a CURLFile object
+		$curl_hook_function = function ( $handle ) use ( $body_args ) {
+			// Check if the body arguments contain a CURLFile object.
 			$has_curl_file = false;
 			if ( is_array( $body_args ) ) {
 				foreach ( $body_args as $value ) {
@@ -190,46 +190,41 @@ class OpenAI_Image_API extends API {
 				}
 			}
 
-			// If it has a CURLFile, force CURLOPT_POSTFIELDS to use the array
-			// This makes cURL automatically use multipart/form-data
+			// If it has a CURLFile, force CURLOPT_POSTFIELDS to use the array.
+			// This makes cURL automatically use multipart/form-data.
 			if ( $has_curl_file && is_resource( $handle ) ) {
-				curl_setopt( $handle, CURLOPT_POSTFIELDS, $body_args );
+				curl_setopt( $handle, CURLOPT_POSTFIELDS, $body_args ); // phpcs:ignore WordPress.WP.AlternativeFunctions.curl_curl_setopt -- We're inside a hook to set cURL options.
 			}
-            // Note: The Gist's fsockopen hook ('requests-fsockopen.before_send')
-            // is omitted here for simplicity, as cURL is far more common.
-            // It could be added if needed, requiring the build_data_files function.
+			// Note: We could also implement the fsockopen hook ('requests-fsockopen.before_send')
+			// Now omitted for simplicity, as cURL is far more common.
 		};
 
-		// --- Add the hook, execute request, remove the hook ---
+		// Add the hook, execute request, remove the hook.
 		add_action( 'http_api_curl', $curl_hook_function, 10, 3 );
 
 		$start_time = microtime( true );
 
-		// Call wp_remote_post using the standard API::request method
-        // Pass the $body_args array directly. The hook will modify the cURL options.
+		// Call wp_remote_post using the standard API::request method.
+		// Pass the $body_args array directly. The hook will modify the cURL options.
 		$response = $this->request(
 			$this->edit_url,
 			[
 				'method'  => 'POST',
 				'timeout' => 100,
 				'headers' => $headers,
-				'body'    => $body_args, // Pass the array with CURLFile
+				'body'    => $body_args, // Pass the array with CURLFile.
 			]
 		);
 
-		$this->response_timer = round( ( microtime( true ) - $start_time ) * 1000 ); // Record time
+		$this->response_timer = round( ( microtime( true ) - $start_time ) * 1000 ); // Record time.
 
-		// IMPORTANT: Remove the hook immediately after the request
+		// Remove the hook immediately after the request.
 		remove_action( 'http_api_curl', $curl_hook_function, 10 );
-		// --- End Hooked Request Execution ---
 
-
-		// --- Process wp_remote_post Response ---
+		// Process wp_remote_post response.
 		if ( is_wp_error( $response ) ) {
-			return $response; // Return WP_Error from wp_remote_post
+			return $response; // Return WP_Error from wp_remote_post.
 		}
-
-		// $this->last_response = $response; // Store the raw WP HTTP API response array if needed
 
 		$response_code = wp_remote_retrieve_response_code( $response );
 		$response_body = wp_remote_retrieve_body( $response );
@@ -239,12 +234,13 @@ class OpenAI_Image_API extends API {
 			$error_message = __( 'Unknown API error', 'superdraft' );
 			if ( json_last_error() === JSON_ERROR_NONE && isset( $data['error']['message'] ) ) {
 				$error_message = $data['error']['message'];
-			} elseif ( ! empty( $response_body ) && is_string($response_body) ) {
-				$error_message = substr( $response_body, 0, 500 ); // Limit raw output
+			} elseif ( ! empty( $response_body ) && is_string( $response_body ) ) {
+				$error_message = substr( $response_body, 0, 500 ); // Limit raw output.
 			}
-			// Include the original error message from WP_Error if available (though we checked is_wp_error already)
-            // $original_wp_error_msg = is_wp_error($response) ? $response->get_error_message() : '';
-			return new \WP_Error( 'api_error', sprintf( __( 'OpenAI Edit API Error (%d): %s', 'superdraft' ), $response_code, $error_message ) );
+
+			// Include the original error message from WP_Error if available (though we checked is_wp_error already).
+			// translators: %1$d: HTTP response code, %2$s: error message.
+			return new \WP_Error( 'api_error', sprintf( __( 'OpenAI Edit API Error (%1$d): %2$s', 'superdraft' ), $response_code, $error_message ) );
 		}
 
 		if ( json_last_error() !== JSON_ERROR_NONE || empty( $data['data'][0]['b64_json'] ) ) {
@@ -254,15 +250,14 @@ class OpenAI_Image_API extends API {
 			);
 		}
 
-		// Decode the base64 image data
+		// Decode the base64 image data.
 		$image_data = base64_decode( $data['data'][0]['b64_json'] ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
 
 		if ( false === $image_data ) {
 			return new \WP_Error( 'decode_error', __( 'Failed to decode base64 edited image data from OpenAI.', 'superdraft' ) );
 		}
 
-		return $image_data; // Return raw image bytes
-		// --- End Response Processing ---
+		return $image_data; // Return raw image bytes.
 	}
 
 	/**

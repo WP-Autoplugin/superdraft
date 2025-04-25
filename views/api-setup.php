@@ -39,8 +39,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 				class="large-text" />
 			<p class="description">
 				<?php
-				// translators: %s: replicate.com link.
 				printf(
+					// translators: %s: replicate.com link.
 					esc_html__( 'The Replicate API offers a variety of models for image generation. You can find more information at %s.', 'superdraft' ),
 					'<a href="https://replicate.com" target="_blank" rel="noopener noreferrer">replicate.com</a>'
 				);

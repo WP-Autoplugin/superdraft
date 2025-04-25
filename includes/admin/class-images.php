@@ -138,7 +138,7 @@ class Images {
 			return new \WP_Error( 'module_disabled', __( 'Image generation module is disabled', 'superdraft' ) );
 		}
 
-		$image_model = $settings['images']['image_model'] ?? 'gemini-2.0-flash-exp-image-generation'; // Or your chosen default
+		$image_model = $settings['images']['image_model'] ?? 'gemini-2.0-flash-exp-image-generation';
 
 		$post_id           = $request->get_param( 'postId' );
 		$featured_image_id = $request->get_param( 'featuredImageId' );
@@ -161,7 +161,7 @@ class Images {
 		$api      = null;
 		$response = null;
 
-		// --- Determine API and call edit ---
+		// Determine API and call edit.
 		if ( 'gpt-image-1' === $image_model ) {
 			$openai_key = $api_keys['openai'] ?? '';
 			if ( empty( $openai_key ) ) {
@@ -183,8 +183,8 @@ class Images {
 			$api->set_api_key( $google_key );
 			$api->set_model( $image_model );
 
-			// Gemini needs base64 encoded data
-			$image_data   = file_get_contents( $file_path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+			// Gemini needs base64 encoded data.
+			$image_data = file_get_contents( $file_path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 			if ( false === $image_data ) {
 				return new \WP_Error( 'file_read_error', __( 'Could not read featured image file.', 'superdraft' ) );
 			}
@@ -209,9 +209,11 @@ class Images {
 					'responseModalities' => [ 'Text', 'Image' ],
 				],
 			];
-			// Gemini uses send_prompt with overrides for editing
+
+			// Gemini uses send_prompt with overrides for editing.
 			$response = $api->send_prompt( $prompt, '', $override_body );
-			// Gemini returns base64, decode it
+
+			// Gemini returns base64, decode it.
 			if ( ! is_wp_error( $response ) ) {
 				$response = base64_decode( $response ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
 				if ( false === $response ) {
@@ -219,30 +221,36 @@ class Images {
 				}
 			}
 		} else {
-			// Replicate and potentially other models don't support editing
+			// Replicate and potentially other models don't support editing.
 			return new \WP_Error(
 				'edit_not_supported',
+				// translators: %s: model name.
 				sprintf( __( 'Image editing is not available for the selected model (%s).', 'superdraft' ), $image_model )
 			);
 		}
-		// --- End API determination ---
+		// End API determination.
 
 		if ( is_wp_error( $response ) ) {
-			// Log the failed request if API object exists
+			// Log the failed request if API object exists.
 			if ( $api ) {
 				Admin::log_api_request(
 					$api,
 					[
-						'prompt'  => $prompt, // Log prompt even on failure
+						'prompt'  => $prompt, // Log prompt even on failure.
 						'tool'    => 'image-edit-error',
-						'message' => wp_json_encode( [ 'error' => $response->get_error_message(), 'code' => $response->get_error_code() ] ), // Log error message and code
+						'message' => wp_json_encode(
+							[
+								'error' => $response->get_error_message(),
+								'code'  => $response->get_error_code(),
+							]
+						), // Log error message and code.
 					]
 				);
 			}
-			return $response; // Return the WP_Error
+			return $response; // Return the WP_Error.
 		}
 
-		// Log the successful API request
+		// Log the successful API request.
 		Admin::log_api_request(
 			$api,
 			[
@@ -251,17 +259,18 @@ class Images {
 			]
 		);
 
-		// $response should now contain raw image bytes
+		// $response should now contain raw image bytes.
 		$edited_image_data = $response;
 
 		if ( ! $edited_image_data ) {
-			// This case might be redundant if API classes return WP_Error, but keep as safety net
+			// This case might be redundant if API classes return WP_Error, but keep as safety net.
 			return new \WP_Error( 'invalid_image_data', __( 'API returned empty image data after editing', 'superdraft' ) );
 		}
 
-		// --- Save the new image (common logic) ---
+		// Save the new image (common logic).
 		$upload = wp_upload_bits( "superdraft-image-{$post_id}-edited-" . time() . '.png', null, $edited_image_data );
 		if ( ! empty( $upload['error'] ) ) {
+			// translators: %s: error message.
 			return new \WP_Error( 'upload_error', sprintf( __( 'Failed to save edited image: %s', 'superdraft' ), $upload['error'] ) );
 		}
 		$file_path         = $upload['file'];
@@ -275,7 +284,7 @@ class Images {
 		];
 		$new_attachment_id = wp_insert_attachment( $attachment, $file_path, $post_id );
 		if ( is_wp_error( $new_attachment_id ) ) {
-			// Attempt to clean up the uploaded file if attachment creation failed
+			// Attempt to clean up the uploaded file if attachment creation failed.
 			wp_delete_file( $file_path );
 			return $new_attachment_id;
 		}
@@ -288,7 +297,7 @@ class Images {
 		// Store the prompt and original image ID as meta.
 		update_post_meta( $new_attachment_id, '_superdraft_image_prompt', $prompt );
 		update_post_meta( $new_attachment_id, '_superdraft_original_image_id', $featured_image_id );
-		update_post_meta( $new_attachment_id, '_superdraft_image_model', $image_model ); // Store model used
+		update_post_meta( $new_attachment_id, '_superdraft_image_model', $image_model ); // Store model used.
 
 		return rest_ensure_response(
 			[
@@ -389,12 +398,12 @@ class Images {
 			return new \WP_Error( 'module_disabled', __( 'Image generation module is disabled', 'superdraft' ) );
 		}
 
-		$image_model = $settings['images']['image_model'] ?? 'gemini-2.0-flash-exp-image-generation'; // Or your chosen default
+		$image_model = $settings['images']['image_model'] ?? 'gemini-2.0-flash-exp-image-generation'; // Or your chosen default.
 		$api_keys    = get_option( 'superdraft_api_keys', [] );
 		$api         = null;
-		$response    = null; // Will hold raw image data or WP_Error
+		$response    = null; // Will hold raw image data or WP_Error.
 
-		// --- Determine API and call generate ---
+		// Determine API and call generate.
 		if ( 'gpt-image-1' === $image_model ) {
 			$openai_key = $api_keys['openai'] ?? '';
 			if ( empty( $openai_key ) ) {
@@ -403,9 +412,9 @@ class Images {
 			$api = new OpenAI_Image_API();
 			$api->set_api_key( $openai_key );
 			$api->set_model( $image_model );
-			$response = $api->send_prompt( $prompt ); // Returns raw bytes or WP_Error
+			$response = $api->send_prompt( $prompt ); // Returns raw bytes or WP_Error.
 
-		} elseif ( str_starts_with( $image_model, 'gemini-' ) ) { // Google Gemini
+		} elseif ( str_starts_with( $image_model, 'gemini-' ) ) { // Google Gemini.
 			$google_key = $api_keys['google'] ?? '';
 			if ( empty( $google_key ) ) {
 				return new \WP_Error( 'missing_api_key', __( 'Google API key is missing', 'superdraft' ) );
@@ -413,15 +422,16 @@ class Images {
 			$api = new Google_Gemini_Image_API();
 			$api->set_api_key( $google_key );
 			$api->set_model( $image_model );
-			$response = $api->send_prompt( $prompt ); // Returns base64 or WP_Error
-			// Decode if successful
+			$response = $api->send_prompt( $prompt ); // Returns base64 or WP_Error.
+
+			// Decode if successful.
 			if ( ! is_wp_error( $response ) ) {
 				$response = base64_decode( $response ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
 				if ( false === $response ) {
 					return new \WP_Error( 'decode_error', __( 'Failed to decode base64 image data from Google Gemini.', 'superdraft' ) );
 				}
 			}
-		} elseif ( str_contains( $image_model, '/' ) ) { // Replicate
+		} elseif ( str_contains( $image_model, '/' ) ) { // Replicate.
 			$replicate_key = $api_keys['replicate'] ?? '';
 			if ( empty( $replicate_key ) ) {
 				return new \WP_Error( 'missing_api_key', __( 'Replicate API key is missing', 'superdraft' ) );
@@ -429,29 +439,29 @@ class Images {
 			$api = new Replicate_Image_API();
 			$api->set_api_key( $replicate_key );
 			$api->set_model( $image_model );
-			$response = $api->send_prompt( $prompt ); // Returns raw bytes or WP_Error
+			$response = $api->send_prompt( $prompt ); // Returns raw bytes or WP_Error.
 		} else {
+			// translators: %s: model name.
 			return new \WP_Error( 'unknown_model', sprintf( __( 'Unknown or unsupported image model: %s', 'superdraft' ), $image_model ) );
 		}
-		// --- End API determination ---
-
+		// End API determination.
 
 		if ( is_wp_error( $response ) ) {
-			// Log the failed request if API object exists
+			// Log the failed request if API object exists.
 			if ( $api ) {
 				Admin::log_api_request(
 					$api,
 					[
-						'prompt'  => $prompt, // Log prompt even on failure
+						'prompt'  => $prompt, // Log prompt even on failure.
 						'tool'    => 'image-generate-error',
-						'message' => wp_json_encode( [ 'error' => $response->get_error_message() ] ), // Log error
+						'message' => wp_json_encode( [ 'error' => $response->get_error_message() ] ), // Log error.
 					]
 				);
 			}
-			return $response; // Return the WP_Error
+			return $response; // Return the WP_Error.
 		}
 
-		// Log the successful API request
+		// Log the successful API request.
 		Admin::log_api_request(
 			$api,
 			[
@@ -460,17 +470,18 @@ class Images {
 			]
 		);
 
-		// $response should now contain raw image bytes
+		// $response should now contain raw image bytes.
 		$image_data = $response;
 
 		if ( ! $image_data ) {
-			// Safety net
+			// Safety net.
 			return new \WP_Error( 'invalid_image_data', __( 'API returned empty image data after generation', 'superdraft' ) );
 		}
 
-		// --- Save the new image (common logic) ---
+		// Save the new image (common logic).
 		$upload = wp_upload_bits( "superdraft-image-{$post_id}-" . time() . '.png', null, $image_data );
 		if ( ! empty( $upload['error'] ) ) {
+			// translators: %s: error message.
 			return new \WP_Error( 'upload_error', sprintf( __( 'Failed to save generated image: %s', 'superdraft' ), $upload['error'] ) );
 		}
 
@@ -496,7 +507,7 @@ class Images {
 
 		// Store the prompt and model as meta.
 		update_post_meta( $attachment_id, '_superdraft_image_prompt', $prompt );
-		update_post_meta( $attachment_id, '_superdraft_image_model', $image_model ); // Store model used
+		update_post_meta( $attachment_id, '_superdraft_image_model', $image_model ); // Store model used.
 
 		return rest_ensure_response(
 			[
