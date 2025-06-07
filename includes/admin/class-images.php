@@ -138,7 +138,10 @@ class Images {
 			return new \WP_Error( 'module_disabled', __( 'Image generation module is disabled', 'superdraft' ) );
 		}
 
-		$image_model = $settings['images']['image_model'] ?? 'gemini-2.0-flash-exp-image-generation';
+               $image_model = $settings['images']['image_edit_model'] ?? '';
+               if ( '' === $image_model ) {
+                       return new \WP_Error( 'edit_not_supported', __( 'Image editing is disabled', 'superdraft' ) );
+               }
 
 		$post_id           = $request->get_param( 'postId' );
 		$featured_image_id = $request->get_param( 'featuredImageId' );
