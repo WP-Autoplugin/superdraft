@@ -86,12 +86,12 @@ import TurndownService from 'turndown';
 		const [ mode, setMode ] = useState( null );
 		const [ prompt, setPrompt ] = useState( '' );
 
-		// Get image model from settings
-		const imageModel = window.superdraftSettings?.images?.image_model || 'gemini-2.0-flash-exp-image-generation'; // Use same default as PHP
+               // Get image models from settings
+               const imageModel = window.superdraftSettings?.images?.image_model || 'gemini-2.0-flash-exp-image-generation'; // Use same default as PHP
+               const editModel = window.superdraftSettings?.images?.image_edit_model || '';
 
-		// Determine if the selected model supports editing
-		// Currently: Gemini and gpt-image-1 support it, Replicate does not.
-		const modelSupportsEditing = imageModel === 'gpt-image-1' || imageModel.startsWith('gemini-');
+               // Determine if the selected edit model supports editing
+               const modelSupportsEditing = editModel && ( editModel === 'gpt-image-1' || editModel.startsWith( 'gemini-' ) );
 
 		const { postId, featuredImageId } = useSelect( state => ({
 			postId: select( 'core/editor' ).getEditedPostAttribute( 'id' ),

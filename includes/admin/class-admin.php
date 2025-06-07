@@ -526,7 +526,7 @@ class Admin {
 	 * @return string The model select dropdown.
 	 */
 	public static function get_model_select( $module, $model_key = 'model' ) {
-		if ( 'image_model' === $model_key ) {
+               if ( 'image_model' === $model_key ) {
 			$image_models = [
 				'Google'    => [
 					'gemini-2.0-flash-exp-image-generation' => 'Gemini 2.0 Flash Experimental',
@@ -563,9 +563,27 @@ class Admin {
 				$out .= '</optgroup>' . "\n";
 			}
 
-			$out .= '</select>';
-			return $out;
-		}
+                       $out .= '</select>';
+                       return $out;
+               }
+
+               if ( 'image_edit_model' === $model_key ) {
+                       $edit_models = [
+                               ''       => __( 'No image edits', 'superdraft' ),
+                               'gemini-2.0-flash-exp-image-generation' => 'Gemini 2.0 Flash Experimental',
+                               'gpt-image-1'                            => 'GPT Image 1',
+                       ];
+
+                       $settings = get_option( 'superdraft_settings', [] );
+                       $selected = $settings['images']['image_edit_model'] ?? '';
+
+                       $out = '<select name="superdraft_settings[images][image_edit_model]" class="regular-text superdraft-models">' . "\n";
+                       foreach ( $edit_models as $value => $label ) {
+                               $out .= '<option value="' . esc_attr( $value ) . '" ' . selected( $selected, $value, false ) . '>' . esc_html( $label ) . '</option>' . "\n";
+                       }
+                       $out .= '</select>';
+                       return $out;
+               }
 
 		$models   = self::get_models();
 		$settings = get_option( 'superdraft_settings', [] );

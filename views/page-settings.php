@@ -302,12 +302,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<label for="superdraft_image_generation_enabled"><?php esc_html_e( 'Generate featured images using AI', 'superdraft' ); ?></label>
 					</td>
 				</tr>
-				<tr valign="top">
-					<th scope="row"><?php esc_html_e( 'Select Image Model', 'superdraft' ); ?></th>
-					<td>
-						<?php echo wp_kses( \Superdraft\Admin::get_model_select( 'images', 'image_model' ), $allowed_html ); ?>
-					</td>
-				</tr>
+                               <tr valign="top">
+                                       <th scope="row"><?php esc_html_e( 'Select Image Generation Model', 'superdraft' ); ?></th>
+                                       <td>
+                                               <?php echo wp_kses( \Superdraft\Admin::get_model_select( 'images', 'image_model' ), $allowed_html ); ?>
+                                       </td>
+                               </tr>
+                               <tr valign="top">
+                                       <th scope="row"><?php esc_html_e( 'Select Image Editing Model', 'superdraft' ); ?></th>
+                                       <td>
+                                               <?php echo wp_kses( \Superdraft\Admin::get_model_select( 'images', 'image_edit_model' ), $allowed_html ); ?>
+                                       </td>
+                               </tr>
 				<tr valign="top">
 					<th scope="row"><?php esc_html_e( 'Prompt Generator Model', 'superdraft' ); ?></th>
 					<td>
