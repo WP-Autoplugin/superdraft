@@ -409,6 +409,8 @@ class Admin {
 				'gpt-3.5-turbo'     => 'GPT-3.5 Turbo',
 			],
 			'Anthropic' => [
+				'claude-sonnet-4-20250514'   => 'Claude Sonnet 4-20250514',
+				'claude-opus-4-20250514'     => 'Claude Opus 4-20250514',
 				'claude-3-7-sonnet-latest'   => 'Claude 3.7 Sonnet-latest',
 				'claude-3-7-sonnet-20250219' => 'Claude 3.7 Sonnet-20250219',
 				'claude-3-5-sonnet-latest'   => 'Claude 3.5 Sonnet-latest',
@@ -421,11 +423,15 @@ class Admin {
 				'claude-3-haiku-20240307'    => 'Claude 3 Haiku-20240307',
 			],
 			'Google'    => [
+				'gemini-2.5-pro'                      => 'Gemini 2.5 Pro (Latest stable)',
+				'gemini-2.5-flash'                    => 'Gemini 2.5 Flash (Latest stable)',
+				'gemini-2.5-flash-lite-preview-06-17' => 'Gemini 2.5 Flash Lite Preview 06-17',
 				'gemini-2.5-pro-exp-03-25'            => 'Gemini 2.5 Pro Experimental 03-25',
 				'gemini-2.5-flash-preview-04-17'      => 'Gemini 2.5 Flash Preview 04-17',
 				'gemini-2.0-pro-exp-02-05'            => 'Gemini 2.0 Pro Experimental 02-05',
-				'gemini-2.0-flash-thinking-exp'       => 'Gemini 2.0 Flash Thinking Experimental',
+				'gemini-2.0-flash'                    => 'Gemini 2.0 Flash',
 				'gemini-2.0-flash-exp'                => 'Gemini 2.0 Flash Experimental',
+				'gemini-2.0-flash-thinking-exp'       => 'Gemini 2.0 Flash Thinking Experimental',
 				'gemini-2.0-flash-thinking-exp-01-21' => 'Gemini 2.0 Flash Thinking Experimental 01-21',
 				'gemini-exp-1206'                     => 'Gemini Experimental 1206',
 				'gemini-exp-1121'                     => 'Gemini Experimental 1121',
@@ -526,7 +532,7 @@ class Admin {
 	 * @return string The model select dropdown.
 	 */
 	public static function get_model_select( $module, $model_key = 'model' ) {
-               if ( 'image_model' === $model_key ) {
+		if ( 'image_model' === $model_key ) {
 			$image_models = [
 				'Google'    => [
 					'gemini-2.0-flash-exp-image-generation' => 'Gemini 2.0 Flash Experimental',
@@ -535,6 +541,7 @@ class Admin {
 					'gpt-image-1' => 'GPT Image 1',
 				],
 				'Replicate' => [
+					'google/imagen-4'				 => 'Imagen 4',
 					'google/imagen-3'                => 'Imagen 3',
 					'google/imagen-3-fast'           => 'Imagen 3 (fast)',
 					'black-forest-labs/flux-1.1-pro' => 'Flux 1.1 Pro',
@@ -563,27 +570,28 @@ class Admin {
 				$out .= '</optgroup>' . "\n";
 			}
 
-                       $out .= '</select>';
-                       return $out;
-               }
+				$out .= '</select>';
+				return $out;
+		}
 
-               if ( 'image_edit_model' === $model_key ) {
-                       $edit_models = [
-                               ''       => __( 'No image edits', 'superdraft' ),
-                               'gemini-2.0-flash-exp-image-generation' => 'Gemini 2.0 Flash Experimental',
-                               'gpt-image-1'                            => 'GPT Image 1',
-                       ];
+		// Only a subset of models can be used for image editing.
+		if ( 'image_edit_model' === $model_key ) {
+			$edit_models = [
+				''                                      => __( 'No image edits', 'superdraft' ),
+				'gemini-2.0-flash-exp-image-generation' => 'Gemini 2.0 Flash Experimental',
+				'gpt-image-1'                           => 'GPT Image 1',
+			];
 
-                       $settings = get_option( 'superdraft_settings', [] );
-                       $selected = $settings['images']['image_edit_model'] ?? '';
+			$settings = get_option( 'superdraft_settings', [] );
+			$selected = $settings['images']['image_edit_model'] ?? '';
 
-                       $out = '<select name="superdraft_settings[images][image_edit_model]" class="regular-text superdraft-models">' . "\n";
-                       foreach ( $edit_models as $value => $label ) {
-                               $out .= '<option value="' . esc_attr( $value ) . '" ' . selected( $selected, $value, false ) . '>' . esc_html( $label ) . '</option>' . "\n";
-                       }
-                       $out .= '</select>';
-                       return $out;
-               }
+			$out = '<select name="superdraft_settings[images][image_edit_model]" class="regular-text superdraft-models">' . "\n";
+			foreach ( $edit_models as $value => $label ) {
+				$out .= '<option value="' . esc_attr( $value ) . '" ' . selected( $selected, $value, false ) . '>' . esc_html( $label ) . '</option>' . "\n";
+			}
+			$out .= '</select>';
+			return $out;
+		}
 
 		$models   = self::get_models();
 		$settings = get_option( 'superdraft_settings', [] );
