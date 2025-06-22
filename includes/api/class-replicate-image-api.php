@@ -96,15 +96,19 @@ class Replicate_Image_API extends API {
 			);
 		}
 
-		$output = $data['output'] ?? '';
-		if ( empty( $output ) ) {
-			return new \WP_Error( 'api_error', __( 'Replicate API returned no output.', 'superdraft' ) );
-		}
+                $output = $data['output'] ?? '';
+                if ( empty( $output ) ) {
+                        return new \WP_Error( 'api_error', __( 'Replicate API returned no output.', 'superdraft' ) );
+                }
 
-		// Output can be string or array.
-		if ( is_array( $output ) ) {
-			$output = reset( $output );
-		}
+                // Output can be string or array/object.
+                if ( is_array( $output ) ) {
+                        if ( isset( $output['image'] ) ) {
+                                $output = $output['image'];
+                        } else {
+                                $output = reset( $output );
+                        }
+                }
 
 		$image_response = wp_remote_get( $output );
 		if ( is_wp_error( $image_response ) ) {

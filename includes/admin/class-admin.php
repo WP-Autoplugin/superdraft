@@ -549,8 +549,9 @@ class Admin {
 					'black-forest-labs/flux-schnell' => 'Flux Schnell',
 					'black-forest-labs/flux-pro'     => 'Flux Pro',
 					'recraft-ai/recraft-v3'          => 'Recraft v3',
-					'ideogram-ai/ideogram-v2a'       => 'Ideogram v2a',
-				],
+                                       'ideogram-ai/ideogram-v2a'       => 'Ideogram v2a',
+                                       'bytedance/bagel:7dd8def79e503990740db4704fa81af995d440fefe714958531d7044d2757c9c' => 'Bagel 7B',
+                               ],
 			];
 
 			$settings = get_option( 'superdraft_settings', [] );
@@ -579,8 +580,9 @@ class Admin {
 			$edit_models = [
 				''                                      => __( 'No image edits', 'superdraft' ),
 				'gemini-2.0-flash-exp-image-generation' => 'Gemini 2.0 Flash Experimental',
-				'gpt-image-1'                           => 'GPT Image 1',
-			];
+                                'gpt-image-1'                           => 'GPT Image 1',
+                                'bytedance/bagel:7dd8def79e503990740db4704fa81af995d440fefe714958531d7044d2757c9c' => 'Bagel 7B',
+                        ];
 
 			$settings = get_option( 'superdraft_settings', [] );
 			$selected = $settings['images']['image_edit_model'] ?? '';
