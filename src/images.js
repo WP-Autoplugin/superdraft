@@ -91,7 +91,7 @@ import TurndownService from 'turndown';
                const editModel = window.superdraftSettings?.images?.image_edit_model || '';
 
                // Determine if the selected edit model supports editing
-               const modelSupportsEditing = editModel && ( editModel === 'gpt-image-1' || editModel.startsWith( 'gemini-' ) );
+               const modelSupportsEditing = editModel && ( editModel === 'gpt-image-1' || editModel.startsWith( 'gemini-' ) || editModel.startsWith( 'bytedance/bagel' ) );
 
 		const { postId, featuredImageId } = useSelect( state => ({
 			postId: select( 'core/editor' ).getEditedPostAttribute( 'id' ),

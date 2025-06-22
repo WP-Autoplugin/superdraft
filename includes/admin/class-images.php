@@ -223,14 +223,36 @@ class Images {
 					return new \WP_Error( 'decode_error', __( 'Failed to decode base64 image data from Google Gemini.', 'superdraft' ) );
 				}
 			}
-		} else {
-			// Replicate and potentially other models don't support editing.
-			return new \WP_Error(
-				'edit_not_supported',
-				// translators: %s: model name.
-				sprintf( __( 'Image editing is not available for the selected model (%s).', 'superdraft' ), $image_model )
-			);
-		}
+                } elseif ( str_starts_with( $image_model, 'bytedance/bagel' ) ) {
+                        $replicate_key = $api_keys['replicate'] ?? '';
+                        if ( empty( $replicate_key ) ) {
+                                return new \WP_Error( 'missing_api_key', __( 'Replicate API key is missing', 'superdraft' ) );
+                        }
+                        $api = new Replicate_Image_API();
+                        $api->set_api_key( $replicate_key );
+                        $api->set_model( $image_model );
+
+                        $image_data = file_get_contents( $file_path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+                        if ( false === $image_data ) {
+                                return new \WP_Error( 'file_read_error', __( 'Could not read featured image file.', 'superdraft' ) );
+                        }
+
+                        $image_base64 = base64_encode( $image_data ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
+
+                        $override_body = [
+                                'image' => $image_base64,
+                                'task'  => 'image-editing',
+                        ];
+
+                        $response = $api->send_prompt( $prompt, '', $override_body );
+                } else {
+                        // Replicate and potentially other models don't support editing.
+                        return new \WP_Error(
+                                'edit_not_supported',
+                                // translators: %s: model name.
+                                sprintf( __( 'Image editing is not available for the selected model (%s).', 'superdraft' ), $image_model )
+                        );
+                }
 		// End API determination.
 
 		if ( is_wp_error( $response ) ) {
