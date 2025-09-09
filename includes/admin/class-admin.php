@@ -580,6 +580,7 @@ class Admin {
 				''                                      => __( 'No image edits', 'superdraft' ),
 				'gemini-2.5-flash-image-preview' => 'Gemini 2.5 Flash Image (Nano-Banana)',
 				'gpt-image-1'                           => 'GPT Image 1',
+				'qwen/qwen-image-edit'                  => 'Qwen Image Edit (Replicate)',
 			];
 
 			$settings = get_option( 'superdraft_settings', [] );
