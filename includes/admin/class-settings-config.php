@@ -130,7 +130,7 @@ class Settings_Config {
 				],
                                 'image_model'  => [
                                         'type'     => 'string',
-                                        'default'  => 'gemini-2.0-flash-exp-image-generation',
+                                        'default'  => 'gemini-2.5-flash-image-preview',
                                         'sanitize' => 'sanitize_text_field',
                                 ],
                                 'image_edit_model' => [

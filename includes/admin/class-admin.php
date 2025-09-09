@@ -535,7 +535,7 @@ class Admin {
 		if ( 'image_model' === $model_key ) {
 			$image_models = [
 				'Google'    => [
-					'gemini-2.0-flash-exp-image-generation' => 'Gemini 2.0 Flash Experimental',
+					'gemini-2.5-flash-image-preview' => 'Gemini 2.5 Flash Image (Nano-Banana)',
 				],
 				'OpenAI'    => [
 					'gpt-image-1' => 'GPT Image 1',
@@ -555,7 +555,7 @@ class Admin {
 
 			$settings = get_option( 'superdraft_settings', [] );
 			$selected = $settings['images']['image_model'] ??
-				'gemini-2.0-flash-exp-image-generation';
+				'gemini-2.5-flash-image-preview';
 
 			$out = '<select name="superdraft_settings[images][image_model]" ' .
 				'class="regular-text superdraft-models">' . "\n";
@@ -578,7 +578,7 @@ class Admin {
 		if ( 'image_edit_model' === $model_key ) {
 			$edit_models = [
 				''                                      => __( 'No image edits', 'superdraft' ),
-				'gemini-2.0-flash-exp-image-generation' => 'Gemini 2.0 Flash Experimental',
+				'gemini-2.5-flash-image-preview' => 'Gemini 2.5 Flash Image (Nano-Banana)',
 				'gpt-image-1'                           => 'GPT Image 1',
 			];
 

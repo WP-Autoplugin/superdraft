@@ -87,7 +87,7 @@ import TurndownService from 'turndown';
 		const [ prompt, setPrompt ] = useState( '' );
 
                // Get image models from settings
-               const imageModel = window.superdraftSettings?.images?.image_model || 'gemini-2.0-flash-exp-image-generation'; // Use same default as PHP
+               const imageModel = window.superdraftSettings?.images?.image_model || 'gemini-2.5-flash-image-preview'; // Use same default as PHP
                const editModel = window.superdraftSettings?.images?.image_edit_model || '';
 
                // Determine if the selected edit model supports editing
