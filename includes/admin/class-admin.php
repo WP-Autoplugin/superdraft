@@ -577,14 +577,14 @@ class Admin {
 		// Only a subset of models can be used for image editing.
 		if ( 'image_edit_model' === $model_key ) {
 			$edit_models = [
-				''                                      => __( 'No image edits', 'superdraft' ),
-				'gemini-2.5-flash-image-preview' => 'Gemini 2.5 Flash Image (Nano-Banana)',
-				'gpt-image-1'                           => 'GPT Image 1',
-				'qwen/qwen-image-edit'                  => 'Qwen Image Edit (Replicate)',
-				'bytedance/seededit-3.0'                => 'SeedEdit 3.0 (Replicate)',
-				'google/nano-banana'                    => 'Nano-Banana (Replicate)',
-				'black-forest-labs/flux-kontext-max'    => 'FLUX Kontext Max (Replicate)',
-				'black-forest-labs/flux-kontext-dev'    => 'FLUX Kontext Dev (Replicate)',
+				''                                   => __( 'No image edits', 'superdraft' ),
+				'gemini-2.5-flash-image-preview'     => 'Gemini 2.5 Flash Image (Nano-Banana)',
+				'gpt-image-1'                        => 'GPT Image 1',
+				'qwen/qwen-image-edit'               => 'Qwen Image Edit (Replicate)',
+				'bytedance/seededit-3.0'             => 'SeedEdit 3.0 (Replicate)',
+				'google/nano-banana'                 => 'Nano-Banana (Replicate)',
+				'black-forest-labs/flux-kontext-max' => 'FLUX Kontext Max (Replicate)',
+				'black-forest-labs/flux-kontext-dev' => 'FLUX Kontext Dev (Replicate)',
 			];
 
 			$settings = get_option( 'superdraft_settings', [] );

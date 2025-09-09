@@ -154,16 +154,42 @@ class Replicate_Image_API extends API {
 
 		$url = trailingslashit( $this->api_url ) . $this->model . '/predictions';
 
-		$input = array_merge(
-			[
-				'image'          => $data_uri,
-				'prompt'         => $prompt,
-				'go_fast'        => true,
-				'output_format'  => 'webp',
-				'output_quality' => 80,
-			],
-			$override_body
-		);
+
+		// Some Replicate editor models expect different input keys/params for the source image.
+		// Default is a single `image` string (data URI). Others use `image_input` (array) or `input_image` (string).
+		$model = (string) $this->model;
+
+		$defaults = [
+			'prompt'         => $prompt,
+			'output_format'  => 'webp',
+			'output_quality' => 80,
+		];
+
+		if ( false !== stripos( $model, 'nano-banana' ) ) {
+			// Google Nano-Banana expects `image_input` as an array.
+			$defaults['image_input']   = [ $data_uri ];
+			$defaults['output_format'] = 'jpg';
+		} elseif ( false !== stripos( $model, 'flux-kontext' ) ) {
+			// FLUX Kontext expects `input_image` and supports extra params.
+			$defaults['input_image']   = $data_uri;
+			$defaults['aspect_ratio']  = 'match_input_image';
+			$defaults['output_format'] = 'jpg';
+			if ( false !== stripos( $model, 'flux-kontext-max' ) ) {
+				$defaults['safety_tolerance'] = 2;
+			} elseif ( false !== stripos( $model, 'flux-kontext-dev' ) ) {
+				$defaults['go_fast']             = true;
+				$defaults['guidance']            = 2.5;
+				$defaults['num_inference_steps'] = 30;
+			}
+		} else {
+			// Default editors like qwen/qwen-image-edit.
+			$defaults['image'] = $data_uri;
+			if ( false !== stripos( $model, 'qwen-image-edit' ) ) {
+				$defaults['go_fast'] = true;
+			}
+		}
+
+		$input = array_merge( $defaults, (array) $override_body );
 
 		$body = [ 'input' => $input ];
 
