@@ -581,6 +581,10 @@ class Admin {
 				'gemini-2.5-flash-image-preview' => 'Gemini 2.5 Flash Image (Nano-Banana)',
 				'gpt-image-1'                           => 'GPT Image 1',
 				'qwen/qwen-image-edit'                  => 'Qwen Image Edit (Replicate)',
+				'bytedance/seededit-3.0'                => 'SeedEdit 3.0 (Replicate)',
+				'google/nano-banana'                    => 'Nano-Banana (Replicate)',
+				'black-forest-labs/flux-kontext-max'    => 'FLUX Kontext Max (Replicate)',
+				'black-forest-labs/flux-kontext-dev'    => 'FLUX Kontext Dev (Replicate)',
 			];
 
 			$settings = get_option( 'superdraft_settings', [] );
