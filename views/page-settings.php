@@ -254,7 +254,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 							<label for="superdraft_autocomplete_smart_compose_enabled">
 								<?php esc_html_e( 'Enable Smart Compose (beta)', 'superdraft' ); ?>
 							</label>
-							<p class="description"><?php esc_html_e( 'Provides real-time suggestions as you type in paragraph blocks.', 'superdraft' ); ?></p>
+							<p class="description">
+								<?php esc_html_e( 'Provides real-time suggestions as you type in paragraph blocks.', 'superdraft' ); ?>
+							</p>
 						</fieldset>
 					</td>
 				</tr>

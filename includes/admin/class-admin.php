@@ -582,6 +582,7 @@ class Admin {
 				'gpt-image-1'                        => 'GPT Image 1',
 				'qwen/qwen-image-edit'               => 'Qwen Image Edit (Replicate)',
 				'bytedance/seededit-3.0'             => 'SeedEdit 3.0 (Replicate)',
+				'bytedance/seedream-4'               => 'Seedream 4 (Replicate)',
 				'google/nano-banana'                 => 'Nano-Banana (Replicate)',
 				'black-forest-labs/flux-kontext-max' => 'FLUX Kontext Max (Replicate)',
 				'black-forest-labs/flux-kontext-dev' => 'FLUX Kontext Dev (Replicate)',

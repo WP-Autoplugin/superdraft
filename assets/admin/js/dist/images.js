@@ -5302,7 +5302,7 @@ __webpack_require__.r(__webpack_exports__);
     const editModel = window.superdraftSettings?.images?.image_edit_model || '';
 
     // Determine if the selected edit model supports editing
-    const imageEditorModels = ['gemini-2.5-flash-image-preview', 'gpt-image-1', 'qwen/qwen-image-edit', 'bytedance/seededit-3.0', 'google/nano-banana', 'black-forest-labs/flux-kontext-max', 'black-forest-labs/flux-kontext-dev'];
+    const imageEditorModels = ['gemini-2.5-flash-image-preview', 'gpt-image-1', 'qwen/qwen-image-edit', 'bytedance/seededit-3.0', 'bytedance/seedream-4', 'google/nano-banana', 'black-forest-labs/flux-kontext-max', 'black-forest-labs/flux-kontext-dev'];
     const modelSupportsEditing = editModel && imageEditorModels.includes(editModel);
     const {
       postId,

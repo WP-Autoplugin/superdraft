@@ -96,6 +96,7 @@ import TurndownService from 'turndown';
 			'gpt-image-1',
 			'qwen/qwen-image-edit',
 			'bytedance/seededit-3.0',
+			'bytedance/seedream-4',
 			'google/nano-banana',
 			'black-forest-labs/flux-kontext-max',
 			'black-forest-labs/flux-kontext-dev'
