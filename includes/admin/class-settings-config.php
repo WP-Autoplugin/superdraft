@@ -128,21 +128,21 @@ class Settings_Config {
 					'type'    => 'boolean',
 					'default' => false,
 				],
-                                'image_model'  => [
-                                        'type'     => 'string',
-                                        'default'  => 'gemini-2.5-flash-image-preview',
-                                        'sanitize' => 'sanitize_text_field',
-                                ],
-                                'image_edit_model' => [
-                                        'type'     => 'string',
-                                        'default'  => '',
-                                        'sanitize' => 'sanitize_text_field',
-                                ],
-                                'prompt_model' => [
-                                        'type'     => 'string',
-                                        'default'  => 'gpt-4o-mini',
-                                        'sanitize' => 'sanitize_text_field',
-                                ],
+				'image_model'  => [
+					'type'     => 'string',
+					'default'  => 'gemini-2.5-flash-image-preview',
+					'sanitize' => 'sanitize_text_field',
+				],
+				'image_edit_model' => [
+					'type'     => 'string',
+					'default'  => '',
+					'sanitize' => 'sanitize_text_field',
+				],
+				'prompt_model' => [
+					'type'     => 'string',
+					'default'  => 'gpt-4o-mini',
+					'sanitize' => 'sanitize_text_field',
+				],
 			],
 		];
 	}

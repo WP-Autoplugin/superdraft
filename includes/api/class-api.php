@@ -67,6 +67,13 @@ class API {
 	protected $last_response;
 
 	/**
+	 * Last request (headers and body).
+	 *
+	 * @var array
+	 */
+	protected $last_request = [];
+
+	/**
 	 * Response timer (in ms).
 	 *
 	 * @var int
@@ -262,6 +269,12 @@ class API {
 			$config
 		);
 
+		$this->last_request = [
+			'url'     => $url,
+			'headers' => $config['headers'],
+			'body'    => isset( $config['body'] ) ? json_decode( $config['body'], true ) : [],
+		];
+
 		$this->response_timer = round( ( microtime( true ) - $start_time ) * 1000 ); // Convert to milliseconds.
 
 		return $request;
@@ -298,6 +311,15 @@ class API {
 	 */
 	public function get_last_response() {
 		return $this->last_response;
+	}
+
+	/**
+	 * Get the last request (headers and body).
+	 *
+	 * @return array The last request.
+	 */
+	public function get_last_request() {
+		return $this->last_request;
 	}
 
 	/**

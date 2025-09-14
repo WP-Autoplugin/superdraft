@@ -671,7 +671,7 @@ class Admin {
 
 		// Add the selected model as an option if it doesn't exist in the list.
 		if ( ! $model_exists && ! empty( $selected ) ) {
-			$output .= '<option value="' . esc_attr( $selected ) . '" selected>' . esc_html( $selected ) . '</option>' . "\n";
+			$output .= '<option value="' . esc_attr( $selected ) . '" selected>' . esc_html( $selected ) . ' ' . __( '(Unavailable)', 'superdraft' ) . '</option>' . "\n";
 		}
 
 		foreach ( $models as $provider => $model ) {
@@ -722,6 +722,46 @@ class Admin {
 		if ( defined( 'SUPERDRAFT_LOG_RESPONSES' ) && SUPERDRAFT_LOG_RESPONSES ) {
 			$messages['response'] = $api->get_last_response();
 		}
+
+		// Optionally log the last request (URL, headers, body) if enabled.
+		if ( defined( 'SUPERDRAFT_LOG_REQUESTS' ) && SUPERDRAFT_LOG_REQUESTS ) {
+			$req = $api->get_last_request();
+
+			// Redact Authorization header.
+			if ( isset( $req['headers']['Authorization'] ) ) {
+				$req['headers']['Authorization'] = '[REDACTED]';
+			}
+
+			// Redact API key style query parameters in the URL (?key= / ?api_key= / ?apikey= / ?token=).
+			if ( ! empty( $req['url'] ) ) {
+				$parsed = wp_parse_url( $req['url'] );
+				if ( isset( $parsed['query'] ) ) {
+					parse_str( $parsed['query'], $query_args );
+					$sensitive_params = [ 'key', 'api_key', 'apikey', 'token' ];
+					$changed          = false;
+					foreach ( $sensitive_params as $param ) {
+						if ( isset( $query_args[ $param ] ) ) {
+							$query_args[ $param ] = '[REDACTED]';
+							$changed               = true;
+						}
+					}
+					if ( $changed ) {
+						$parsed['query'] = http_build_query( $query_args );
+						// Rebuild sanitized URL.
+						$req['url'] =
+							( isset( $parsed['scheme'] ) ? $parsed['scheme'] . '://' : '' ) .
+							( $parsed['host'] ?? '' ) .
+							( isset( $parsed['port'] ) ? ':' . $parsed['port'] : '' ) .
+							( $parsed['path'] ?? '' ) .
+							( ! empty( $parsed['query'] ) ? '?' . $parsed['query'] : '' ) .
+							( isset( $parsed['fragment'] ) ? '#' . $parsed['fragment'] : '' );
+					}
+				}
+			}
+
+			$messages['request'] = $req;
+		}
+
 		$default_data['message'] = wp_json_encode( $messages, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT );
 
 		$data = array_merge( $default_data, $data );

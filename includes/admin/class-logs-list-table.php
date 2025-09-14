@@ -51,7 +51,8 @@ class Logs_List_Table extends \WP_List_Table {
 		];
 
 		if ( ( defined( 'SUPERDRAFT_LOG_PROMPTS' ) && SUPERDRAFT_LOG_PROMPTS ) ||
-			( defined( 'SUPERDRAFT_LOG_RESPONSES' ) && SUPERDRAFT_LOG_RESPONSES ) ) {
+			( defined( 'SUPERDRAFT_LOG_RESPONSES' ) && SUPERDRAFT_LOG_RESPONSES ) ||
+			( defined( 'SUPERDRAFT_LOG_REQUESTS' ) && SUPERDRAFT_LOG_REQUESTS ) ) {
 			$columns['message'] = __( 'Message', 'superdraft' );
 		}
 

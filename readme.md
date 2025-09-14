@@ -157,6 +157,7 @@ Generate and edit featured images directly in the post editor using AI. Features
 ### Constants
 - `SUPERDRAFT_LOG_PROMPTS`: Enable logging of all AI prompts as messages
 - `SUPERDRAFT_LOG_RESPONSES`: Enable logging of all AI responses as messages
+- `SUPERDRAFT_LOG_REQUESTS`: Enable logging of all API requests (headers and body) as messages
 
 When enabled, the log messages can be viewed in the plugin's logging interface. Additionally, you can customize the log output through the provided filters.
 
