@@ -692,15 +692,15 @@ class Admin {
 		return $output;
 	}
 
-	/**
-	 * Log an API request.
-	 *
-	 * @param API   $api  The API object.
-	 * @param array $data Additional data to log.
-	 *
-	 * @return int|false The log item ID or false on failure.
-	 */
-	public static function log_api_request( $api, $data = [] ) {
+    /**
+     * Log an API request.
+     *
+     * @param API   $api  The API object.
+     * @param array $data Additional data to log.
+     *
+     * @return int|false The log item ID or false on failure.
+     */
+    public static function log_api_request( $api, $data = [] ) {
 		$usage        = $api->get_token_usage();
 		$default_data = [
 			'prompt'        => '',
@@ -774,9 +774,9 @@ class Admin {
 		 */
 		$data = apply_filters( 'superdraft_log_data', $data, $api );
 
-		$logger = new Logger();
-		$logger->insert_log( $data );
+        $logger = new Logger();
+        $insert_id = $logger->insert_log( $data );
 
-		return $data;
-	}
+        return $insert_id;
+    }
 }
