@@ -181,6 +181,13 @@ class Replicate_Image_API extends API {
 				$defaults['guidance']            = 2.5;
 				$defaults['num_inference_steps'] = 30;
 			}
+		} elseif ( false !== stripos( $model, 'seedream' ) ) {
+			// Seedream model expects `image_input` as an array.
+			$defaults['image_input'] = [ $data_uri ];
+			$defaults['max_images']  = 1;
+		} elseif ( false !== stripos( $model, 'seededit' ) ) {
+			// Seededit model expects `image` as a string.
+			$defaults['image'] = $data_uri;
 		} else {
 			// Default editors like qwen/qwen-image-edit.
 			$defaults['image'] = $data_uri;
