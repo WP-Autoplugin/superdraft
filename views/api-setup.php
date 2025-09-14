@@ -45,7 +45,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 					'<a href="https://replicate.com" target="_blank" rel="noopener noreferrer">replicate.com</a>'
 				);
 				?>
-				<?php esc_html_e( 'For image generation only (no editing).', 'superdraft' ); ?>
 			</p>
 		</td>
 	</tr>

@@ -406,15 +406,10 @@ class Admin {
 				'chatgpt-4o-latest' => 'ChatGPT-4o-latest',
 				'o1'                => 'o1',
 				'o1-preview'        => 'o1-preview',
-				'o3-mini-low'       => 'o3-mini-low',
-				'o3-mini-medium'    => 'o3-mini-medium',
-				'o3-mini-high'      => 'o3-mini-high',
-				'o3-low'            => 'o3-low',
-				'o3-medium'         => 'o3-medium',
-				'o3-high'           => 'o3-high',
-				'o4-mini-low'       => 'o4-mini-low',
-				'o4-mini-medium'    => 'o4-mini-medium',
-				'o4-mini-high'      => 'o4-mini-high',
+				'o3-mini'           => 'o3-mini',
+				'o3'                => 'o3',
+				'o4-mini'           => 'o4-mini',
+				'o4'                => 'o4',
 				'gpt-4-turbo'       => 'GPT-4 Turbo',
 				'gpt-3.5-turbo'     => 'GPT-3.5 Turbo',
 			],
@@ -546,6 +541,7 @@ class Admin {
 					'gpt-image-1' => 'GPT Image 1',
 				],
 				'Replicate' => [
+					'google/nano-banana'               => 'Gemini 2.5 Flash Image (Nano-Banana)',
 					'google/imagen-4'                  => 'Imagen 4',
 					'google/imagen-4-ultra'            => 'Imagen 4 Ultra',
 					'google/imagen-4-fast'             => 'Imagen 4 Fast',
@@ -600,34 +596,60 @@ class Admin {
 
 		// Only a subset of models can be used for image editing.
 		if ( 'image_edit_model' === $model_key ) {
-			$edit_models = [
-				''                                   => __( 'No image edits', 'superdraft' ),
-				'gemini-2.5-flash-image-preview'     => 'Gemini 2.5 Flash Image (Nano-Banana)',
-				'gpt-image-1'                        => 'GPT Image 1',
-				'qwen/qwen-image-edit'               => 'Qwen Image Edit (Replicate)',
-				'bytedance/seededit-3.0'             => 'SeedEdit 3.0 (Replicate)',
-				'bytedance/seedream-4'               => 'Seedream 4 (Replicate)',
-				'google/nano-banana'                 => 'Nano-Banana (Replicate)',
-				'black-forest-labs/flux-kontext-max' => 'FLUX Kontext Max (Replicate)',
-				'black-forest-labs/flux-kontext-dev' => 'FLUX Kontext Dev (Replicate)',
+			// Grouped edit models to mirror other dropdowns (optgroups) while keeping a top "no edits" option.
+			$no_edit_option = [ '' => __( 'No image edits', 'superdraft' ) ]; // phpcs:ignore WordPress.Arrays.ArrayDeclarationSpacing.AssignmentAlignment -- Single assignment clarity.
+			$grouped_edit_models = [
+				'Google'    => [
+					'gemini-2.5-flash-image-preview' => 'Gemini 2.5 Flash Image (Nano-Banana)',
+				],
+				'OpenAI'    => [
+					'gpt-image-1' => 'GPT Image 1',
+				],
+				'Replicate' => [
+					'qwen/qwen-image-edit'               => 'Qwen Image Edit',
+					'bytedance/seededit-3.0'             => 'SeedEdit 3.0',
+					'bytedance/seedream-4'               => 'Seedream 4',
+					'google/nano-banana'                 => 'Nano-Banana',
+					'black-forest-labs/flux-kontext-max' => 'FLUX Kontext Max',
+					'black-forest-labs/flux-kontext-dev' => 'FLUX Kontext Dev',
+				],
 			];
 
 			$settings = get_option( 'superdraft_settings', [] );
 			$selected = $settings['images']['image_edit_model'] ?? '';
 
-			// Check if selected model exists in the list
-			$model_exists = array_key_exists( $selected, $edit_models );
+			// Detect if selected model exists inside grouped providers (ignore the empty/no-edit option which is always present).
+			$model_exists = ( '' === $selected );
+			if ( ! $model_exists ) {
+				foreach ( $grouped_edit_models as $provider => $models ) {
+					if ( array_key_exists( $selected, $models ) ) {
+						$model_exists = true;
+						break;
+					}
+				}
+			}
 
 			$out = '<select name="superdraft_settings[images][image_edit_model]" class="regular-text superdraft-models">' . "\n";
 
-			// Add the selected model as an option if it doesn't exist in the list
+			// Always render the no-edit option first (not in an optgroup).
+			foreach ( $no_edit_option as $value => $label ) {
+				$out .= '<option value="' . esc_attr( $value ) . '" ' . selected( $selected, $value, false ) . '>' . esc_html( $label ) . '</option>' . "\n";
+			}
+
+			// Add the selected model as a standalone option if it's unknown (back-compat / custom filter additions).
 			if ( ! $model_exists && ! empty( $selected ) ) {
 				$out .= '<option value="' . esc_attr( $selected ) . '" selected>' . esc_html( $selected ) . '</option>' . "\n";
 			}
 
-			foreach ( $edit_models as $value => $label ) {
-				$out .= '<option value="' . esc_attr( $value ) . '" ' . selected( $selected, $value, false ) . '>' . esc_html( $label ) . '</option>' . "\n";
+			// Output grouped providers.
+			foreach ( $grouped_edit_models as $provider => $models ) {
+				$out .= '<optgroup label="' . esc_attr( $provider ) . '">' . "\n";
+				foreach ( $models as $value => $label ) {
+					$out .= '<option value="' . esc_attr( $value ) . '" ' . selected( $selected, $value, false ) . '>' . esc_html( $label ) . '</option>' . "\n";
+				}
+				$out .= '</optgroup>' . "\n";
 			}
+
 			$out .= '</select>';
 			return $out;
 		}
@@ -636,7 +658,7 @@ class Admin {
 		$settings = get_option( 'superdraft_settings', [] );
 		$selected = $settings[ $module ][ $model_key ] ?? '';
 
-		// Check if selected model exists in the models list
+		// Check if selected model exists in the models list.
 		$model_exists = false;
 		foreach ( $models as $provider => $model_list ) {
 			if ( array_key_exists( $selected, $model_list ) ) {
@@ -647,7 +669,7 @@ class Admin {
 
 		$output = '<select name="superdraft_settings[' . esc_attr( $module ) . '][' . $model_key . ']" class="regular-text superdraft-models">' . "\n";
 
-		// Add the selected model as an option if it doesn't exist in the list
+		// Add the selected model as an option if it doesn't exist in the list.
 		if ( ! $model_exists && ! empty( $selected ) ) {
 			$output .= '<option value="' . esc_attr( $selected ) . '" selected>' . esc_html( $selected ) . '</option>' . "\n";
 		}
