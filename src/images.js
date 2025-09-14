@@ -86,12 +86,22 @@ import TurndownService from 'turndown';
 		const [ mode, setMode ] = useState( null );
 		const [ prompt, setPrompt ] = useState( '' );
 
-               // Get image models from settings
-               const imageModel = window.superdraftSettings?.images?.image_model || 'gemini-2.0-flash-exp-image-generation'; // Use same default as PHP
-               const editModel = window.superdraftSettings?.images?.image_edit_model || '';
+		// Get image models from settings
+		const imageModel = window.superdraftSettings?.images?.image_model || 'gemini-2.5-flash-image-preview'; // Use same default as PHP
+		const editModel = window.superdraftSettings?.images?.image_edit_model || '';
 
-               // Determine if the selected edit model supports editing
-               const modelSupportsEditing = editModel && ( editModel === 'gpt-image-1' || editModel.startsWith( 'gemini-' ) );
+		// Determine if the selected edit model supports editing
+		const imageEditorModels = [
+			'gemini-2.5-flash-image-preview',
+			'gpt-image-1',
+			'qwen/qwen-image-edit',
+			'bytedance/seededit-3.0',
+			'bytedance/seedream-4',
+			'google/nano-banana',
+			'black-forest-labs/flux-kontext-max',
+			'black-forest-labs/flux-kontext-dev'
+		];
+		const modelSupportsEditing = editModel && imageEditorModels.includes( editModel );
 
 		const { postId, featuredImageId } = useSelect( state => ({
 			postId: select( 'core/editor' ).getEditedPostAttribute( 'id' ),

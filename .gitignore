@@ -2,3 +2,5 @@
 node_modules
 *.log
 *.env
+AGENTS.md
+agents

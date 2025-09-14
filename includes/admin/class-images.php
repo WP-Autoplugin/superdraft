@@ -138,10 +138,10 @@ class Images {
 			return new \WP_Error( 'module_disabled', __( 'Image generation module is disabled', 'superdraft' ) );
 		}
 
-               $image_model = $settings['images']['image_edit_model'] ?? '';
-               if ( '' === $image_model ) {
-                       return new \WP_Error( 'edit_not_supported', __( 'Image editing is disabled', 'superdraft' ) );
-               }
+		$image_model = $settings['images']['image_edit_model'] ?? '';
+		if ( '' === $image_model ) {
+			return new \WP_Error( 'edit_not_supported', __( 'Image editing is disabled', 'superdraft' ) );
+		}
 
 		$post_id           = $request->get_param( 'postId' );
 		$featured_image_id = $request->get_param( 'featuredImageId' );
@@ -223,8 +223,28 @@ class Images {
 					return new \WP_Error( 'decode_error', __( 'Failed to decode base64 image data from Google Gemini.', 'superdraft' ) );
 				}
 			}
+		} elseif ( str_contains( $image_model, '/' ) ) { // Replicate image editor models, e.g., qwen/qwen-image-edit
+
+			$replicate_key = $api_keys['replicate'] ?? '';
+			if ( empty( $replicate_key ) ) {
+				return new \WP_Error( 'missing_api_key', __( 'Replicate API key is missing', 'superdraft' ) );
+			}
+
+			$api = new Replicate_Image_API();
+			$api->set_api_key( $replicate_key );
+			$api->set_model( $image_model );
+
+			// For Replicate editors, send the image as a data URI with sensible defaults.
+			$response = $api->edit_image(
+				$prompt,
+				$file_path,
+				[
+					// Users can override via filters later if needed.
+				]
+			);
+
 		} else {
-			// Replicate and potentially other models don't support editing.
+			// Other models don't support editing.
 			return new \WP_Error(
 				'edit_not_supported',
 				// translators: %s: model name.
@@ -401,7 +421,7 @@ class Images {
 			return new \WP_Error( 'module_disabled', __( 'Image generation module is disabled', 'superdraft' ) );
 		}
 
-		$image_model = $settings['images']['image_model'] ?? 'gemini-2.0-flash-exp-image-generation'; // Or your chosen default.
+		$image_model = $settings['images']['image_model'] ?? 'gemini-2.5-flash-image-preview'; // Or your chosen default.
 		$api_keys    = get_option( 'superdraft_api_keys', [] );
 		$api         = null;
 		$response    = null; // Will hold raw image data or WP_Error.
