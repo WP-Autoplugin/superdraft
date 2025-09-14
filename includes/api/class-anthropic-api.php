@@ -43,14 +43,7 @@ class Anthropic_API extends API {
 	 *
 	 * @var string
 	 */
-	protected $api_url = 'https://api.anthropic.com/v1/complete';
-
-	/**
-	 * Constructor.
-	 */
-	public function __construct() {
-		$this->api_key = get_option( 'superdraft_anthropic_api_key' );
-	}
+	protected $api_url = 'https://api.anthropic.com/v1/messages';
 
 	/**
 	 * Set the model and its parameters.
@@ -116,7 +109,6 @@ class Anthropic_API extends API {
 				'content' => $system_message,
 			];
 		}
-
 		$messages[] = [
 			'role'    => 'user',
 			'content' => $prompt,
@@ -129,29 +121,38 @@ class Anthropic_API extends API {
 			'messages'    => $messages,
 		];
 
-		// Keep only allowed keys in the override body.
-		$allowed_keys  = [ 'model', 'temperature', 'max_tokens', 'messages' ];
+		$allowed_keys  = [ 'model', 'temperature', 'max_tokens', 'messages', 'thinking' ];
 		$override_body = array_intersect_key( $override_body, array_flip( $allowed_keys ) );
 		$body          = array_merge( $body, $override_body );
 
 		$headers = [
-			'X-API-Key'    => $this->api_key,
-			'Content-Type' => 'application/json',
+			'X-API-Key'         => $this->api_key,
+			'Anthropic-Version' => '2023-06-01',
+			'Content-Type'      => 'application/json',
 		];
 
+		// Optional beta header example (extend if needed).
+		if ( 'claude-3-5-sonnet-20240620' === $this->model ) {
+			$headers['Anthropic-Beta'] = 'max-tokens-3-5-sonnet-2024-07-15';
+		}
+
 		/**
-		 * Filters the body of the request to the OpenAI API.
+		 * Filters the body of the request sent to the Anthropic API.
 		 *
-		 * @param array $body The body of the request.
-		 * @param object $this The current instance of the API class.
+		 * @since 1.0.0
+		 *
+		 * @param array          $body The request body array.
+		 * @param Anthropic_API  $this Current API instance.
 		 */
 		$body = apply_filters( 'superdraft_api_request_body', $body, $this );
 
 		/**
-		 * Filters the headers of the request to the OpenAI API.
+		 * Filters the headers of the request sent to the Anthropic API.
 		 *
-		 * @param array $headers The headers of the request.
-		 * @param object $this The current instance of the API class.
+		 * @since 1.0.0
+		 *
+		 * @param array          $headers The request headers array.
+		 * @param Anthropic_API  $this    Current API instance.
 		 */
 		$headers = apply_filters( 'superdraft_api_request_headers', $headers, $this );
 
@@ -170,14 +171,20 @@ class Anthropic_API extends API {
 		$this->last_response = $response;
 		$data                = json_decode( wp_remote_retrieve_body( $response ), true );
 
-		if ( empty( $data['completion'] ) ) {
-			return new \WP_Error(
-				'api_error',
-				__( 'Error communicating with the Anthropic API.', 'superdraft' ) . "\n" . print_r( $data, true ) // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r -- We show the API response for debugging.
-			);
+		// New Messages API primary path.
+		if ( isset( $data['content'][0]['text'] ) ) {
+			return $data['content'][0]['text'];
 		}
 
-		return $data['completion'];
+		// Fallback for (unlikely) old completion style.
+		if ( isset( $data['completion'] ) ) {
+			return $data['completion'];
+		}
+
+		return new \WP_Error(
+			'api_error',
+			__( 'Error communicating with the Anthropic API.', 'superdraft' ) . "\n" . print_r( $data, true ) // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
+		);
 	}
 
 	/**
