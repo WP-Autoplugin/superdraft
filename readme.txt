@@ -4,7 +4,7 @@ Contributors: pbalazs
 Tags: ai, openai, autocomplete, automation, writing
 Requires at least: 6.0
 Tested up to: 6.8
-Stable tag: 1.1.2
+Stable tag: 1.1.3
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: [https://www.gnu.org/licenses/gpl-3.0.html](https://www.gnu.org/licenses/gpl-3.0.html)
@@ -185,6 +185,12 @@ Contributions are welcome via [GitHub](https://github.com/WP-Autoplugin/superdra
 GPL-3.0 or later – [https://www.gnu.org/licenses/gpl-3.0.html](https://www.gnu.org/licenses/gpl-3.0.html)
 
 == Changelog ==
+
+= 1.1.3 =
+- Updated models list
+- Fixed Smart Compose arrow key navigation issues
+- More extensive logging options
+- UI improvements and minor bug fixes
 
 = 1.1.2 =
 - Added support for new image generation model: GPT-image-1
