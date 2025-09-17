@@ -5,8 +5,8 @@ Superdraft is a free WordPress plugin that enhances your content creation workfl
 - AI-powered writing assistance and recommendations
 - Intelligent tag and category management
 - Smart autocomplete for faster content creation
-- AI-powered image generation and editing
-- Support for many AI models, including free options
+- AI-powered image generation and editing (with Nano Banana)
+- Support for all AI platforms/models, including free options
 - Comprehensive logging and customization options
 
 ---

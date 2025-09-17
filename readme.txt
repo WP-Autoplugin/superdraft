@@ -20,7 +20,7 @@ This plugin provides:
 - AI-powered writing assistance and recommendations
 - Intelligent tag and category management
 - Smart autocomplete for faster content creation
-- AI-powered image generation and editing
+- AI-powered image generation and editing (with Nano Banana)
 - Support for numerous AI models (including free, locally hosted, and custom models)
 - Detailed logging, customization, and multilingual support
 
@@ -55,13 +55,13 @@ Intelligent, context-aware suggestions triggered by customizable prefixes. Featu
 
 ### Image Generation & Editing
 
-Create and edit featured images directly in the post editor using AI technology, just like in ChatGPT. Features:
+Create and edit featured images directly in the post editor using AI technology, just like in ChatGPT or Gemini. Features:
 
 - Text-to-image generation with custom prompts
 - Smart prompt generation from post content
-- Precise image editing with instructions-based modifications (through Google’s free Gemini API, or OpenAI’s advanced GPT image generator)
+- Precise image editing with instructions-based modifications (through Google’s Gemini API, or OpenAI’s advanced GPT image generator)
 - WordPress media library integration
-- Support for various image generation models including Imagen 3, Flux, Recraft, and more
+- Support for various image generation and editing models including Nano Banana, Imagen 4, Seedream 4.0, Recraft, and more
 
 ### Smart Compose
 
