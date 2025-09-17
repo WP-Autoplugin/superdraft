@@ -4633,13 +4633,9 @@ const withSmartCompose = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__.crea
           acceptSuggestion();
         } else if (event.key === 'Escape') {
           event.preventDefault();
-          setSuggestion('');
-          dismissedRef.current = true;
-          setShouldFetch(false);
+          dismissSuggestion();
         } else if (event.key === 'ArrowLeft' || event.key === 'ArrowRight' || event.key === 'ArrowUp' || event.key === 'ArrowDown' || event.key === 'Backspace') {
-          setSuggestion('');
-          dismissedRef.current = true;
-          setShouldFetch(false);
+          dismissSuggestion();
         } else if (event.key.length === 1) {
           isTypingRef.current = true;
         }

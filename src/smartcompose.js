@@ -284,9 +284,7 @@ const withSmartCompose = createHigherOrderComponent((BlockEdit) => {
 							acceptSuggestion();
 						} else if (event.key === 'Escape') {
 							event.preventDefault();
-							setSuggestion('');
-							dismissedRef.current = true;
-							setShouldFetch(false);
+							dismissSuggestion();
 						} else if (
 							event.key === 'ArrowLeft' ||
 							event.key === 'ArrowRight' ||
@@ -294,9 +292,7 @@ const withSmartCompose = createHigherOrderComponent((BlockEdit) => {
 							event.key === 'ArrowDown' ||
 							event.key === 'Backspace'
 						) {
-							setSuggestion('');
-							dismissedRef.current = true;
-							setShouldFetch(false);
+							dismissSuggestion();
 						} else if (event.key.length === 1) {
 							isTypingRef.current = true;
 						}
