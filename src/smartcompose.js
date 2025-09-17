@@ -69,6 +69,19 @@ const withSmartCompose = createHigherOrderComponent((BlockEdit) => {
 		const [shouldFetch, setShouldFetch] = useState(false);  // Changed initial value to false
 		const [hasStartedTyping, setHasStartedTyping] = useState(false);
 		const isConsumingSuggestionRef = useRef(false); // New ref to track if user is consuming suggestion
+		const suggestionRef = useRef(null);
+
+		// Reusable helpers to avoid duplicated click dismissal logic
+		const isClickInsideSuggestion = useCallback((event) => {
+			const el = suggestionRef.current;
+			return el && (el === event.target || el.contains(event.target));
+		}, []);
+
+		const dismissSuggestion = useCallback(() => {
+			setSuggestion('');
+			dismissedRef.current = true;
+			setShouldFetch(false);
+		}, []);
 
 		// Accept suggestion and trigger selection update.
 		const acceptSuggestion = useCallback(() => {
@@ -219,9 +232,27 @@ const withSmartCompose = createHigherOrderComponent((BlockEdit) => {
 			if (!isSelected) {
 				setHasStartedTyping(false);
 				setShouldFetch(false);
+				setSuggestion(''); // Clear any visible suggestion so it doesn't reappear on reselect
 				isConsumingSuggestionRef.current = false; // Reset consumption state on blur
 			}
 		}, [isSelected]);
+
+		// Hide suggestion when clicking anywhere outside the suggestion text
+		useEffect(() => {
+			if (!suggestion || !isSelected) return;
+
+			const handleDocumentClick = (event) => {
+				if (isClickInsideSuggestion(event)) {
+					return; // Clicked on the suggestion; let onClick handler accept it
+				}
+				dismissSuggestion();
+			};
+
+			document.addEventListener('click', handleDocumentClick);
+			return () => {
+				document.removeEventListener('click', handleDocumentClick);
+			};
+		}, [suggestion, isSelected, isClickInsideSuggestion, dismissSuggestion]);
 
 		const handleSuggestionClick = useCallback(
 			(event) => {
@@ -235,27 +266,33 @@ const withSmartCompose = createHigherOrderComponent((BlockEdit) => {
 		return (
 			<div
 				style={{ position: 'relative' }}
+				onMouseDownCapture={(event) => {
+					if (!suggestion) return;
+					if (isClickInsideSuggestion(event)) {
+						return; // Clicking on suggestion span; handled by onClick
+					}
+					dismissSuggestion();
+				}}
 				onKeyDown={useCallback(
 					(event) => {
 						if (!suggestion) {
 							return;
 						}
-						if (event.key === 'Tab' || event.key === 'ArrowRight') {
+						if (event.key === 'Tab') {
 							event.preventDefault();
 							event.stopPropagation();
 							acceptSuggestion();
 						} else if (event.key === 'Escape') {
 							event.preventDefault();
-							setSuggestion('');
-							dismissedRef.current = true;
+							dismissSuggestion();
 						} else if (
 							event.key === 'ArrowLeft' ||
+							event.key === 'ArrowRight' ||
 							event.key === 'ArrowUp' ||
 							event.key === 'ArrowDown' ||
 							event.key === 'Backspace'
 						) {
-							setSuggestion('');
-							dismissedRef.current = true;
+							dismissSuggestion();
 						} else if (event.key.length === 1) {
 							isTypingRef.current = true;
 						}
@@ -280,6 +317,7 @@ const withSmartCompose = createHigherOrderComponent((BlockEdit) => {
 							dangerouslySetInnerHTML={{ __html: content }}
 						/>
 						<span
+							ref={suggestionRef}
 							style={{
 								color: 'rgba(0,0,0,0.4)',
 								cursor: 'pointer',

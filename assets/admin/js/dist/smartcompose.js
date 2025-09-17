@@ -4441,6 +4441,18 @@ const withSmartCompose = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__.crea
     const [shouldFetch, setShouldFetch] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(false); // Changed initial value to false
     const [hasStartedTyping, setHasStartedTyping] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(false);
     const isConsumingSuggestionRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useRef)(false); // New ref to track if user is consuming suggestion
+    const suggestionRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useRef)(null);
+
+    // Reusable helpers to avoid duplicated click dismissal logic
+    const isClickInsideSuggestion = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useCallback)(event => {
+      const el = suggestionRef.current;
+      return el && (el === event.target || el.contains(event.target));
+    }, []);
+    const dismissSuggestion = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useCallback)(() => {
+      setSuggestion('');
+      dismissedRef.current = true;
+      setShouldFetch(false);
+    }, []);
 
     // Accept suggestion and trigger selection update.
     const acceptSuggestion = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useCallback)(() => {
@@ -4576,9 +4588,25 @@ const withSmartCompose = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__.crea
       if (!isSelected) {
         setHasStartedTyping(false);
         setShouldFetch(false);
+        setSuggestion(''); // Clear any visible suggestion so it doesn't reappear on reselect
         isConsumingSuggestionRef.current = false; // Reset consumption state on blur
       }
     }, [isSelected]);
+
+    // Hide suggestion when clicking anywhere outside the suggestion text
+    (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useEffect)(() => {
+      if (!suggestion || !isSelected) return;
+      const handleDocumentClick = event => {
+        if (isClickInsideSuggestion(event)) {
+          return; // Clicked on the suggestion; let onClick handler accept it
+        }
+        dismissSuggestion();
+      };
+      document.addEventListener('click', handleDocumentClick);
+      return () => {
+        document.removeEventListener('click', handleDocumentClick);
+      };
+    }, [suggestion, isSelected, isClickInsideSuggestion, dismissSuggestion]);
     const handleSuggestionClick = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useCallback)(event => {
       event.preventDefault();
       event.stopPropagation();
@@ -4588,21 +4616,26 @@ const withSmartCompose = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__.crea
       style: {
         position: 'relative'
       },
+      onMouseDownCapture: event => {
+        if (!suggestion) return;
+        if (isClickInsideSuggestion(event)) {
+          return; // Clicking on suggestion span; handled by onClick
+        }
+        dismissSuggestion();
+      },
       onKeyDown: (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useCallback)(event => {
         if (!suggestion) {
           return;
         }
-        if (event.key === 'Tab' || event.key === 'ArrowRight') {
+        if (event.key === 'Tab') {
           event.preventDefault();
           event.stopPropagation();
           acceptSuggestion();
         } else if (event.key === 'Escape') {
           event.preventDefault();
-          setSuggestion('');
-          dismissedRef.current = true;
-        } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp' || event.key === 'ArrowDown' || event.key === 'Backspace') {
-          setSuggestion('');
-          dismissedRef.current = true;
+          dismissSuggestion();
+        } else if (event.key === 'ArrowLeft' || event.key === 'ArrowRight' || event.key === 'ArrowUp' || event.key === 'ArrowDown' || event.key === 'Backspace') {
+          dismissSuggestion();
         } else if (event.key.length === 1) {
           isTypingRef.current = true;
         }
@@ -4626,6 +4659,7 @@ const withSmartCompose = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__.crea
             __html: content
           }
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
+          ref: suggestionRef,
           style: {
             color: 'rgba(0,0,0,0.4)',
             cursor: 'pointer',
