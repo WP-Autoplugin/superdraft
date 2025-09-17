@@ -175,7 +175,7 @@ class Google_Gemini_API extends API {
 		if ( ! empty( $this->last_response ) ) {
 			$response = json_decode( wp_remote_retrieve_body( $this->last_response ), true );
 
-			if ( ! empty( $response['usageMetadata'] && is_array( $response['usageMetadata'] ) ) ) {
+			if ( ! empty( $response['usageMetadata'] ) && is_array( $response['usageMetadata'] ) ) {
 				$usage['input_tokens']  = empty( $response['usageMetadata']['promptTokenCount'] ) ? 0 : $response['usageMetadata']['promptTokenCount'];
 				$usage['output_tokens'] = empty( $response['usageMetadata']['candidatesTokenCount'] ) ? 0 : $response['usageMetadata']['candidatesTokenCount'];
 			}

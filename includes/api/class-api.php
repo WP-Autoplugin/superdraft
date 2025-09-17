@@ -153,14 +153,17 @@ class API {
 
 		$prompt_directories = $this->get_prompt_directories();
 
-		// Reverse the array to prioritize custom prompts over default ones.
+		// Reverse to prioritize custom/theme overrides before default plugin prompts.
 		$prompt_directories = array_reverse( $prompt_directories );
+
+		$contents   = '';
+		$found_path = '';
 
 		foreach ( $prompt_directories as $directory ) {
 			$directory = trailingslashit( $directory );
 
 			$file_variants = [];
-			// Add fully localized version first if not English.
+			// Localized variants (full locale then language) if not en_US.
 			if ( $locale !== 'en_US' ) {
 				$file_variants[] = [
 					'path' => $directory . $template . '-' . $locale . '.txt',
@@ -171,28 +174,29 @@ class API {
 					'code' => $code,
 				];
 			}
-			// Add default version.
+			// Default (unlocalized) variant.
 			$file_variants[] = [
 				'path' => $directory . $template . '.txt',
 				'code' => '',
 			];
-		}
 
-		foreach ( $file_variants as $variant ) {
-			if ( file_exists( $variant['path'] ) ) {
-				$contents = file_get_contents( $variant['path'] ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- We're reading a file.
-				break;
+			foreach ( $file_variants as $variant ) {
+				if ( file_exists( $variant['path'] ) ) {
+					$contents   = file_get_contents( $variant['path'] ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Reading a local template file.
+					$found_path = $variant['path'];
+					break 2; // Stop searching once we find the first matching file (highest priority).
+				}
 			}
 		}
 
 		/**
 		 * Filter the prompt text.
 		 *
-		 * @param string $contents The prompt text.
-		 * @param string $template The prompt template.
-		 * @param string $path     The path to the prompt file.
+		 * @param string $contents    The prompt text (may be empty if no file found).
+		 * @param string $template    The sanitized prompt template slug.
+		 * @param string $found_path  The full path to the located prompt file (empty if none).
 		 */
-		return apply_filters( 'superdraft_prompt_text', $contents, $template );
+		return apply_filters( 'superdraft_prompt_text', $contents, $template, $found_path );
 	}
 
 	/**
