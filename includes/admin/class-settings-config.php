@@ -124,11 +124,11 @@ class Settings_Config {
 				],
 			],
 			'images'          => [
-				'enabled'      => [
+				'enabled'          => [
 					'type'    => 'boolean',
 					'default' => false,
 				],
-				'image_model'  => [
+				'image_model'      => [
 					'type'     => 'string',
 					'default'  => 'gemini-2.5-flash-image-preview',
 					'sanitize' => 'sanitize_text_field',
@@ -138,7 +138,7 @@ class Settings_Config {
 					'default'  => '',
 					'sanitize' => 'sanitize_text_field',
 				],
-				'prompt_model' => [
+				'prompt_model'     => [
 					'type'     => 'string',
 					'default'  => 'gpt-4o-mini',
 					'sanitize' => 'sanitize_text_field',

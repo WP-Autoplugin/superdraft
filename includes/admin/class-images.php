@@ -273,14 +273,14 @@ class Images {
 			return $response; // Return the WP_Error.
 		}
 
-        // Log the successful API request and capture log ID (for meta).
-        $edit_log_id = Admin::log_api_request(
-            $api,
-            [
-                'prompt' => $prompt,
-                'tool'   => 'image-edit',
-            ]
-        );
+		// Log the successful API request and capture log ID (for meta).
+		$edit_log_id = Admin::log_api_request(
+			$api,
+			[
+				'prompt' => $prompt,
+				'tool'   => 'image-edit',
+			]
+		);
 
 		// $response should now contain raw image bytes.
 		$edited_image_data = $response;
@@ -317,13 +317,13 @@ class Images {
 		$attach_data = wp_generate_attachment_metadata( $new_attachment_id, $file_path );
 		wp_update_attachment_metadata( $new_attachment_id, $attach_data );
 
-        // Store the prompt and original image ID as meta.
-        update_post_meta( $new_attachment_id, '_superdraft_image_prompt', $prompt );
-        update_post_meta( $new_attachment_id, '_superdraft_original_image_id', $featured_image_id );
-        update_post_meta( $new_attachment_id, '_superdraft_image_model', $image_model ); // Store model used.
-        if ( $edit_log_id ) {
-            update_post_meta( $new_attachment_id, '_superdraft_log_id', intval( $edit_log_id ) );
-        }
+		// Store the prompt and original image ID as meta.
+		update_post_meta( $new_attachment_id, '_superdraft_image_prompt', $prompt );
+		update_post_meta( $new_attachment_id, '_superdraft_original_image_id', $featured_image_id );
+		update_post_meta( $new_attachment_id, '_superdraft_image_model', $image_model ); // Store model used.
+		if ( $edit_log_id ) {
+			update_post_meta( $new_attachment_id, '_superdraft_log_id', intval( $edit_log_id ) );
+		}
 
 		return rest_ensure_response(
 			[
@@ -487,14 +487,14 @@ class Images {
 			return $response; // Return the WP_Error.
 		}
 
-        // Log the successful API request and capture log ID (for meta).
-        $generate_log_id = Admin::log_api_request(
-            $api,
-            [
-                'prompt' => $prompt,
-                'tool'   => 'image-generate',
-            ]
-        );
+		// Log the successful API request and capture log ID (for meta).
+		$generate_log_id = Admin::log_api_request(
+			$api,
+			[
+				'prompt' => $prompt,
+				'tool'   => 'image-generate',
+			]
+		);
 
 		// $response should now contain raw image bytes.
 		$image_data = $response;
@@ -531,12 +531,12 @@ class Images {
 		$attach_data = wp_generate_attachment_metadata( $attachment_id, $file_path );
 		wp_update_attachment_metadata( $attachment_id, $attach_data );
 
-        // Store the prompt and model as meta.
-        update_post_meta( $attachment_id, '_superdraft_image_prompt', $prompt );
-        update_post_meta( $attachment_id, '_superdraft_image_model', $image_model ); // Store model used.
-        if ( $generate_log_id ) {
-            update_post_meta( $attachment_id, '_superdraft_log_id', intval( $generate_log_id ) );
-        }
+		// Store the prompt and model as meta.
+		update_post_meta( $attachment_id, '_superdraft_image_prompt', $prompt );
+		update_post_meta( $attachment_id, '_superdraft_image_model', $image_model ); // Store model used.
+		if ( $generate_log_id ) {
+			update_post_meta( $attachment_id, '_superdraft_log_id', intval( $generate_log_id ) );
+		}
 
 		return rest_ensure_response(
 			[

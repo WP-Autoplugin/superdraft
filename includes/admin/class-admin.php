@@ -597,7 +597,7 @@ class Admin {
 		// Only a subset of models can be used for image editing.
 		if ( 'image_edit_model' === $model_key ) {
 			// Grouped edit models to mirror other dropdowns (optgroups) while keeping a top "no edits" option.
-			$no_edit_option = [ '' => __( 'No image edits', 'superdraft' ) ]; // phpcs:ignore WordPress.Arrays.ArrayDeclarationSpacing.AssignmentAlignment -- Single assignment clarity.
+			$no_edit_option      = [ '' => __( 'No image edits', 'superdraft' ) ]; // phpcs:ignore WordPress.Arrays.ArrayDeclarationSpacing.AssignmentAlignment -- Single assignment clarity.
 			$grouped_edit_models = [
 				'Google'    => [
 					'gemini-2.5-flash-image-preview' => 'Gemini 2.5 Flash Image (Nano-Banana)',
@@ -692,15 +692,15 @@ class Admin {
 		return $output;
 	}
 
-    /**
-     * Log an API request.
-     *
-     * @param API   $api  The API object.
-     * @param array $data Additional data to log.
-     *
-     * @return int|false The log item ID or false on failure.
-     */
-    public static function log_api_request( $api, $data = [] ) {
+	/**
+	 * Log an API request.
+	 *
+	 * @param API   $api  The API object.
+	 * @param array $data Additional data to log.
+	 *
+	 * @return int|false The log item ID or false on failure.
+	 */
+	public static function log_api_request( $api, $data = [] ) {
 		$usage        = $api->get_token_usage();
 		$default_data = [
 			'prompt'        => '',
@@ -742,7 +742,7 @@ class Admin {
 					foreach ( $sensitive_params as $param ) {
 						if ( isset( $query_args[ $param ] ) ) {
 							$query_args[ $param ] = '[REDACTED]';
-							$changed               = true;
+							$changed              = true;
 						}
 					}
 					if ( $changed ) {
@@ -774,9 +774,9 @@ class Admin {
 		 */
 		$data = apply_filters( 'superdraft_log_data', $data, $api );
 
-        $logger = new Logger();
-        $insert_id = $logger->insert_log( $data );
+		$logger    = new Logger();
+		$insert_id = $logger->insert_log( $data );
 
-        return $insert_id;
-    }
+		return $insert_id;
+	}
 }

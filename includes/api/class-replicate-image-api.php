@@ -154,7 +154,6 @@ class Replicate_Image_API extends API {
 
 		$url = trailingslashit( $this->api_url ) . $this->model . '/predictions';
 
-
 		// Some Replicate editor models expect different input keys/params for the source image.
 		// Default is a single `image` string (data URI). Others use `image_input` (array) or `input_image` (string).
 		$model = (string) $this->model;
