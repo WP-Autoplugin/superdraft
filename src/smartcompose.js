@@ -71,6 +71,18 @@ const withSmartCompose = createHigherOrderComponent((BlockEdit) => {
 		const isConsumingSuggestionRef = useRef(false); // New ref to track if user is consuming suggestion
 		const suggestionRef = useRef(null);
 
+		// Reusable helpers to avoid duplicated click dismissal logic
+		const isClickInsideSuggestion = useCallback((event) => {
+			const el = suggestionRef.current;
+			return el && (el === event.target || el.contains(event.target));
+		}, []);
+
+		const dismissSuggestion = useCallback(() => {
+			setSuggestion('');
+			dismissedRef.current = true;
+			setShouldFetch(false);
+		}, []);
+
 		// Accept suggestion and trigger selection update.
 		const acceptSuggestion = useCallback(() => {
 			if (suggestion) {
@@ -230,20 +242,17 @@ const withSmartCompose = createHigherOrderComponent((BlockEdit) => {
 			if (!suggestion || !isSelected) return;
 
 			const handleDocumentClick = (event) => {
-				const el = suggestionRef.current;
-				if (el && (el === event.target || el.contains(event.target))) {
+				if (isClickInsideSuggestion(event)) {
 					return; // Clicked on the suggestion; let onClick handler accept it
 				}
-				setSuggestion('');
-				dismissedRef.current = true;
-				setShouldFetch(false);
+				dismissSuggestion();
 			};
 
 			document.addEventListener('click', handleDocumentClick);
 			return () => {
 				document.removeEventListener('click', handleDocumentClick);
 			};
-		}, [suggestion, isSelected]);
+		}, [suggestion, isSelected, isClickInsideSuggestion, dismissSuggestion]);
 
 		const handleSuggestionClick = useCallback(
 			(event) => {
@@ -259,13 +268,10 @@ const withSmartCompose = createHigherOrderComponent((BlockEdit) => {
 				style={{ position: 'relative' }}
 				onMouseDownCapture={(event) => {
 					if (!suggestion) return;
-					const el = suggestionRef.current;
-					if (el && (el === event.target || el.contains(event.target))) {
+					if (isClickInsideSuggestion(event)) {
 						return; // Clicking on suggestion span; handled by onClick
 					}
-					setSuggestion('');
-					dismissedRef.current = true;
-					setShouldFetch(false);
+					dismissSuggestion();
 				}}
 				onKeyDown={useCallback(
 					(event) => {

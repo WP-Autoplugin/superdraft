@@ -4443,6 +4443,17 @@ const withSmartCompose = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__.crea
     const isConsumingSuggestionRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useRef)(false); // New ref to track if user is consuming suggestion
     const suggestionRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useRef)(null);
 
+    // Reusable helpers to avoid duplicated click dismissal logic
+    const isClickInsideSuggestion = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useCallback)(event => {
+      const el = suggestionRef.current;
+      return el && (el === event.target || el.contains(event.target));
+    }, []);
+    const dismissSuggestion = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useCallback)(() => {
+      setSuggestion('');
+      dismissedRef.current = true;
+      setShouldFetch(false);
+    }, []);
+
     // Accept suggestion and trigger selection update.
     const acceptSuggestion = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useCallback)(() => {
       if (suggestion) {
@@ -4586,19 +4597,16 @@ const withSmartCompose = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__.crea
     (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useEffect)(() => {
       if (!suggestion || !isSelected) return;
       const handleDocumentClick = event => {
-        const el = suggestionRef.current;
-        if (el && (el === event.target || el.contains(event.target))) {
+        if (isClickInsideSuggestion(event)) {
           return; // Clicked on the suggestion; let onClick handler accept it
         }
-        setSuggestion('');
-        dismissedRef.current = true;
-        setShouldFetch(false);
+        dismissSuggestion();
       };
       document.addEventListener('click', handleDocumentClick);
       return () => {
         document.removeEventListener('click', handleDocumentClick);
       };
-    }, [suggestion, isSelected]);
+    }, [suggestion, isSelected, isClickInsideSuggestion, dismissSuggestion]);
     const handleSuggestionClick = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useCallback)(event => {
       event.preventDefault();
       event.stopPropagation();
@@ -4610,13 +4618,10 @@ const withSmartCompose = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__.crea
       },
       onMouseDownCapture: event => {
         if (!suggestion) return;
-        const el = suggestionRef.current;
-        if (el && (el === event.target || el.contains(event.target))) {
+        if (isClickInsideSuggestion(event)) {
           return; // Clicking on suggestion span; handled by onClick
         }
-        setSuggestion('');
-        dismissedRef.current = true;
-        setShouldFetch(false);
+        dismissSuggestion();
       },
       onKeyDown: (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useCallback)(event => {
         if (!suggestion) {
