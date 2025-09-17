@@ -4623,7 +4623,6 @@ const withSmartCompose = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__.crea
           return;
         }
         if (event.key === 'Tab') {
-          // Accept on Tab
           event.preventDefault();
           event.stopPropagation();
           acceptSuggestion();
