@@ -166,6 +166,7 @@ For example, to enable logging of all AI prompts and responses, add the followin
 ```php
 define( 'SUPERDRAFT_LOG_PROMPTS', true );
 define( 'SUPERDRAFT_LOG_RESPONSES', true );
+define( 'SUPERDRAFT_LOG_REQUESTS', true );
 ```
 
 <details>

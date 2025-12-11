@@ -3,8 +3,8 @@
 Contributors: pbalazs
 Tags: ai, openai, autocomplete, automation, writing
 Requires at least: 6.0
-Tested up to: 6.8
-Stable tag: 1.1.3
+Tested up to: 6.9
+Stable tag: 1.1.4
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: [https://www.gnu.org/licenses/gpl-3.0.html](https://www.gnu.org/licenses/gpl-3.0.html)
@@ -20,7 +20,7 @@ This plugin provides:
 - AI-powered writing assistance and recommendations
 - Intelligent tag and category management
 - Smart autocomplete for faster content creation
-- AI-powered image generation and editing (with Nano Banana)
+- AI-powered image generation and editing (with Nano Banana Pro and other models)
 - Support for numerous AI models (including free, locally hosted, and custom models)
 - Detailed logging, customization, and multilingual support
 
@@ -61,7 +61,7 @@ Create and edit featured images directly in the post editor using AI technology,
 - Smart prompt generation from post content
 - Precise image editing with instructions-based modifications (through Google’s Gemini API, or OpenAI’s advanced GPT image generator)
 - WordPress media library integration
-- Support for various image generation and editing models including Nano Banana, Imagen 4, Seedream 4.0, Recraft, and more
+- Support for various image generation and editing models including Nano Banana Pro, Imagen 4, Seedream 4.5, Ideogram, and more
 
 ### Smart Compose
 
@@ -185,6 +185,10 @@ Contributions are welcome via [GitHub](https://github.com/WP-Autoplugin/superdra
 GPL-3.0 or later – [https://www.gnu.org/licenses/gpl-3.0.html](https://www.gnu.org/licenses/gpl-3.0.html)
 
 == Changelog ==
+
+= 1.1.4 =
+- Added support for new image generation and editing models
+- Added support for new text generation models
 
 = 1.1.3 =
 - Updated models list

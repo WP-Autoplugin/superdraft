@@ -180,6 +180,9 @@ class Replicate_Image_API extends API {
 				$defaults['guidance']            = 2.5;
 				$defaults['num_inference_steps'] = 30;
 			}
+		} elseif ( false !== stripos( $model, 'flux-2' ) ) {
+			// FLUX 2 family expects `input_images` as an array.
+			$defaults['input_images'] = [ $data_uri ];
 		} elseif ( false !== stripos( $model, 'seedream' ) ) {
 			// Seedream model expects `image_input` as an array.
 			$defaults['image_input'] = [ $data_uri ];

@@ -393,27 +393,30 @@ class Admin {
 	public static function get_models() {
 		self::$models = [
 			'OpenAI'    => [
-				'gpt-5'             => 'GPT-5',
-				'gpt-5-mini'        => 'GPT-5 mini',
-				'gpt-5-nano'        => 'GPT-5 nano',
-				'gpt-5-chat-latest' => 'ChatGPT-5-latest',
-				'gpt-4.5-preview'   => 'GPT-4.5 Preview',
-				'gpt-4.1'           => 'GPT-4.1',
-				'gpt-4.1-mini'      => 'GPT-4.1 mini',
-				'gpt-4.1-nano'      => 'GPT-4.1 nano',
-				'gpt-4o'            => 'GPT-4o',
-				'gpt-4o-mini'       => 'GPT-4o mini',
-				'chatgpt-4o-latest' => 'ChatGPT-4o-latest',
-				'o1'                => 'o1',
-				'o1-preview'        => 'o1-preview',
-				'o3-mini'           => 'o3-mini',
-				'o3'                => 'o3',
-				'o4-mini'           => 'o4-mini',
-				'o4'                => 'o4',
-				'gpt-4-turbo'       => 'GPT-4 Turbo',
-				'gpt-3.5-turbo'     => 'GPT-3.5 Turbo',
+				'gpt-5.1'            => 'GPT-5.1',
+				'gpt-5'              => 'GPT-5',
+				'gpt-5-mini'         => 'GPT-5 mini',
+				'gpt-5-nano'         => 'GPT-5 nano',
+				'gpt-5-chat-latest'  => 'ChatGPT-5-latest',
+				'gpt-4.5-preview'    => 'GPT-4.5 Preview',
+				'gpt-4.1'            => 'GPT-4.1',
+				'gpt-4.1-mini'       => 'GPT-4.1 mini',
+				'gpt-4.1-nano'       => 'GPT-4.1 nano',
+				'gpt-4o'             => 'GPT-4o',
+				'gpt-4o-mini'        => 'GPT-4o mini',
+				'chatgpt-4o-latest'  => 'ChatGPT-4o-latest',
+				'o1'                 => 'o1',
+				'o1-preview'         => 'o1-preview',
+				'o3-mini'            => 'o3-mini',
+				'o3'                 => 'o3',
+				'o4-mini'            => 'o4-mini',
+				'gpt-4-turbo'        => 'GPT-4 Turbo',
+				'gpt-3.5-turbo'      => 'GPT-3.5 Turbo',
 			],
 			'Anthropic' => [
+				'claude-opus-4-5-20251101'   => 'Claude Opus 4.5-20251101',
+				'claude-sonnet-4-5-20250929' => 'Claude Sonnet 4.5-20250929',
+				'claude-haiku-4-5-20251001'  => 'Claude Haiku 4.5-20251001',
 				'claude-opus-4-1-20250805'   => 'Claude Opus 4.1-20250805',
 				'claude-opus-4-20250514'     => 'Claude Opus 4-20250514',
 				'claude-sonnet-4-20250514'   => 'Claude Sonnet 4-20250514',
@@ -430,6 +433,7 @@ class Admin {
 				'claude-3-haiku-20240307'    => 'Claude 3 Haiku-20240307',
 			],
 			'Google'    => [
+				'gemini-3-pro-preview'  => 'Gemini 3 Pro Preview',
 				'gemini-2.5-pro'        => 'Gemini 2.5 Pro',
 				'gemini-2.5-flash'      => 'Gemini 2.5 Flash',
 				'gemini-2.5-flash-lite' => 'Gemini 2.5 Flash Lite',
@@ -439,11 +443,16 @@ class Admin {
 				'gemma-3-27b-it'        => 'Gemma 3 27B',
 			],
 			'xAI'       => [
-				'grok-4'      => 'Grok 4 (Latest)',
-				'grok-4-0709' => 'Grok 4-0709',
-				'grok-3'      => 'Grok 3',
-				'grok-3-mini' => 'Grok 3 Mini',
-				'grok-2-1212' => 'Grok 2-1212',
+				'grok-4-1-fast-non-reasoning' => 'Grok 4.1 Fast Non-Reasoning',
+				'grok-4-1-fast-reasoning'     => 'Grok 4.1 Fast Reasoning',
+				'grok-code-fast-1'            => 'Grok Code Fast 1',
+				'grok-4-fast-non-reasoning'   => 'Grok 4 Fast Non-Reasoning',
+				'grok-4-fast-reasoning'       => 'Grok 4 Fast Reasoning',
+				'grok-4'                      => 'Grok 4 (Latest)',
+				'grok-4-0709'                 => 'Grok 4-0709',
+				'grok-3'                      => 'Grok 3',
+				'grok-3-mini'                 => 'Grok 3 Mini',
+				'grok-2-1212'                 => 'Grok 2-1212',
 			],
 		];
 
@@ -535,18 +544,24 @@ class Admin {
 		if ( 'image_model' === $model_key ) {
 			$image_models = [
 				'Google'    => [
-					'gemini-2.5-flash-image-preview' => 'Gemini 2.5 Flash Image (Nano-Banana)',
+					'gemini-2.5-flash-image' => 'Gemini 2.5 Flash Image (Nano-Banana)',
+					'gemini-3-pro-image-preview' => 'Gemini 3 Pro Image (Nano-Banana Pro)',
 				],
 				'OpenAI'    => [
 					'gpt-image-1' => 'GPT Image 1',
+					'gpt-image-1-mini' => 'GPT Image 1 Mini',
 				],
 				'Replicate' => [
+					'google/nano-banana-pro'           => 'Gemini 3 Pro Image (Nano-Banana Pro)',
 					'google/nano-banana'               => 'Gemini 2.5 Flash Image (Nano-Banana)',
 					'google/imagen-4'                  => 'Imagen 4',
 					'google/imagen-4-ultra'            => 'Imagen 4 Ultra',
 					'google/imagen-4-fast'             => 'Imagen 4 Fast',
 					'google/imagen-3'                  => 'Imagen 3',
 					'google/imagen-3-fast'             => 'Imagen 3 Fast',
+					'black-forest-labs/flux-2-pro'     => 'Flux 2 Pro',
+					'black-forest-labs/flux-2-dev'     => 'Flux 2 Dev',
+					'black-forest-labs/flux-2-flex'    => 'Flux 2 Flex',
 					'black-forest-labs/flux-1.1-pro'   => 'Flux 1.1 Pro',
 					'black-forest-labs/flux-dev'       => 'Flux Dev',
 					'black-forest-labs/flux-schnell'   => 'Flux Schnell',
@@ -556,13 +571,14 @@ class Admin {
 					'ideogram-ai/ideogram-v3-turbo'    => 'Ideogram v3 Turbo',
 					'ideogram-ai/ideogram-v3-quality'  => 'Ideogram v3 Quality',
 					'ideogram-ai/ideogram-v3-balanced' => 'Ideogram v3 Balanced',
+					'bytedance/seedream-4.5'           => 'Seedream 4.5',
 					'bytedance/seedream-4'             => 'Seedream 4',
 					'qwen/qwen-image'                  => 'Qwen Image',
 				],
 			];
 
 			$settings = get_option( 'superdraft_settings', [] );
-			$selected = $settings['images']['image_model'] ?? 'gemini-2.5-flash-image-preview';
+			$selected = $settings['images']['image_model'] ?? 'gemini-2.5-flash-image';
 
 			// Check if selected model exists in the list.
 			$model_exists = false;
@@ -600,18 +616,25 @@ class Admin {
 			$no_edit_option      = [ '' => __( 'No image edits', 'superdraft' ) ]; // phpcs:ignore WordPress.Arrays.ArrayDeclarationSpacing.AssignmentAlignment -- Single assignment clarity.
 			$grouped_edit_models = [
 				'Google'    => [
-					'gemini-2.5-flash-image-preview' => 'Gemini 2.5 Flash Image (Nano-Banana)',
+					'gemini-3-pro-image-preview'     => 'Gemini 3 Pro Image (Nano-Banana Pro)',
+					'gemini-2.5-flash-image' => 'Gemini 2.5 Flash Image (Nano-Banana)',
 				],
 				'OpenAI'    => [
 					'gpt-image-1' => 'GPT Image 1',
+					'gpt-image-1-mini' => 'GPT Image 1 Mini',
 				],
 				'Replicate' => [
+					'google/nano-banana-pro'             => 'Gemini 3 Pro Image (Nano-Banana Pro)',
 					'qwen/qwen-image-edit'               => 'Qwen Image Edit',
 					'bytedance/seededit-3.0'             => 'SeedEdit 3.0',
 					'bytedance/seedream-4'               => 'Seedream 4',
+					'bytedance/seedream-4.5'             => 'Seedream 4.5',
 					'google/nano-banana'                 => 'Nano-Banana',
 					'black-forest-labs/flux-kontext-max' => 'FLUX Kontext Max',
 					'black-forest-labs/flux-kontext-dev' => 'FLUX Kontext Dev',
+					'black-forest-labs/flux-2-pro'       => 'Flux 2 Pro',
+					'black-forest-labs/flux-2-dev'       => 'Flux 2 Dev',
+					'black-forest-labs/flux-2-flex'      => 'Flux 2 Flex',
 				],
 			];
 

@@ -99,7 +99,10 @@ import TurndownService from 'turndown';
 			'bytedance/seedream-4',
 			'google/nano-banana',
 			'black-forest-labs/flux-kontext-max',
-			'black-forest-labs/flux-kontext-dev'
+			'black-forest-labs/flux-kontext-dev',
+			'black-forest-labs/flux-2-pro',
+			'black-forest-labs/flux-2-dev',
+			'black-forest-labs/flux-2-flex'
 		];
 		const modelSupportsEditing = editModel && imageEditorModels.includes( editModel );
 
