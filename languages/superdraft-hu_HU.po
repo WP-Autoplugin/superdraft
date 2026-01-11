@@ -2,10 +2,10 @@
 # This file is distributed under the same license as the Superdraft plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Superdraft 1.0.0\n"
+"Project-Id-Version: Superdraft 1.1.4\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/superdraft\n"
-"POT-Creation-Date: 2025-04-06T23:34:41+00:00\n"
-"PO-Revision-Date: 2025-02-23 11:10+1\n"
+"POT-Creation-Date: 2026-01-10 19:11+0000\n"
+"PO-Revision-Date: 2026-01-11 14:30+0100\n"
 "Last-Translator: Balázs Piller <connect@webwizwork.com>\n"
 "Language-Team: Hungarian <connect@webwizwork.com>\n"
 "Language: hu\n"
@@ -37,7 +37,7 @@ msgstr "Piller Balázs"
 #. Author URI of the plugin
 #: superdraft.php
 msgid "https://wp-autoplugin.com"
-msgstr ""
+msgstr "https://wp-autoplugin.com"
 
 #: includes/admin/class-admin.php:78 includes/admin/class-admin.php:104
 msgid "Superdraft API Logs"
@@ -101,7 +101,7 @@ msgstr "Hiba a modell mentésekor"
 
 #: includes/admin/class-admin.php:318 includes/admin/class-admin.php:356
 msgid "You do not have permission to do this."
-msgstr ""
+msgstr "Nincs jogosultságod ehhez a művelethez."
 
 #: includes/admin/class-admin.php:324
 msgid "Invalid model data."
@@ -167,7 +167,7 @@ msgstr "Üzenet"
 
 #: includes/admin/class-logs-list-table.php:106
 msgid "N/A"
-msgstr ""
+msgstr "N/A"
 
 #: includes/admin/class-logs-list-table.php:111
 msgid "View Message"
@@ -190,9 +190,8 @@ msgid "Auto-select Tags"
 msgstr "Címkék automatikus kiválasztása"
 
 #: includes/admin/class-tags-categories.php:392
-#, fuzzy
 msgid "Invalid response format from API or no terms selected"
-msgstr "Érvénytelen API válaszformátum"
+msgstr "Érvénytelen API válaszformátum vagy nincs kiválasztott kifejezés"
 
 #. translators: %s is the taxonomy name.
 #: includes/admin/class-tags-categories.php:442
@@ -237,6 +236,7 @@ msgid "Generate Suggestions"
 msgstr "Javaslatok generálása"
 
 #: includes/admin/class-writing-tips.php:133
+#: includes/admin/class-images.php:366
 msgid "Invalid prompt template"
 msgstr "Érvénytelen prompt sablon"
 
@@ -382,8 +382,7 @@ msgstr "AI írási tippek"
 
 #: views/page-settings.php:114
 msgid "Get writing, SEO, and readability tips while editing your posts."
-msgstr ""
-"Kapj írási, SEO és olvashatósági tippeket a bejegyzések szerkesztése közben."
+msgstr "Kapj írási, SEO és olvashatósági tippeket a bejegyzések szerkesztése közben."
 
 #: views/page-settings.php:117
 msgid "Enable AI Writing Tips"
@@ -399,8 +398,7 @@ msgstr "Minimum tippek"
 
 #: views/page-settings.php:132
 msgid "Minimum number of tips to generate. The AI may add more if needed."
-msgstr ""
-"Generálandó tippek minimális száma. Az AI szükség esetén többet is "
+msgstr "Generálandó tippek minimális száma. Az AI szükség esetén többet is "
 "hozzáadhat."
 
 #: views/page-settings.php:136
@@ -443,9 +441,7 @@ msgstr "Aktiváló előtag"
 
 #: views/page-settings.php:176
 msgid "Character(s) that trigger autocomplete suggestions. Default: ~"
-msgstr ""
-"Karakter(ek), amelyek aktiválják az automatikus kiegészítési javaslatokat. "
-"Alapértelmezett: ~"
+msgstr "Karakter(ek), amelyek aktiválják az automatikus kiegészítési javaslatokat. Alapértelmezett: ~"
 
 #: views/page-settings.php:180
 msgid "Empty Search Suggestions"
@@ -488,11 +484,8 @@ msgid "Full Post"
 msgstr "Teljes bejegyzés"
 
 #: views/page-settings.php:222
-#, fuzzy
 msgid "Amount of text to use as context for generating suggestions."
-msgstr ""
-"A javaslatok generálásához használt bejegyzés kivonatok száma. "
-"Alapértelmezett: 20"
+msgstr "A javaslatok generálásához kontextusként használandó szöveg mennyisége."
 
 #: views/page-settings.php:226
 msgid "Debounce Delay"
@@ -500,52 +493,47 @@ msgstr "Késleltetés"
 
 #: views/page-settings.php:232
 msgid "Delay in milliseconds before showing suggestions. Default: 500"
-msgstr ""
-"Késleltetés milliszekundumban a javaslatok megjelenítése előtt. "
+msgstr "Késleltetés milliszekundumban a javaslatok megjelenítése előtt. "
 "Alapértelmezett: 500"
 
 #: views/page-settings.php:245
 msgid "Smart Compose"
-msgstr ""
+msgstr "Intelligens kiegészítés"
 
 #: views/page-settings.php:248
 msgid "Smart Compose Settings"
-msgstr ""
+msgstr "Intelligens kiegészítés beállításai"
 
 #: views/page-settings.php:254
 msgid "Enable Smart Compose (beta)"
-msgstr ""
+msgstr "Intelligens kiegészítés engedélyezése (béta)"
 
 #: views/page-settings.php:256
 msgid "Provides real-time suggestions as you type in paragraph blocks."
-msgstr ""
+msgstr "Valós idejű javaslatokat ad írás közben a bekezdés blokkokban."
 
 #: views/page-settings.php:261
-#, fuzzy
 msgid "Smart Compose Model"
-msgstr "Egyedi modell mentése"
+msgstr "Intelligens kiegészítés modellje"
 
 #: views/page-settings.php:269
 msgid "Smart Compose Delay"
-msgstr ""
+msgstr "Intelligens kiegészítés késleltetése"
 
 #: views/page-settings.php:275
-#, fuzzy
 msgid ""
 "Delay in milliseconds before showing Smart Compose suggestions. Default: 1500"
-msgstr ""
-"Késleltetés milliszekundumban a javaslatok megjelenítése előtt. "
-"Alapértelmezett: 500"
+msgstr "Késleltetés milliszekundumban az intelligens kiegészítés javaslatok megjelenítése előtt. Alapértelmezett: 1500"
 
 #: views/page-settings.php:279
 msgid "Smart Compose Max Tokens"
-msgstr ""
+msgstr "Intelligens kiegészítés maximum tokenek"
 
 #: views/page-settings.php:285
 msgid ""
 "Maximum number of tokens to generate for Smart Compose suggestions. One "
 "token is generally one word or a few characters in English. Default: 10"
-msgstr ""
+msgstr "Az intelligens kiegészítés javaslatokhoz generálandó tokenek maximális száma. Egy token általában egy szó vagy néhány karakter. Alapértelmezett: 10"
 
 #: assets/admin/js/dist/tags-categories.js:1
 msgid "No matching terms found."
@@ -579,9 +567,8 @@ msgstr "Elemzés most"
 
 #. Translators: %1$s: completed count, %2$s: total count.
 #: assets/admin/js/dist/writing-tips.js:4
-#, fuzzy
 msgid "Update Checklist (%1$s/%2$s)"
-msgstr "Lista frissítése (%s/%s)"
+msgstr "Lista frissítése (%1$s/%2$s)"
 
 #: assets/admin/js/dist/writing-tips.js:4
 msgid "No tips yet."
@@ -608,5 +595,322 @@ msgid "Add Item"
 msgstr "Elem hozzáadása"
 
 #~ msgid "Prompt template for taxonomy auto-select is not defined"
-#~ msgstr ""
-#~ "A taxonómia automatikus kiválasztásához szükséges sablon nincs megadva"
+#~ msgstr "A taxonómia automatikus kiválasztásához szükséges sablon nincs megadva"
+
+#: includes/admin/class-admin.php:697
+msgid "(Unavailable)"
+msgstr "(Nem érhető el)"
+
+#: views/page-settings.php:295
+msgid "AI Image Generation"
+msgstr "AI képgenerálás"
+
+#: includes/admin/class-images.php:290
+msgid "API returned empty image data after editing"
+msgstr "Az API üres képadatot adott vissza a szerkesztés után"
+
+#: includes/admin/class-images.php:504
+msgid "API returned empty image data after generation"
+msgstr "Az API üres képadatot adott vissza a generálás után"
+
+#: includes/admin/class-images.php:192
+#: includes/api/class-replicate-image-api.php:143
+msgid "Could not read featured image file."
+msgstr "Nem sikerült beolvasni a kiemelt kép fájlt."
+
+#: views/api-setup.php:53
+msgid "Custom Language Models"
+msgstr "Egyéni nyelvi modellek"
+
+#: includes/admin/class-images.php:332
+msgid "Edited image generated successfully"
+msgstr "A szerkesztett kép sikeresen generálva"
+
+#: views/page-settings.php:299
+msgid "Enable AI Image Generation"
+msgstr "AI képgenerálás engedélyezése"
+
+#: includes/api/class-google-gemini-image-api.php:132
+msgid "Error communicating with the Google Gemini Image API."
+msgstr "Hiba a Google Gemini Image API-val való kommunikáció során."
+
+#: includes/api/class-replicate-image-api.php:151
+msgid "Failed to base64-encode image data for Replicate."
+msgstr "Nem sikerült a képadatokat base64 formátumba kódolni a Replicate számára."
+
+#: includes/api/class-openai-image-api.php:257
+msgid "Failed to decode base64 edited image data from OpenAI."
+msgstr "Nem sikerült dekódolni a szerkesztett kép base64 adatait az OpenAI-tól."
+
+#: includes/admin/class-images.php:223 includes/admin/class-images.php:457
+msgid "Failed to decode base64 image data from Google Gemini."
+msgstr "Nem sikerült dekódolni a kép base64 adatait a Google Gemini-től."
+
+#: includes/api/class-openai-image-api.php:109
+msgid "Failed to decode base64 image data from OpenAI."
+msgstr "Nem sikerült dekódolni a kép base64 adatait az OpenAI-tól."
+
+#: includes/api/class-replicate-image-api.php:254
+msgid "Failed to download edited image from Replicate."
+msgstr "Nem sikerült letölteni a szerkesztett képet a Replicate-ről."
+
+#: includes/api/class-replicate-image-api.php:115
+msgid "Failed to download generated image."
+msgstr "Nem sikerült letölteni a generált képet."
+
+#. %s: error message.
+#: includes/admin/class-images.php:297
+#, php-format
+msgid "Failed to save edited image: %s"
+msgstr "Nem sikerült menteni a szerkesztett képet: %s"
+
+#. %s: error message.
+#: includes/admin/class-images.php:511
+#, php-format
+msgid "Failed to save generated image: %s"
+msgstr "Nem sikerült menteni a generált képet: %s"
+
+#: includes/admin/class-images.php:160
+#: includes/api/class-replicate-image-api.php:137
+msgid "Featured image file not found or path is invalid"
+msgstr "A kiemelt kép fájl nem található, vagy az elérési út érvénytelen"
+
+#: includes/admin/class-images.php:545
+msgid "Featured image generated and set successfully"
+msgstr "A kiemelt kép sikeresen generálva és beállítva"
+
+#: views/page-settings.php:296
+msgid "Generate a featured image for your post using AI based on a textual prompt."
+msgstr "Generálj kiemelt képet a bejegyzéshez AI segítségével, szöveges prompt alapján."
+
+#: views/page-settings.php:304
+msgid "Generate featured images using AI"
+msgstr "Kiemelt képek generálása AI-val"
+
+#: includes/admin/class-images.php:183 includes/admin/class-images.php:446
+msgid "Google API key is missing"
+msgstr "A Google API kulcs hiányzik"
+
+#: includes/admin/class-images.php:143
+msgid "Image editing is disabled"
+msgstr "A képszerkesztés ki van kapcsolva"
+
+#. %s: model name.
+#: includes/admin/class-images.php:251
+#, php-format
+msgid "Image editing is not available for the selected model (%s)."
+msgstr "A képszerkesztés nem érhető el a kiválasztott modellhez (%s)."
+
+#: views/page-settings.php:25
+msgid "Image Generation"
+msgstr "Képgenerálás"
+
+#: includes/admin/class-images.php:138 includes/admin/class-images.php:424
+msgid "Image generation module is disabled"
+msgstr "A képgenerálás modul ki van kapcsolva"
+
+#: includes/api/class-openai-image-api.php:249
+msgid "Invalid or empty JSON response received from OpenAI Edit API."
+msgstr "Érvénytelen vagy üres JSON válasz érkezett az OpenAI Edit API-tól."
+
+#: includes/admin/class-images.php:355
+msgid "Invalid post ID"
+msgstr "Érvénytelen bejegyzés azonosító"
+
+#: includes/admin/class-images.php:361
+msgid "Invalid prompt model"
+msgstr "Érvénytelen prompt modell"
+
+#: includes/admin/class-images.php:350
+msgid "Missing parameters"
+msgstr "Hiányzó paraméterek"
+
+#: includes/admin/class-images.php:415
+msgid "Missing postId or prompt"
+msgstr "Hiányzó bejegyzés azonosító vagy prompt"
+
+#: includes/admin/class-images.php:151
+msgid "Missing postId, featuredImageId, or prompt"
+msgstr "Hiányzó bejegyzés azonosító, kiemelt kép azonosító vagy prompt"
+
+#: views/page-settings.php:323
+msgid "Model used to generate image prompts based on your post content."
+msgstr "A képpromptek generálásához használt modell a bejegyzés tartalma alapján."
+
+#: includes/api/class-google-gemini-image-api.php:144
+msgid "No image data found in the API response."
+msgstr "Nem található képadat az API válaszban."
+
+#: includes/api/class-openai-image-api.php:101
+msgid "No image data found in the OpenAI API response."
+msgstr "Nem található képadat az OpenAI API válaszban."
+
+#: includes/admin/class-admin.php:616
+msgid "No image edits"
+msgstr "Nincs képszerkesztés"
+
+#: includes/api/class-openai-image-api.php:139
+msgid "No reference image path provided for editing."
+msgstr "Nincs referenciakép elérési út megadva a szerkesztéshez."
+
+#. %s: error message.
+#: includes/api/class-openai-image-api.php:95
+#, php-format
+msgid "OpenAI API Error: %s"
+msgstr "OpenAI API hiba: %s"
+
+#: includes/admin/class-images.php:171 includes/admin/class-images.php:436
+msgid "OpenAI API key is missing"
+msgstr "Az OpenAI API kulcs hiányzik"
+
+#. %1$d: HTTP response code, %2$s: error message.
+#: includes/api/class-openai-image-api.php:243
+#, php-format
+msgid "OpenAI Edit API Error (%1$d): %2$s"
+msgstr "OpenAI Edit API hiba (%1$d): %2$s"
+
+#: includes/api/class-openai-image-api.php:129
+msgid "PHP 5.5+ with CURLFile support is required for reliable image editing with wp_remote_post."
+msgstr "A megbízható képszerkesztéshez PHP 5.5+ CURLFile támogatással szükséges a wp_remote_post használatakor."
+
+#: views/page-settings.php:320
+msgid "Prompt Generator Model"
+msgstr "Prompt generáló modell"
+
+#: views/page-settings.php:258
+msgid "Provides real-time suggestions as you type in paragraph blocks. Use a fast-responding model for the best experience."
+msgstr "Valós idejű javaslatokat ad írás közben a bekezdés blokkokban. A legjobb élményért használj gyors válaszadó modellt."
+
+#. %s: image path.
+#: includes/api/class-openai-image-api.php:144
+#, php-format
+msgid "Reference image file not found: %s"
+msgstr "Referenciakép fájl nem található: %s"
+
+#. %s: error message.
+#: includes/api/class-replicate-image-api.php:95
+#: includes/api/class-replicate-image-api.php:234
+#, php-format
+msgid "Replicate API error: %s"
+msgstr "Replicate API hiba: %s"
+
+#: includes/admin/class-images.php:230 includes/admin/class-images.php:463
+msgid "Replicate API key is missing"
+msgstr "A Replicate API kulcs hiányzik"
+
+#: includes/api/class-replicate-image-api.php:101
+#: includes/api/class-replicate-image-api.php:240
+msgid "Replicate API returned no output."
+msgstr "A Replicate API nem adott vissza kimenetet."
+
+#: views/api-setup.php:34
+msgid "Replicate API Token"
+msgstr "Replicate API Token"
+
+#: views/page-settings.php:314
+msgid "Select Image Editing Model"
+msgstr "Képszerkesztő modell kiválasztása"
+
+#: views/page-settings.php:308
+msgid "Select Image Generation Model"
+msgstr "Képgeneráló modell kiválasztása"
+
+#: includes/api/class-openai-image-api.php:135
+msgid "The cURL transport for WP_Http is not available, cannot guarantee multipart upload."
+msgstr "A cURL átvitel nem érhető el a WP_Http számára, nem garantálható a többrészes feltöltés."
+
+#. %s: replicate.com link.
+#: views/api-setup.php:44
+#, php-format
+msgid "The Replicate API offers a variety of models for image generation. You can find more information at %s."
+msgstr "A Replicate API számos modellt kínál képgeneráláshoz. További információkat itt találsz: %s."
+
+#: includes/api/class-openai-image-api.php:93
+#: includes/api/class-openai-image-api.php:234
+msgid "Unknown API error"
+msgstr "Ismeretlen API hiba"
+
+#. %s: model name.
+#: includes/admin/class-images.php:471
+#, php-format
+msgid "Unknown or unsupported image model: %s"
+msgstr "Ismeretlen vagy nem támogatott képmodell: %s"
+
+#: includes/admin/class-images.php:155 includes/admin/class-images.php:419
+msgid "You do not have permission to edit this post"
+msgstr "Nincs jogosultságod ennek a bejegyzésnek a szerkesztéséhez"
+#: assets/admin/js/dist/images.js:61
+msgid "Auto-generate prompt"
+msgstr "Prompt automatikus generálása"
+
+#: assets/admin/js/dist/images.js:125
+msgid "An unexpected error occurred."
+msgstr "Váratlan hiba történt."
+
+#: assets/admin/js/dist/images.js:170
+msgid "Image generated successfully."
+msgstr "A kép sikeresen generálva."
+
+#: assets/admin/js/dist/images.js:177
+msgid "Generation completed but no image ID received."
+msgstr "A generálás befejeződött, de nem érkezett kép azonosító."
+
+#: assets/admin/js/dist/images.js:199
+msgid "Image edited successfully."
+msgstr "A kép sikeresen szerkesztve."
+
+#: assets/admin/js/dist/images.js:205
+msgid "Edit completed but no image ID received."
+msgstr "A szerkesztés befejeződött, de nem érkezett kép azonosító."
+
+#: assets/admin/js/dist/images.js:236
+msgid "Generate"
+msgstr "Generálás"
+
+#: assets/admin/js/dist/images.js:247
+msgid "Edit"
+msgstr "Szerkesztés"
+
+#: assets/admin/js/dist/images.js:256
+msgid "Prompt"
+msgstr "Prompt"
+
+#: assets/admin/js/dist/images.js:261
+msgid "Describe the new image..."
+msgstr "Írd le az új képet..."
+
+#: assets/admin/js/dist/images.js:262
+msgid "Describe the changes..."
+msgstr "Írd le a változtatásokat..."
+
+#: assets/admin/js/dist/images.js:277
+msgid "Generating..."
+msgstr "Generálás folyamatban..."
+
+#: assets/admin/js/dist/images.js:277
+msgid "Editing..."
+msgstr "Szerkesztés folyamatban..."
+
+#: assets/admin/js/dist/images.js:278
+msgid "Generate Image"
+msgstr "Kép generálása"
+
+#: assets/admin/js/dist/images.js:278
+msgid "Apply Edits"
+msgstr "Szerkesztések alkalmazása"
+
+#: assets/admin/js/dist/images.js:312
+msgid "Processing image..."
+msgstr "Kép feldolgozása folyamatban..."
+
+#: assets/admin/js/taxonomy-suggestions.js:33
+msgid "Generate More"
+msgstr "Továbbiak generálása"
+
+#: assets/admin/js/taxonomy-suggestions.js:45
+msgid "Add"
+msgstr "Hozzáadás"
+
+#: assets/admin/js/taxonomy-suggestions.js:64
+msgid "Failed to get suggestions"
+msgstr "Nem sikerült lekérni a javaslatokat"

@@ -121,7 +121,7 @@ class Tags_Categories {
 		wp_enqueue_script(
 			'superdraft-taxonomy-suggestions',
 			SUPERDRAFT_URL . 'assets/admin/js/taxonomy-suggestions.js',
-			[ 'jquery' ],
+			[ 'jquery', 'wp-i18n' ],
 			SUPERDRAFT_VERSION,
 			true
 		);
@@ -134,6 +134,8 @@ class Tags_Categories {
 				'nonce'   => wp_create_nonce( 'superdraft-suggest-terms' ),
 			]
 		);
+
+		wp_set_script_translations( 'superdraft-taxonomy-suggestions', 'superdraft', SUPERDRAFT_DIR . 'languages' );
 
 		wp_enqueue_style(
 			'superdraft-taxonomy-suggestions',

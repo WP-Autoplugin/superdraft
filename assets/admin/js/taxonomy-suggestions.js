@@ -1,6 +1,8 @@
 (function ($) {
 	'use strict';
 
+	const { __ } = wp.i18n;
+
 	$( document ).ready(
 		function () {
 			const $button      = $( '#superdraft-suggest-terms' );
@@ -28,7 +30,7 @@
 							success: function (response) {
 								if (response.success && Array.isArray( response.data )) {
 									// Update button text after first successful response
-									$button.text( 'Generate More' ); // Todo: i18n
+									$button.text( __( 'Generate More', 'superdraft' ) );
 
 									// Store new terms
 									generatedTerms = generatedTerms.concat( response.data );
@@ -40,7 +42,7 @@
 											.append(
 												$( '<span>' ).text( term ),
 												$( '<button type="button" class="button-link">' )
-													.text( 'Add' )
+													.text( __( 'Add', 'superdraft' ) )
 													.on(
 														'click',
 														function () {
@@ -59,7 +61,7 @@
 								}
 							},
 							error: function () {
-								$suggestions.html( '<p class="error">Failed to get suggestions</p>' );
+								$suggestions.html( '<p class="error">' + __( 'Failed to get suggestions', 'superdraft' ) + '</p>' );
 							},
 							complete: function () {
 								$button.prop( 'disabled', false );
