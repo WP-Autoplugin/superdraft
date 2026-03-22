@@ -107,6 +107,32 @@ if ( ! defined( 'ABSPATH' ) ) {
 							?>
 					</td>
 				</tr>
+				<tr valign="top">
+					<th scope="row"><?php esc_html_e( 'Enabled Taxonomies', 'superdraft' ); ?></th>
+					<td>
+						<?php
+						$enabled_taxonomies = $settings['tags_categories']['enabled_taxonomies'] ?? [ 'category', 'post_tag' ];
+						$public_taxonomies  = get_taxonomies( [ 'public' => true ], 'objects' );
+
+						foreach ( $public_taxonomies as $taxonomy ) {
+							// Skip taxonomies that don't have a UI.
+							if ( false === $taxonomy->show_ui ) {
+								continue;
+							}
+							$checked = in_array( $taxonomy->name, $enabled_taxonomies, true ) ? 'checked' : '';
+							?>
+							<label style="display: block; margin-bottom: 5px;">
+								<input type="checkbox" name="superdraft_settings[tags_categories][enabled_taxonomies][]" 
+									value="<?php echo esc_attr( $taxonomy->name ); ?>" <?php echo esc_attr( $checked ); ?> />
+								<?php echo esc_html( $taxonomy->labels->name ); ?> 
+								<code><?php echo esc_html( $taxonomy->name ); ?></code>
+							</label>
+							<?php
+						}
+						?>
+						<p class="description"><?php esc_html_e( 'Select which taxonomies to enable for AI auto-select and term suggestions. Built-in taxonomies (Categories and Tags) are enabled by default.', 'superdraft' ); ?></p>
+					</td>
+				</tr>
 			</table>
 		</div>
 

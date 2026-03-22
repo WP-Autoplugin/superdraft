@@ -47,6 +47,11 @@ class Settings_Config {
 					'default'  => 20,
 					'sanitize' => 'absint',
 				],
+				'enabled_taxonomies'  => [
+					'type'    => 'array',
+					'default' => [ 'category', 'post_tag' ],
+					'sanitize' => [ __CLASS__, 'sanitize_taxonomy_array' ],
+				],
 			],
 			'writing_tips'    => [
 				'enabled'     => [
@@ -209,5 +214,32 @@ class Settings_Config {
 			$defaults[ $key ] = $config['default'];
 		}
 		return $defaults;
+	}
+
+	/**
+	 * Sanitize taxonomy array.
+	 *
+	 * @param array $input The input array to sanitize.
+	 * @return array Sanitized array of valid taxonomy names.
+	 */
+	public static function sanitize_taxonomy_array( $input ) {
+		if ( ! is_array( $input ) ) {
+			return [ 'category', 'post_tag' ];
+		}
+
+		$sanitized = [];
+		foreach ( $input as $taxonomy ) {
+			$taxonomy = sanitize_text_field( $taxonomy );
+			if ( taxonomy_exists( $taxonomy ) ) {
+				$sanitized[] = $taxonomy;
+			}
+		}
+
+		// Always ensure at least one taxonomy is enabled.
+		if ( empty( $sanitized ) ) {
+			return [ 'category', 'post_tag' ];
+		}
+
+		return $sanitized;
 	}
 }
