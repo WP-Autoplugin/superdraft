@@ -2,15 +2,15 @@
 # This file is distributed under the GPL-3.0.
 msgid ""
 msgstr ""
-"Project-Id-Version: Superdraft 1.0.1\n"
+"Project-Id-Version: Superdraft 1.1.4\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/superdraft\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-04-06T23:34:41+00:00\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"POT-Creation-Date: 2026-01-10 19:11+0000\n"
+"PO-Revision-Date: 2026-01-11 14:30+0100\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: superdraft\n"
 
@@ -236,6 +236,7 @@ msgid "Generate Suggestions"
 msgstr ""
 
 #: includes/admin/class-writing-tips.php:133
+#: includes/admin/class-images.php:366
 msgid "Invalid prompt template"
 msgstr ""
 
@@ -553,4 +554,324 @@ msgstr ""
 
 #: assets/admin/js/dist/writing-tips.js:4
 msgid "Add Item"
+msgstr ""
+
+
+#: includes/admin/class-admin.php:697
+msgid "(Unavailable)"
+msgstr ""
+
+#: views/page-settings.php:295
+msgid "AI Image Generation"
+msgstr ""
+
+#: includes/admin/class-images.php:290
+msgid "API returned empty image data after editing"
+msgstr ""
+
+#: includes/admin/class-images.php:504
+msgid "API returned empty image data after generation"
+msgstr ""
+
+#: includes/admin/class-images.php:192
+#: includes/api/class-replicate-image-api.php:143
+msgid "Could not read featured image file."
+msgstr ""
+
+#: views/api-setup.php:53
+msgid "Custom Language Models"
+msgstr ""
+
+#: includes/admin/class-images.php:332
+msgid "Edited image generated successfully"
+msgstr ""
+
+#: views/page-settings.php:299
+msgid "Enable AI Image Generation"
+msgstr ""
+
+#: includes/api/class-google-gemini-image-api.php:132
+msgid "Error communicating with the Google Gemini Image API."
+msgstr ""
+
+#: includes/api/class-replicate-image-api.php:151
+msgid "Failed to base64-encode image data for Replicate."
+msgstr ""
+
+#: includes/api/class-openai-image-api.php:257
+msgid "Failed to decode base64 edited image data from OpenAI."
+msgstr ""
+
+#: includes/admin/class-images.php:223 includes/admin/class-images.php:457
+msgid "Failed to decode base64 image data from Google Gemini."
+msgstr ""
+
+#: includes/api/class-openai-image-api.php:109
+msgid "Failed to decode base64 image data from OpenAI."
+msgstr ""
+
+#: includes/api/class-replicate-image-api.php:254
+msgid "Failed to download edited image from Replicate."
+msgstr ""
+
+#: includes/api/class-replicate-image-api.php:115
+msgid "Failed to download generated image."
+msgstr ""
+
+#. %s: error message.
+#: includes/admin/class-images.php:297
+#, php-format
+msgid "Failed to save edited image: %s"
+msgstr ""
+
+#. %s: error message.
+#: includes/admin/class-images.php:511
+#, php-format
+msgid "Failed to save generated image: %s"
+msgstr ""
+
+#: includes/admin/class-images.php:160
+#: includes/api/class-replicate-image-api.php:137
+msgid "Featured image file not found or path is invalid"
+msgstr ""
+
+#: includes/admin/class-images.php:545
+msgid "Featured image generated and set successfully"
+msgstr ""
+
+#: views/page-settings.php:296
+msgid "Generate a featured image for your post using AI based on a textual prompt."
+msgstr ""
+
+#: views/page-settings.php:304
+msgid "Generate featured images using AI"
+msgstr ""
+
+#: includes/admin/class-images.php:183 includes/admin/class-images.php:446
+msgid "Google API key is missing"
+msgstr ""
+
+#: includes/admin/class-images.php:143
+msgid "Image editing is disabled"
+msgstr ""
+
+#. %s: model name.
+#: includes/admin/class-images.php:251
+#, php-format
+msgid "Image editing is not available for the selected model (%s)."
+msgstr ""
+
+#: views/page-settings.php:25
+msgid "Image Generation"
+msgstr ""
+
+#: includes/admin/class-images.php:138 includes/admin/class-images.php:424
+msgid "Image generation module is disabled"
+msgstr ""
+
+#: includes/api/class-openai-image-api.php:249
+msgid "Invalid or empty JSON response received from OpenAI Edit API."
+msgstr ""
+
+#: includes/admin/class-images.php:355
+msgid "Invalid post ID"
+msgstr ""
+
+#: includes/admin/class-images.php:361
+msgid "Invalid prompt model"
+msgstr ""
+
+#: includes/admin/class-images.php:350
+msgid "Missing parameters"
+msgstr ""
+
+#: includes/admin/class-images.php:415
+msgid "Missing postId or prompt"
+msgstr ""
+
+#: includes/admin/class-images.php:151
+msgid "Missing postId, featuredImageId, or prompt"
+msgstr ""
+
+#: views/page-settings.php:323
+msgid "Model used to generate image prompts based on your post content."
+msgstr ""
+
+#: includes/api/class-google-gemini-image-api.php:144
+msgid "No image data found in the API response."
+msgstr ""
+
+#: includes/api/class-openai-image-api.php:101
+msgid "No image data found in the OpenAI API response."
+msgstr ""
+
+#: includes/admin/class-admin.php:616
+msgid "No image edits"
+msgstr ""
+
+#: includes/api/class-openai-image-api.php:139
+msgid "No reference image path provided for editing."
+msgstr ""
+
+#. %s: error message.
+#: includes/api/class-openai-image-api.php:95
+#, php-format
+msgid "OpenAI API Error: %s"
+msgstr ""
+
+#: includes/admin/class-images.php:171 includes/admin/class-images.php:436
+msgid "OpenAI API key is missing"
+msgstr ""
+
+#. %1$d: HTTP response code, %2$s: error message.
+#: includes/api/class-openai-image-api.php:243
+#, php-format
+msgid "OpenAI Edit API Error (%1$d): %2$s"
+msgstr ""
+
+#: includes/api/class-openai-image-api.php:129
+msgid "PHP 5.5+ with CURLFile support is required for reliable image editing with wp_remote_post."
+msgstr ""
+
+#: views/page-settings.php:320
+msgid "Prompt Generator Model"
+msgstr ""
+
+#: views/page-settings.php:258
+msgid "Provides real-time suggestions as you type in paragraph blocks. Use a fast-responding model for the best experience."
+msgstr ""
+
+#. %s: image path.
+#: includes/api/class-openai-image-api.php:144
+#, php-format
+msgid "Reference image file not found: %s"
+msgstr ""
+
+#. %s: error message.
+#: includes/api/class-replicate-image-api.php:95
+#: includes/api/class-replicate-image-api.php:234
+#, php-format
+msgid "Replicate API error: %s"
+msgstr ""
+
+#: includes/admin/class-images.php:230 includes/admin/class-images.php:463
+msgid "Replicate API key is missing"
+msgstr ""
+
+#: includes/api/class-replicate-image-api.php:101
+#: includes/api/class-replicate-image-api.php:240
+msgid "Replicate API returned no output."
+msgstr ""
+
+#: views/api-setup.php:34
+msgid "Replicate API Token"
+msgstr ""
+
+#: views/page-settings.php:314
+msgid "Select Image Editing Model"
+msgstr ""
+
+#: views/page-settings.php:308
+msgid "Select Image Generation Model"
+msgstr ""
+
+#: includes/api/class-openai-image-api.php:135
+msgid "The cURL transport for WP_Http is not available, cannot guarantee multipart upload."
+msgstr ""
+
+#. %s: replicate.com link.
+#: views/api-setup.php:44
+#, php-format
+msgid "The Replicate API offers a variety of models for image generation. You can find more information at %s."
+msgstr ""
+
+#: includes/api/class-openai-image-api.php:93
+#: includes/api/class-openai-image-api.php:234
+msgid "Unknown API error"
+msgstr ""
+
+#. %s: model name.
+#: includes/admin/class-images.php:471
+#, php-format
+msgid "Unknown or unsupported image model: %s"
+msgstr ""
+
+#: includes/admin/class-images.php:155 includes/admin/class-images.php:419
+msgid "You do not have permission to edit this post"
+msgstr ""
+
+#: assets/admin/js/dist/images.js:61
+msgid "Auto-generate prompt"
+msgstr ""
+
+#: assets/admin/js/dist/images.js:125
+msgid "An unexpected error occurred."
+msgstr ""
+
+#: assets/admin/js/dist/images.js:170
+msgid "Image generated successfully."
+msgstr ""
+
+#: assets/admin/js/dist/images.js:177
+msgid "Generation completed but no image ID received."
+msgstr ""
+
+#: assets/admin/js/dist/images.js:199
+msgid "Image edited successfully."
+msgstr ""
+
+#: assets/admin/js/dist/images.js:205
+msgid "Edit completed but no image ID received."
+msgstr ""
+
+#: assets/admin/js/dist/images.js:236
+msgid "Generate"
+msgstr ""
+
+#: assets/admin/js/dist/images.js:247
+msgid "Edit"
+msgstr ""
+
+#: assets/admin/js/dist/images.js:256
+msgid "Prompt"
+msgstr ""
+
+#: assets/admin/js/dist/images.js:261
+msgid "Describe the new image..."
+msgstr ""
+
+#: assets/admin/js/dist/images.js:262
+msgid "Describe the changes..."
+msgstr ""
+
+#: assets/admin/js/dist/images.js:277
+msgid "Generating..."
+msgstr ""
+
+#: assets/admin/js/dist/images.js:277
+msgid "Editing..."
+msgstr ""
+
+#: assets/admin/js/dist/images.js:278
+msgid "Generate Image"
+msgstr ""
+
+#: assets/admin/js/dist/images.js:278
+msgid "Apply Edits"
+msgstr ""
+
+#: assets/admin/js/dist/images.js:312
+msgid "Processing image..."
+msgstr ""
+
+#: assets/admin/js/taxonomy-suggestions.js:33
+msgid "Generate More"
+msgstr ""
+
+#: assets/admin/js/taxonomy-suggestions.js:45
+msgid "Add"
+msgstr ""
+
+#: assets/admin/js/taxonomy-suggestions.js:64
+msgid "Failed to get suggestions"
 msgstr ""
