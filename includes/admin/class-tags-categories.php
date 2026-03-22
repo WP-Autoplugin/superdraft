@@ -41,11 +41,24 @@ class Tags_Categories {
 		add_action( 'admin_init', [ $this, 'handle_cancel_bulk_process' ] );
 		add_action( 'superdraft_bulk_process_completed', [ $this, 'cleanup_bulk_process_data' ] );
 
-		// Taxonomy suggestions.
-		add_action( 'category_add_form_fields', [ $this, 'render_suggestion_form' ] );
-		add_action( 'post_tag_add_form_fields', [ $this, 'render_suggestion_form' ] );
+		// Taxonomy suggestions - register for all public taxonomies.
+		add_action( 'admin_init', [ $this, 'register_taxonomy_suggestion_hooks' ] );
 		add_action( 'wp_ajax_superdraft_suggest_terms', [ $this, 'handle_suggest_terms' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_taxonomy_assets' ] );
+	}
+
+	/**
+	 * Register taxonomy suggestion hooks for all enabled taxonomies.
+	 */
+	public function register_taxonomy_suggestion_hooks() {
+		$settings = get_option( 'superdraft_settings', [] );
+		$enabled_taxonomies = $settings['tags_categories']['enabled_taxonomies'] ?? [ 'category', 'post_tag' ];
+
+		foreach ( $enabled_taxonomies as $taxonomy ) {
+			if ( taxonomy_exists( $taxonomy ) ) {
+				add_action( "{$taxonomy}_add_form_fields", [ $this, 'render_suggestion_form' ] );
+			}
+		}
 	}
 
 	/**
@@ -154,8 +167,23 @@ class Tags_Categories {
 			return $bulk_actions;
 		}
 
-		$bulk_actions['superdraft_auto_select_categories'] = __( 'Auto-select Categories', 'superdraft' );
-		$bulk_actions['superdraft_auto_select_tags']       = __( 'Auto-select Tags', 'superdraft' );
+		$settings = get_option( 'superdraft_settings', [] );
+		$enabled_taxonomies = $settings['tags_categories']['enabled_taxonomies'] ?? [ 'category', 'post_tag' ];
+
+		foreach ( $enabled_taxonomies as $taxonomy ) {
+			if ( ! taxonomy_exists( $taxonomy ) ) {
+				continue;
+			}
+
+			$taxonomy_obj = get_taxonomy( $taxonomy );
+			$label = $taxonomy_obj->labels->name ?? $taxonomy;
+
+			// Add bulk action for this taxonomy.
+			$action_key = "superdraft_auto_select_{$taxonomy}";
+			/* translators: %s: Taxonomy label */
+			$bulk_actions[ $action_key ] = sprintf( __( 'Auto-select %s', 'superdraft' ), $label );
+		}
+
 		return $bulk_actions;
 	}
 
@@ -182,8 +210,15 @@ class Tags_Categories {
 		 */
 		$interval = apply_filters( 'superdraft_bulk_process_interval', 60, $action, $post_ids );
 
-		if ( 'superdraft_auto_select_categories' === $action || 'superdraft_auto_select_tags' === $action ) {
-			$taxonomy = ( 'superdraft_auto_select_categories' === $action ) ? 'category' : 'post_tag';
+		// Check if this is a superdraft auto-select action.
+		if ( strpos( $action, 'superdraft_auto_select_' ) === 0 ) {
+			// Extract taxonomy from action name.
+			$taxonomy = str_replace( 'superdraft_auto_select_', '', $action );
+
+			// Validate taxonomy exists.
+			if ( ! taxonomy_exists( $taxonomy ) ) {
+				return $redirect_url;
+			}
 
 			// Calculate the first scheduled time (start in 1 minute).
 			$schedule_time = time() + $interval;
@@ -195,6 +230,7 @@ class Tags_Categories {
 				'start_time'     => time(),
 				'post_ids'       => $post_ids,
 				'last_scheduled' => $schedule_time + ( ( count( $post_ids ) - 1 ) * $interval ), // Store when the last action will run.
+				'taxonomy'       => $taxonomy,
 			];
 			update_option( 'superdraft_bulk_process_data', $bulk_data );
 
@@ -419,6 +455,13 @@ class Tags_Categories {
 		$percentage = round( ( $processed / $total ) * 100 );
 		$taxonomy   = isset( $bulk_data['taxonomy'] ) ? $bulk_data['taxonomy'] : 'category';
 
+		// Get taxonomy label.
+		$taxonomy_label = __( 'Terms', 'superdraft' );
+		if ( taxonomy_exists( $taxonomy ) ) {
+			$taxonomy_obj   = get_taxonomy( $taxonomy );
+			$taxonomy_label = $taxonomy_obj->labels->name ?? $taxonomy;
+		}
+
 		// Calculate remaining time.
 		$completion_time = isset( $bulk_data['last_scheduled'] ) ? $bulk_data['last_scheduled'] : 0;
 		$time_remaining  = '';
@@ -440,7 +483,7 @@ class Tags_Categories {
 							sprintf(
 								// translators: %s is the taxonomy name.
 								__( 'Superdraft is processing auto-select for posts (%s)', 'superdraft' ),
-								( 'category' === $taxonomy ) ? __( 'Categories', 'superdraft' ) : __( 'Tags', 'superdraft' )
+								esc_html( $taxonomy_label )
 							)
 						);
 					?>
