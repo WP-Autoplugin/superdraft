@@ -11,6 +11,7 @@ entry: {
 	'writing-tips': './src/writing-tips.js',
 	'tags-categories': './src/tags-categories.js',
 	'images': './src/images.js',
+	'wizard': './src/wizard.js',
 	},
 	output: {
 		path: __dirname + '/assets/admin/js/dist',

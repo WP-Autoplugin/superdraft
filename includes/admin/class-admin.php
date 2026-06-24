@@ -82,6 +82,25 @@ class Admin {
 			[ $this, 'render_api_logs_page' ]
 		);
 
+		// Add wizard page (accessible via URL, hidden from menu via CSS).
+		add_submenu_page(
+			'superdraft-settings',
+			__( 'Setup Wizard', 'superdraft' ),
+			__( 'Setup Wizard', 'superdraft' ),
+			'manage_options',
+			'superdraft-wizard',
+			[ $this, 'render_wizard_page' ]
+		);
+		
+		// Hide the wizard menu item via CSS.
+		add_action( 'admin_head', function() {
+			echo '<style>
+				li a[href="admin.php?page=superdraft-wizard"] {
+					display: none !important;
+				}
+			</style>';
+		} );
+
 		// Modify the first submenu item to show "Settings" instead of "Superdraft".
 		global $submenu;
 		if ( isset( $submenu['superdraft-settings'] ) ) {
@@ -272,6 +291,13 @@ class Admin {
 	 */
 	public function render_settings_page() {
 		include SUPERDRAFT_DIR . 'views/page-settings.php';
+	}
+
+	/**
+	 * Render the wizard page.
+	 */
+	public function render_wizard_page() {
+		include SUPERDRAFT_DIR . 'views/page-wizard.php';
 	}
 
 	/**

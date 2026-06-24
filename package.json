@@ -12,7 +12,8 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "@wordpress/scripts": "^30.8.1"
+    "@wordpress/scripts": "^30.8.1",
+    "simple-icons": "^16.24.0"
   },
   "dependencies": {
     "@wordpress/api-fetch": "^7.15.1",

@@ -24,6 +24,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<a href="#autocomplete" class="nav-tab"><?php esc_html_e( 'Autocomplete', 'superdraft' ); ?></a>
 		<a href="#images" class="nav-tab"><?php esc_html_e( 'Image Generation', 'superdraft' ); ?></a>
 		<a href="#api-setup" class="nav-tab"><?php esc_html_e( 'API Setup', 'superdraft' ); ?></a>
+		<a href="<?php echo esc_url( admin_url( 'admin.php?page=superdraft-wizard' ) ); ?>" class="nav-tab nav-tab-external">
+			<?php esc_html_e( 'Setup Wizard', 'superdraft' ); ?> ↗
+		</a>
 	</h2>
 	<form method="post" action="options.php" id="superdraft-settings-form">
 		<?php

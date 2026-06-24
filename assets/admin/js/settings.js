@@ -27,6 +27,10 @@ jQuery(document).ready(function($) {
 
     // Handle tab clicks
     $('.nav-tab').click(function(e) {
+        // Skip wizard link - it opens a different page
+        if ($(this).hasClass('nav-tab-external')) {
+            return;
+        }
         e.preventDefault();
         const tabId = $(this).attr('href').substring(1);
         switchToTab(tabId, true);
