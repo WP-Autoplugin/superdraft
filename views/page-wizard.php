@@ -240,45 +240,68 @@ if ( ! is_array( $enabled_modules ) ) {
 		<div class="superdraft-wizard-step-content" data-step="3" style="display:none;">
 			<h2><?php esc_html_e( 'Enable Features', 'superdraft' ); ?></h2>
 			<p class="description">
-				<?php esc_html_e( 'Select which AI features you want to enable. You can always change these later in Settings.', 'superdraft' ); ?>
+				<?php esc_html_e( 'Choose which AI features to enable. You can always change these later in Settings.', 'superdraft' ); ?>
 			</p>
 
-			<div class="superdraft-wizard-modules">
-				<?php foreach ( $modules as $key => $module ) : ?>
-				<div class="superdraft-wizard-module-card" data-module="<?php echo esc_attr( $key ); ?>">
-					<div class="module-header">
-						<div class="module-toggle">
-							<input type="checkbox" id="module-<?php echo esc_attr( $key ); ?>" class="module-checkbox" checked />
-							<label for="module-<?php echo esc_attr( $key ); ?>" class="toggle-label"></label>
+			<div class="superdraft-wizard-carousel">
+				<button type="button" class="carousel-nav carousel-prev" aria-label="<?php esc_attr_e( 'Previous feature', 'superdraft' ); ?>">
+					<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+						<polyline points="15 18 9 12 15 6"></polyline>
+					</svg>
+				</button>
+
+				<div class="carousel-slides">
+					<?php foreach ( $modules as $key => $module ) : ?>
+					<div class="superdraft-wizard-module-card" data-module="<?php echo esc_attr( $key ); ?>">
+						<div class="module-header">
+							<h3><?php echo esc_html( $module['title'] ); ?></h3>
+							<div class="module-toggle">
+								<input type="checkbox" id="module-<?php echo esc_attr( $key ); ?>" class="module-checkbox" checked />
+								<label for="module-<?php echo esc_attr( $key ); ?>" class="toggle-label">
+									<span class="toggle-track"></span>
+									<span class="toggle-thumb"></span>
+								</label>
+								<span class="toggle-status"><?php esc_html_e( 'Enabled', 'superdraft' ); ?></span>
+							</div>
 						</div>
-						<div class="module-icon"><?php echo esc_html( $module['icon'] ); ?></div>
-						<h3><?php echo esc_html( $module['title'] ); ?></h3>
-					</div>
-					<p class="module-description"><?php echo esc_html( $module['desc'] ); ?></p>
-					<div class="module-preview">
-						<div class="module-preview-svg">
-							<?php
-							$svg_map = [
-								'smart_compose'   => 'smart-compose.svg',
-								'autocomplete'    => 'autocomplete.svg',
-								'tags_categories' => 'auto-tags.svg',
-								'images'          => 'image-gen.svg',
-								'writing_tips'    => 'writing-tips.svg',
-							];
-							$svg_file = $svg_map[ $key ] ?? '';
-							if ( $svg_file && file_exists( SUPERDRAFT_DIR . 'assets/admin/images/features/' . $svg_file ) ) :
-								echo file_get_contents( SUPERDRAFT_DIR . 'assets/admin/images/features/' . $svg_file ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-							else :
-							?>
-							<svg class="preview-placeholder" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
-								<rect x="10" y="10" width="180" height="80" rx="5" fill="#f0f6fc" />
-								<text x="100" y="55" text-anchor="middle" font-size="14" fill="#2271b1"><?php echo esc_html( $module['title'] ); ?></text>
-							</svg>
-							<?php endif; ?>
+						<p class="module-description"><?php echo esc_html( $module['desc'] ); ?></p>
+						<div class="module-preview">
+							<div class="module-preview-svg">
+								<?php
+								$svg_map = [
+									'smart_compose'   => 'smart-compose.svg',
+									'autocomplete'    => 'autocomplete.svg',
+									'tags_categories' => 'auto-tags.svg',
+									'images'          => 'image-gen.svg',
+									'writing_tips'    => 'writing-tips.svg',
+								];
+								$svg_file = $svg_map[ $key ] ?? '';
+								if ( $svg_file && file_exists( SUPERDRAFT_DIR . 'assets/admin/images/features/' . $svg_file ) ) :
+									echo file_get_contents( SUPERDRAFT_DIR . 'assets/admin/images/features/' . $svg_file ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+								else :
+								?>
+								<svg class="preview-placeholder" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+									<rect x="10" y="10" width="180" height="80" rx="5" fill="#f0f6fc" />
+									<text x="100" y="55" text-anchor="middle" font-size="14" fill="#2271b1"><?php echo esc_html( $module['title'] ); ?></text>
+								</svg>
+								<?php endif; ?>
+							</div>
 						</div>
 					</div>
+					<?php endforeach; ?>
 				</div>
-				<?php endforeach; ?>
+
+				<button type="button" class="carousel-nav carousel-next" aria-label="<?php esc_attr_e( 'Next feature', 'superdraft' ); ?>">
+					<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+						<polyline points="9 18 15 12 9 6"></polyline>
+					</svg>
+				</button>
+			</div>
+
+			<div class="carousel-dots">
+				<?php $module_index = 0; foreach ( $modules as $key => $module ) : ?>
+					<button type="button" class="carousel-dot" data-slide="<?php echo esc_attr( $module_index ); ?>" aria-label="<?php printf( /* translators: %s: Feature name */ esc_attr__( 'Feature: %s', 'superdraft' ), esc_attr( $module['title'] ) ); ?>" aria-current="<?php echo 0 === $module_index ? 'true' : 'false'; ?>"></button>
+				<?php $module_index++; endforeach; ?>
 			</div>
 
 			<div class="superdraft-wizard-actions">

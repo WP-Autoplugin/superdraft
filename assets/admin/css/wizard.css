@@ -421,36 +421,95 @@
 	color: #d63638;
 }
 
-/* Module cards */
-.superdraft-wizard-modules {
+/* Carousel */
+.superdraft-wizard-carousel {
 	display: flex;
-	flex-direction: column;
-	gap: 20px;
+	align-items: center;
+	justify-content: center;
+	gap: 15px;
 	margin-bottom: 30px;
+}
+
+.carousel-nav {
+	flex-shrink: 0;
+	width: 48px;
+	height: 48px;
+	border-radius: 50%;
+	border: 1px solid #c5c5c5;
+	background: #fff;
+	color: #646970;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: all 0.2s ease;
+	padding: 0;
+	outline: none;
+}
+
+.carousel-nav:hover {
+	border-color: #2271b1;
+	color: #2271b1;
+	background: #f0f6fc;
+}
+
+.carousel-nav:disabled {
+	opacity: 0.4;
+	cursor: not-allowed;
+}
+
+.carousel-slides {
+	flex: 1;
+	max-width: 600px;
+	overflow: hidden;
+}
+
+.carousel-slide-wrapper {
+	display: flex;
+	transition: transform 0.4s ease-in-out;
+}
+
+.carousel-slide-wrapper > .superdraft-wizard-module-card {
+	flex: 0 0 100%;
+	width: 100%;
 }
 
 .superdraft-wizard-module-card {
 	border: 2px solid #c5c5c5;
-	border-radius: 8px;
-	padding: 20px;
+	border-radius: 12px;
+	padding: 25px;
 	background: #fff;
-	transition: all 0.2s ease;
+	transition: all 0.3s ease;
+}
+
+.superdraft-wizard-module-card.enabled {
+	border-color: #2271b1;
+	box-shadow: 0 4px 12px rgba(34, 113, 177, 0.15);
 }
 
 .superdraft-wizard-module-card:hover {
-	border-color: #2271b1;
-	box-shadow: 0 2px 8px rgba(34, 113, 177, 0.15);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .module-header {
 	display: flex;
 	align-items: center;
-	gap: 15px;
-	margin-bottom: 10px;
+	justify-content: space-between;
+	margin-bottom: 15px;
 }
 
+.module-header h3 {
+	font-size: 20px;
+	font-weight: 600;
+	margin: 0;
+	color: #1d2327;
+}
+
+/* Toggle Switch */
 .module-toggle {
-	flex-shrink: 0;
+	display: flex;
+	align-items: center;
+	gap: 10px;
 }
 
 .module-checkbox {
@@ -459,10 +518,10 @@
 
 .toggle-label {
 	display: inline-block;
-	width: 50px;
-	height: 26px;
+	width: 60px;
+	height: 32px;
 	background: #c5c5c5;
-	border-radius: 13px;
+	border-radius: 16px;
 	position: relative;
 	cursor: pointer;
 	transition: background 0.2s ease;
@@ -471,13 +530,14 @@
 .toggle-label::after {
 	content: '';
 	position: absolute;
-	width: 22px;
-	height: 22px;
+	width: 26px;
+	height: 26px;
 	background: #fff;
 	border-radius: 50%;
-	top: 2px;
-	left: 2px;
+	top: 3px;
+	left: 3px;
 	transition: transform 0.2s ease;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
 
 .module-checkbox:checked + .toggle-label {
@@ -485,25 +545,24 @@
 }
 
 .module-checkbox:checked + .toggle-label::after {
-	transform: translateX(24px);
+	transform: translateX(28px);
 }
 
-.module-icon {
-	font-size: 24px;
-}
-
-.module-header h3 {
-	font-size: 16px;
+.toggle-status {
+	font-size: 14px;
 	font-weight: 600;
-	margin: 0;
-	color: #1d2327;
+	color: #c5c5c5;
+	transition: color 0.2s ease;
+}
+
+.superdraft-wizard-module-card.enabled .toggle-status {
+	color: #2271b1;
 }
 
 .module-description {
-	font-size: 14px;
+	font-size: 15px;
 	color: #646970;
-	margin: 0 0 15px;
-	padding-left: 65px;
+	margin: 0 0 20px;
 }
 
 .module-preview {
@@ -522,16 +581,76 @@
 	display: block;
 }
 
-.preview-placeholder {
-	width: 100%;
-	max-width: 200px;
-	height: 100px;
+/* Dots Navigation */
+.carousel-dots {
+	display: flex;
+	justify-content: center;
+	gap: 10px;
+	margin-bottom: 30px;
 }
 
-.preview-note {
-	font-size: 12px;
-	color: #646970;
-	margin: 0;
+.carousel-dot {
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+	border: none;
+	background: #c5c5c5;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	outline: none;
+	padding: 0;
+}
+
+.carousel-dot:hover {
+	background: #969696;
+}
+
+.carousel-dot.active {
+	background: #2271b1;
+	transform: scale(1.2);
+}
+
+/* Responsive */
+@media screen and (max-width: 600px) {
+	.superdraft-wizard {
+		padding: 20px;
+		margin: 10px;
+	}
+
+	.superdraft-wizard-carousel {
+		gap: 8px;
+	}
+
+	.carousel-nav {
+		width: 36px;
+		height: 36px;
+	}
+
+	.carousel-slides {
+		max-width: 100%;
+	}
+
+	.superdraft-wizard-module-card {
+		padding: 15px;
+	}
+
+	.module-header h3 {
+		font-size: 16px;
+	}
+
+	.superdraft-wizard-actions {
+		flex-direction: column;
+		gap: 10px;
+	}
+
+	.superdraft-wizard-actions .button {
+		width: 100%;
+		text-align: center;
+	}
+
+	.step-label {
+		display: none;
+	}
 }
 
 /* Loading state */

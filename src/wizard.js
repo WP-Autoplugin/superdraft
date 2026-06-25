@@ -16,11 +16,14 @@
 		selectedModel: '',
 		connectionTested: false,
 		enabledModules: {},
+		currentSlide: 0,
+		totalSlides: 0,
 
 		init: function() {
 			this.bindEvents();
 			this.updateProgressBar();
 			this.initModules();
+			this.initCarousel();
 		},
 
 		bindEvents: function() {
@@ -83,17 +86,92 @@
 
 			// Module toggles.
 			$(document).on('change', '.module-checkbox', function() {
-				var module = $(this).closest('.superdraft-wizard-module-card').data('module');
-				Wizard.enabledModules[module] = $(this).is(':checked');
+				var $card = $(this).closest('.superdraft-wizard-module-card');
+				var module = $card.data('module');
+				var isEnabled = $(this).is(':checked');
+				Wizard.enabledModules[module] = isEnabled;
+				$card.toggleClass('enabled', isEnabled);
+				$card.find('.toggle-status').text(isEnabled ? 'Enabled' : 'Disabled');
+			});
+
+			// Carousel navigation.
+			$(document).on('click', '.carousel-prev', function(e) {
+				e.preventDefault();
+				Wizard.prevSlide();
+			});
+
+			$(document).on('click', '.carousel-next', function(e) {
+				e.preventDefault();
+				Wizard.nextSlide();
+			});
+
+			$(document).on('click', '.carousel-dot', function(e) {
+				e.preventDefault();
+				var slide = $(this).data('slide');
+				Wizard.goToSlide(slide);
 			});
 		},
 
 		initModules: function() {
 			// Initialize default enabled state.
 			$('.module-checkbox').each(function() {
-				var module = $(this).closest('.superdraft-wizard-module-card').data('module');
-				Wizard.enabledModules[module] = $(this).is(':checked');
+				var $card = $(this).closest('.superdraft-wizard-module-card');
+				var module = $card.data('module');
+				var isEnabled = $(this).is(':checked');
+				Wizard.enabledModules[module] = isEnabled;
+				$card.toggleClass('enabled', isEnabled);
+				$card.find('.toggle-status').text(isEnabled ? 'Enabled' : 'Disabled');
 			});
+		},
+
+		initCarousel: function() {
+			var $cards = $('.carousel-slides .superdraft-wizard-module-card');
+			this.totalSlides = $cards.length;
+			if (this.totalSlides > 1) {
+				// Wrap cards in a sliding container
+				var $wrapper = $('<div class="carousel-slide-wrapper"></div>');
+				$cards.wrapAll($wrapper);
+				this.updateCarousel();
+			} else {
+				$('.carousel-nav').hide();
+				$('.carousel-dots').hide();
+			}
+		},
+
+		showSlide: function(index) {
+			if (index < 0) {
+				index = this.totalSlides - 1;
+			} else if (index >= this.totalSlides) {
+				index = 0;
+			}
+			this.currentSlide = index;
+			this.updateCarousel();
+		},
+
+		nextSlide: function() {
+			this.showSlide(this.currentSlide + 1);
+		},
+
+		prevSlide: function() {
+			this.showSlide(this.currentSlide - 1);
+		},
+
+		goToSlide: function(index) {
+			this.showSlide(index);
+		},
+
+		updateCarousel: function() {
+			var $wrapper = $('.carousel-slide-wrapper');
+			var offset = -this.currentSlide * 100;
+			$wrapper.css('transform', 'translateX(' + offset + '%)');
+
+			// Update dots
+			$('.carousel-dot').removeClass('active').attr('aria-current', 'false');
+			$('.carousel-dot[data-slide="' + this.currentSlide + '"]').addClass('active').attr('aria-current', 'true');
+
+			// Update nav buttons
+			$('.carousel-prev').prop('disabled', this.totalSlides <= 1);
+			$('.carousel-next').prop('disabled', this.totalSlides <= 1);
 		},
 
 		updateProgressBar: function() {
