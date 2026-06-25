@@ -257,13 +257,25 @@ if ( ! is_array( $enabled_modules ) ) {
 					<p class="module-description"><?php echo esc_html( $module['desc'] ); ?></p>
 					<div class="module-preview">
 						<div class="module-preview-svg">
-							<!-- SVG placeholder - will be replaced with actual animations -->
+							<?php
+							$svg_map = [
+								'smart_compose'   => 'smart-compose.svg',
+								'autocomplete'    => 'autocomplete.svg',
+								'tags_categories' => 'auto-tags.svg',
+								'images'          => 'image-gen.svg',
+								'writing_tips'    => 'writing-tips.svg',
+							];
+							$svg_file = $svg_map[ $key ] ?? '';
+							if ( $svg_file && file_exists( SUPERDRAFT_DIR . 'assets/admin/images/features/' . $svg_file ) ) :
+								echo file_get_contents( SUPERDRAFT_DIR . 'assets/admin/images/features/' . $svg_file ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+							else :
+							?>
 							<svg class="preview-placeholder" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
 								<rect x="10" y="10" width="180" height="80" rx="5" fill="#f0f6fc" />
 								<text x="100" y="55" text-anchor="middle" font-size="14" fill="#2271b1"><?php echo esc_html( $module['title'] ); ?></text>
 							</svg>
+							<?php endif; ?>
 						</div>
-						<p class="preview-note"><?php esc_html_e( 'Preview animation will be shown here.', 'superdraft' ); ?></p>
 					</div>
 				</div>
 				<?php endforeach; ?>
