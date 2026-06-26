@@ -13,6 +13,7 @@
 		totalSteps: 4,
 		selectedProvider: '',
 		apiKey: '',
+		customModel: {},
 		connectionTested: false,
 		connectionAdvanceTimer: null,
 		enabledModules: {},
@@ -34,6 +35,7 @@
 				Wizard.selectedProvider = $(this).data('provider');
 				Wizard.updateKeyHint();
 				Wizard.updateKeyLinks();
+				Wizard.updateCustomFields();
 				Wizard.populateSavedApiKey();
 				Wizard.enableNextButton();
 			});
@@ -41,6 +43,13 @@
 			// API key input.
 			$(document).on('input', '#superdraft-wizard-api-key', function() {
 				Wizard.apiKey = $(this).val().trim();
+				Wizard.resetConnectionState();
+				Wizard.enableNextButton();
+			});
+
+			// Custom endpoint inputs.
+			$(document).on('input', '#superdraft-wizard-custom-name, #superdraft-wizard-custom-url, #superdraft-wizard-custom-parameter, #superdraft-wizard-custom-headers', function() {
+				Wizard.customModel = Wizard.getCustomModelPayload();
 				Wizard.resetConnectionState();
 				Wizard.enableNextButton();
 			});
@@ -62,12 +71,6 @@
 				Wizard.testConnection();
 			});
 
-			// Create demo post.
-			$(document).on('click', '.superdraft-wizard-create-demo', function(e) {
-				e.preventDefault();
-				Wizard.createDemoPost();
-			});
-
 			// Dismiss wizard.
 			$(document).on('click', '.superdraft-wizard-dismiss', function(e) {
 				e.preventDefault();
@@ -87,6 +90,7 @@
 				Wizard.enabledModules[module] = isEnabled;
 				$card.toggleClass('enabled', isEnabled);
 				$card.find('.toggle-status').text(isEnabled ? 'Enabled' : 'Disabled');
+				Wizard.updateSummary();
 			});
 
 			// Carousel navigation.
@@ -215,6 +219,7 @@
 			if (step === 2) {
 				this.updateKeyHint();
 				this.updateKeyLinks();
+				this.updateCustomFields();
 				this.populateSavedApiKey();
 			} else if (step === 3) {
 				this.clearConnectionAdvanceTimer();
@@ -226,6 +231,13 @@
 
 		nextStep: function($trigger) {
 			if (this.currentStep === 2 && !this.connectionTested) {
+				if (this.selectedProvider === 'custom') {
+					if (this.isCustomModelComplete()) {
+						this.showStep(this.currentStep + 1);
+					}
+					return;
+				}
+
 				if (this.apiKey) {
 					this.testConnection($trigger);
 				}
@@ -259,14 +271,49 @@
 			$('.superdraft-wizard-key-links .key-link[data-provider="' + this.selectedProvider + '"]').addClass('active');
 		},
 
+		updateCustomFields: function() {
+			$('.superdraft-wizard-custom-details').toggle(this.selectedProvider === 'custom');
+		},
+
 		populateSavedApiKey: function() {
 			var savedKeys = typeof superdraftWizardApiKeys === 'object' && superdraftWizardApiKeys ? superdraftWizardApiKeys : {};
 			var savedKey = savedKeys[this.selectedProvider] || '';
 
+			if (this.selectedProvider === 'custom' && !savedKey && typeof superdraftWizardCustomModel === 'object' && superdraftWizardCustomModel) {
+				savedKey = superdraftWizardCustomModel.apiKey || '';
+			}
+
 			this.apiKey = savedKey;
 			$('#superdraft-wizard-api-key').val(savedKey);
+			this.customModel = this.getCustomModelPayload();
 			this.resetConnectionState();
 			this.enableNextButton();
+		},
+
+		getCustomModelPayload: function() {
+			var headers = $('#superdraft-wizard-custom-headers').val() || '';
+
+			return {
+				name: ($('#superdraft-wizard-custom-name').val() || '').trim(),
+				url: ($('#superdraft-wizard-custom-url').val() || '').trim(),
+				modelParameter: ($('#superdraft-wizard-custom-parameter').val() || '').trim(),
+				apiKey: this.apiKey,
+				headers: headers.split('\n').map(function(header) {
+					return header.trim();
+				}).filter(function(header) {
+					return header.length > 0;
+				})
+			};
+		},
+
+		isCustomModelComplete: function() {
+			if (this.selectedProvider !== 'custom') {
+				return true;
+			}
+
+			this.customModel = this.getCustomModelPayload();
+
+			return !!(this.apiKey && this.customModel.name && this.customModel.url);
 		},
 
 		enableNextButton: function() {
@@ -275,7 +322,7 @@
 			if (this.currentStep === 1) {
 				$btn.prop('disabled', !this.selectedProvider);
 			} else if (this.currentStep === 2) {
-				$btn.prop('disabled', !this.apiKey);
+				$btn.prop('disabled', !this.apiKey || !this.isCustomModelComplete());
 			} else if (this.currentStep === 3) {
 				// Module step - always enabled since we have defaults.
 				$btn.prop('disabled', false);
@@ -299,19 +346,32 @@
 			$('.superdraft-wizard-test-result').hide().removeClass('success error');
 		},
 
-		updateSummary: function() {
-			// Update the summary on the final step.
-			$('.feature-card').each(function() {
-				var module = $(this).data('module');
-				if (Wizard.enabledModules[module]) {
-					$(this).addClass('enabled').removeClass('disabled');
-				} else {
-					$(this).addClass('disabled').removeClass('enabled');
+		hasEnabledModules: function() {
+			for (var module in this.enabledModules) {
+				if (Object.prototype.hasOwnProperty.call(this.enabledModules, module) && this.enabledModules[module]) {
+					return true;
 				}
-			});
+			}
+
+			return false;
+		},
+
+		updateSummary: function() {
+			var hasEnabledModules = this.hasEnabledModules();
+
+			$('.superdraft-wizard-ready-message').toggle(hasEnabledModules);
+			$('.superdraft-wizard-no-features-message').toggle(!hasEnabledModules);
 		},
 
 		testConnection: function($trigger) {
+			if (this.selectedProvider === 'custom') {
+				if (this.isCustomModelComplete()) {
+					this.connectionTested = true;
+					this.showStep(this.currentStep + 1);
+				}
+				return;
+			}
+
 			var $btn = $trigger && $trigger.length ? $trigger : $('.superdraft-wizard-test-btn');
 			var $result = $('.superdraft-wizard-test-result');
 			var originalText = $btn.data('original-text') || $btn.text();
@@ -328,7 +388,8 @@
 					action: 'superdraft_wizard_test_api',
 					nonce: superdraftWizard.nonce,
 					provider: this.selectedProvider,
-					api_key: this.apiKey
+					api_key: this.apiKey,
+					custom_model: this.selectedProvider === 'custom' ? this.getCustomModelPayload() : {}
 				},
 				success: function(response) {
 					if (response.success) {
@@ -376,7 +437,8 @@
 					action: 'superdraft_wizard_save_api',
 					nonce: superdraftWizard.nonce,
 					provider: this.selectedProvider,
-					api_key: this.apiKey
+					api_key: this.apiKey,
+					custom_model: this.selectedProvider === 'custom' ? this.getCustomModelPayload() : {}
 				},
 				success: function(response) {
 					if (response.success) {
@@ -400,33 +462,6 @@
 					if (response.success) {
 						// Modules saved.
 					}
-				}
-			});
-		},
-
-		createDemoPost: function() {
-			var $btn = $('.superdraft-wizard-create-demo');
-			$btn.prop('disabled', true).text(superdraftWizard.i18n.creatingDemo || 'Creating...');
-
-			$.ajax({
-				url: superdraftWizard.ajax_url,
-				type: 'POST',
-				data: {
-					action: 'superdraft_wizard_create_demo',
-					nonce: superdraftWizard.nonce
-				},
-				success: function(response) {
-					if (response.success && response.data.edit_url) {
-						$btn.text(superdraftWizard.i18n.demoCreated || 'Opening editor...');
-						window.location.href = response.data.edit_url;
-					} else {
-						alert('Failed to create demo post.');
-						$btn.prop('disabled', false).text('Create a Demo Post');
-					}
-				},
-				error: function() {
-					alert('Failed to create demo post.');
-					$btn.prop('disabled', false).text('Create a Demo Post');
 				}
 			});
 		},

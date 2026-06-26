@@ -29,7 +29,6 @@ class Wizard {
 		add_action( 'wp_ajax_superdraft_wizard_save_api', [ $this, 'ajax_save_api' ] );
 		add_action( 'wp_ajax_superdraft_wizard_test_api', [ $this, 'ajax_test_api' ] );
 		add_action( 'wp_ajax_superdraft_wizard_dismiss', [ $this, 'ajax_dismiss' ] );
-		add_action( 'wp_ajax_superdraft_wizard_create_demo', [ $this, 'ajax_create_demo' ] );
 		add_action( 'wp_ajax_superdraft_wizard_save_modules', [ $this, 'ajax_save_modules' ] );
 	}
 
@@ -114,8 +113,6 @@ class Wizard {
 					'connectionSuccess' => __( 'Connection successful! Your API key is valid.', 'superdraft' ),
 					'connectionError'   => __( 'Connection failed. Please check your API key and try again.', 'superdraft' ),
 					'saving'            => __( 'Saving...', 'superdraft' ),
-					'creatingDemo'      => __( 'Creating demo post...', 'superdraft' ),
-					'demoCreated'       => __( 'Demo post created! Opening editor...', 'superdraft' ),
 				],
 			]
 		);
@@ -195,6 +192,15 @@ class Wizard {
 			wp_send_json_error( __( 'Invalid provider or API key.', 'superdraft' ) );
 		}
 
+		$custom_model = null;
+		if ( 'custom' === $provider ) {
+			$custom_model = $this->get_custom_model_from_request( $api_key );
+			if ( is_wp_error( $custom_model ) ) {
+				wp_send_json_error( $custom_model->get_error_message() );
+			}
+			$this->save_custom_model( $custom_model );
+		}
+
 		$api_keys = get_option( 'superdraft_api_keys', [] );
 		if ( ! is_array( $api_keys ) ) {
 			$api_keys = [];
@@ -210,6 +216,10 @@ class Wizard {
 		}
 
 		$model_defaults = self::get_provider_model_defaults( $provider );
+		if ( 'custom' === $provider && ! empty( $custom_model['name'] ) ) {
+			$model_defaults = array_fill_keys( array_keys( $model_defaults ), $custom_model['name'] );
+		}
+
 		if ( ! isset( $settings['tags_categories'] ) || ! is_array( $settings['tags_categories'] ) ) {
 			$settings['tags_categories'] = [];
 		}
@@ -307,6 +317,13 @@ class Wizard {
 
 		if ( empty( $provider ) || empty( $api_key ) ) {
 			wp_send_json_error( __( 'Invalid provider or API key.', 'superdraft' ) );
+		}
+
+		if ( 'custom' === $provider ) {
+			$custom_model = $this->get_custom_model_from_request( $api_key );
+			if ( is_wp_error( $custom_model ) ) {
+				wp_send_json_error( $custom_model->get_error_message() );
+			}
 		}
 
 		$result = $this->test_api_key( $provider, $api_key );
@@ -437,6 +454,63 @@ class Wizard {
 	}
 
 	/**
+	 * Get the custom model payload posted by the wizard.
+	 *
+	 * @param string $api_key API key entered in the wizard's shared API key field.
+	 * @return array|\WP_Error
+	 */
+	private function get_custom_model_from_request( $api_key ) {
+		$raw_model = [];
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Nonce is checked by the AJAX handlers before this helper is called.
+		if ( isset( $_POST['custom_model'] ) && is_array( $_POST['custom_model'] ) ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Values are sanitized below.
+			$raw_model = wp_unslash( (array) $_POST['custom_model'] );
+		}
+
+		$model = [
+			'name'           => isset( $raw_model['name'] ) ? sanitize_text_field( $raw_model['name'] ) : '',
+			'url'            => isset( $raw_model['url'] ) ? esc_url_raw( $raw_model['url'] ) : '',
+			'modelParameter' => isset( $raw_model['modelParameter'] ) ? sanitize_text_field( $raw_model['modelParameter'] ) : '',
+			'apiKey'         => sanitize_text_field( $api_key ),
+			'headers'        => isset( $raw_model['headers'] ) ? array_map( 'sanitize_text_field', (array) $raw_model['headers'] ) : [],
+		];
+
+		if ( empty( $model['name'] ) || empty( $model['url'] ) || empty( $model['apiKey'] ) ) {
+			return new \WP_Error( 'invalid_custom_model', __( 'Enter your custom model name, endpoint URL, and API key.', 'superdraft' ) );
+		}
+
+		return $model;
+	}
+
+	/**
+	 * Save or replace a custom model configured from the wizard.
+	 *
+	 * @param array $model Sanitized custom model data.
+	 */
+	private function save_custom_model( $model ) {
+		$custom_models = get_option( 'superdraft_custom_models', [] );
+		if ( ! is_array( $custom_models ) ) {
+			$custom_models = [];
+		}
+
+		$updated = false;
+		foreach ( $custom_models as $index => $custom_model ) {
+			if ( isset( $custom_model['name'] ) && $custom_model['name'] === $model['name'] ) {
+				$custom_models[ $index ] = $model;
+				$updated                 = true;
+				break;
+			}
+		}
+
+		if ( ! $updated ) {
+			$custom_models[] = $model;
+		}
+
+		update_option( 'superdraft_custom_models', $custom_models );
+	}
+
+	/**
 	 * AJAX handler for dismissing the wizard.
 	 */
 	public function ajax_dismiss() {
@@ -451,49 +525,6 @@ class Wizard {
 	}
 
 	/**
-	 * AJAX handler for creating a demo post.
-	 */
-	public function ajax_create_demo() {
-		check_ajax_referer( 'superdraft_wizard_nonce', 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'You do not have permission to do this.', 'superdraft' ) );
-		}
-
-		$post_id = wp_insert_post(
-			[
-				'post_title'   => __( 'Welcome to Superdraft — Your AI Writing Assistant', 'superdraft' ),
-				'post_content' => $this->get_demo_content(),
-				'post_status'  => 'draft',
-				'post_type'    => 'post',
-			]
-		);
-
-		if ( is_wp_error( $post_id ) ) {
-			wp_send_json_error( __( 'Failed to create demo post.', 'superdraft' ) );
-		}
-
-		// Enable all modules for the demo.
-		$settings = get_option( 'superdraft_settings', [] );
-		$modules  = [ 'tags_categories', 'writing_tips', 'autocomplete', 'images' ];
-		foreach ( $modules as $module ) {
-			if ( isset( $settings[ $module ] ) ) {
-				$settings[ $module ]['enabled'] = true;
-			} else {
-				$settings[ $module ] = [ 'enabled' => true ];
-			}
-		}
-		update_option( 'superdraft_settings', $settings );
-
-		wp_send_json_success(
-			[
-				'post_id'  => $post_id,
-				'edit_url' => admin_url( 'post.php?post=' . $post_id . '&action=edit' ),
-			]
-		);
-	}
-
-	/**
 	 * AJAX handler for saving enabled modules.
 	 */
 	public function ajax_save_modules() {
@@ -503,76 +534,96 @@ class Wizard {
 			wp_send_json_error( __( 'You do not have permission to do this.', 'superdraft' ) );
 		}
 
-		$modules  = isset( $_POST['modules'] ) ? array_map( 'sanitize_text_field', wp_unslash( (array) $_POST['modules'] ) ) : [];
-		$settings = get_option( 'superdraft_settings', [] );
+		$enabled_modules = $this->get_enabled_modules_from_request();
 
-		if ( ! is_array( $settings ) ) {
-			$settings = [];
-		}
-
-		foreach ( $modules as $module => $enabled ) {
-			if ( isset( $settings[ $module ] ) ) {
-				$settings[ $module ]['enabled'] = (bool) $enabled;
-			} else {
-				$settings[ $module ] = [ 'enabled' => (bool) $enabled ];
-			}
-		}
-
-		update_option( 'superdraft_settings', $settings );
+		$this->save_enabled_modules( $enabled_modules );
 		wp_send_json_success( __( 'Modules saved successfully.', 'superdraft' ) );
 	}
 
 	/**
-	 * Get demo post content.
+	 * Get wizard module keys.
 	 *
-	 * @return string
+	 * @return string[]
 	 */
-	private function get_demo_content() {
-		$content  = '<!-- wp:paragraph -->' . "\n";
-		$content .= '<p>' . __( 'Welcome to Superdraft! This is a demo post to help you explore the AI-powered features of the plugin. Superdraft enhances your WordPress writing experience with smart automation, intelligent recommendations, and predictive features.', 'superdraft' ) . '</p>' . "\n";
-		$content .= '<!-- /wp:paragraph -->' . "\n\n";
+	private function get_wizard_module_keys() {
+		return [ 'smart_compose', 'autocomplete', 'tags_categories', 'images', 'writing_tips' ];
+	}
 
-		$content .= '<!-- wp:heading -->' . "\n";
-		$content .= '<h2 class="wp-block-heading">' . __( 'Try Smart Compose', 'superdraft' ) . '</h2>' . "\n";
-		$content .= '<!-- /wp:heading -->' . "\n\n";
+	/**
+	 * Get enabled modules posted by the wizard.
+	 *
+	 * @param bool $fallback_to_settings Whether to use saved settings when no modules were posted.
+	 * @return array<string,bool>
+	 */
+	private function get_enabled_modules_from_request( $fallback_to_settings = false ) {
+		$enabled_modules = array_fill_keys( $this->get_wizard_module_keys(), false );
+		$raw_modules     = [];
 
-		$content .= '<!-- wp:paragraph -->' . "\n";
-		$content .= '<p>' . __( 'Smart Compose provides real-time suggestions as you type in paragraph blocks. Just start typing, and the AI will suggest how to continue your sentence. This feature is great for overcoming writer\'s block and speeding up your content creation process.', 'superdraft' ) . '</p>' . "\n";
-		$content .= '<!-- /wp:paragraph -->' . "\n\n";
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Nonce is checked by AJAX handlers before this helper is called; values are validated against known boolean module keys below.
+		if ( isset( $_POST['modules'] ) && is_array( $_POST['modules'] ) ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Nonce is checked by AJAX handlers before this helper is called; values are validated against known boolean module keys below.
+			$raw_modules = wp_unslash( (array) $_POST['modules'] );
+		}
 
-		$content .= '<!-- wp:heading -->' . "\n";
-		$content .= '<h2 class="wp-block-heading">' . __( 'Try Autocomplete', 'superdraft' ) . '</h2>' . "\n";
-		$content .= '<!-- /wp:heading -->' . "\n\n";
+		if ( empty( $raw_modules ) && $fallback_to_settings ) {
+			return $this->get_enabled_modules_from_settings();
+		}
 
-		$content .= '<!-- wp:paragraph -->' . "\n";
-		$content .= '<p>' . __( 'Use the autocomplete feature by typing the trigger prefix (default is ~) followed by your query. The AI will suggest completions based on your content context. This helps you write faster and more consistently.', 'superdraft' ) . '</p>' . "\n";
-		$content .= '<!-- /wp:paragraph -->' . "\n\n";
+		foreach ( $this->get_wizard_module_keys() as $module ) {
+			if ( array_key_exists( $module, $raw_modules ) ) {
+				$enabled_modules[ $module ] = wp_validate_boolean( $raw_modules[ $module ] );
+			}
+		}
 
-		$content .= '<!-- wp:heading -->' . "\n";
-		$content .= '<h2 class="wp-block-heading">' . __( 'Try AI Tags & Categories', 'superdraft' ) . '</h2>' . "\n";
-		$content .= '<!-- /wp:heading -->' . "\n\n";
+		return $enabled_modules;
+	}
 
-		$content .= '<!-- wp:paragraph -->' . "\n";
-		$content .= '<p>' . __( 'Superdraft can automatically suggest and select tags and categories for your posts based on the content. This saves time and helps with SEO and content organization.', 'superdraft' ) . '</p>' . "\n";
-		$content .= '<!-- /wp:paragraph -->' . "\n\n";
+	/**
+	 * Get enabled modules from saved Superdraft settings.
+	 *
+	 * @return array<string,bool>
+	 */
+	private function get_enabled_modules_from_settings() {
+		$settings        = get_option( 'superdraft_settings', [] );
+		$enabled_modules = array_fill_keys( $this->get_wizard_module_keys(), false );
 
-		$content .= '<!-- wp:heading -->' . "\n";
-		$content .= '<h2 class="wp-block-heading">' . __( 'Try AI Image Generation', 'superdraft' ) . '</h2>' . "\n";
-		$content .= '<!-- /wp:heading -->' . "\n\n";
+		if ( ! is_array( $settings ) ) {
+			return $enabled_modules;
+		}
 
-		$content .= '<!-- wp:paragraph -->' . "\n";
-		$content .= '<p>' . __( 'Generate a featured image for your post using AI. Simply describe what you want, and Superdraft will create an image for you. You can also use AI to enhance your image prompts based on your post content.', 'superdraft' ) . '</p>' . "\n";
-		$content .= '<!-- /wp:paragraph -->' . "\n\n";
+		$enabled_modules['smart_compose']   = ! empty( $settings['autocomplete']['smart_compose_enabled'] );
+		$enabled_modules['autocomplete']    = ! empty( $settings['autocomplete']['enabled'] );
+		$enabled_modules['tags_categories'] = ! empty( $settings['tags_categories']['enabled'] );
+		$enabled_modules['images']          = ! empty( $settings['images']['enabled'] );
+		$enabled_modules['writing_tips']    = ! empty( $settings['writing_tips']['enabled'] );
 
-		$content .= '<!-- wp:heading -->' . "\n";
-		$content .= '<h2 class="wp-block-heading">' . __( 'Try Writing Tips', 'superdraft' ) . '</h2>' . "\n";
-		$content .= '<!-- /wp:heading -->' . "\n\n";
+		return $enabled_modules;
+	}
 
-		$content .= '<!-- wp:paragraph -->' . "\n";
-		$content .= '<p>' . __( 'Get real-time writing, SEO, and readability tips while editing your posts. The AI analyzes your content and provides actionable suggestions to improve your writing quality and search engine visibility.', 'superdraft' ) . '</p>' . "\n";
-		$content .= '<!-- /wp:paragraph -->';
+	/**
+	 * Save enabled modules to Superdraft settings.
+	 *
+	 * @param array<string,bool> $enabled_modules Enabled wizard modules.
+	 */
+	private function save_enabled_modules( $enabled_modules ) {
+		$settings = get_option( 'superdraft_settings', [] );
+		if ( ! is_array( $settings ) ) {
+			$settings = [];
+		}
 
-		return $content;
+		foreach ( [ 'tags_categories', 'writing_tips', 'images', 'autocomplete' ] as $module ) {
+			if ( ! isset( $settings[ $module ] ) || ! is_array( $settings[ $module ] ) ) {
+				$settings[ $module ] = [];
+			}
+		}
+
+		$settings['tags_categories']['enabled']            = ! empty( $enabled_modules['tags_categories'] );
+		$settings['writing_tips']['enabled']               = ! empty( $enabled_modules['writing_tips'] );
+		$settings['images']['enabled']                     = ! empty( $enabled_modules['images'] );
+		$settings['autocomplete']['enabled']               = ! empty( $enabled_modules['autocomplete'] );
+		$settings['autocomplete']['smart_compose_enabled'] = ! empty( $enabled_modules['smart_compose'] );
+
+		update_option( 'superdraft_settings', $settings );
 	}
 
 	/**

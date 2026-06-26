@@ -1,4 +1,4 @@
-# Copyright (C) 2025 Balázs Piller
+# Copyright (C) 2026 Balázs Piller
 # This file is distributed under the GPL-3.0.
 msgid ""
 msgstr ""
@@ -9,8 +9,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-01-10 19:11+0000\n"
-"PO-Revision-Date: 2026-01-11 14:30+0100\n"
+"POT-Creation-Date: 2026-06-26T23:15:12+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: superdraft\n"
 
@@ -34,107 +34,230 @@ msgstr ""
 msgid "https://wp-autoplugin.com"
 msgstr ""
 
-#: includes/admin/class-admin.php:78
-#: includes/admin/class-admin.php:104
+#: includes/admin/class-admin.php:83
+#: includes/admin/class-admin.php:128
 msgid "Superdraft API Logs"
 msgstr ""
 
-#: includes/admin/class-admin.php:79
+#: includes/admin/class-admin.php:84
 msgid "API Logs"
 msgstr ""
 
-#: includes/admin/class-admin.php:88
-#: includes/admin/class-admin.php:284
+#: includes/admin/class-admin.php:93
+#: includes/admin/class-admin.php:94
+#: views/page-settings.php:28
+msgid "Setup Wizard"
+msgstr ""
+
+#: includes/admin/class-admin.php:112
+#: includes/admin/class-admin.php:315
 msgid "Settings"
 msgstr ""
 
-#: includes/admin/class-admin.php:110
+#: includes/admin/class-admin.php:134
 msgid "Search Logs"
 msgstr ""
 
-#: includes/admin/class-admin.php:131
+#: includes/admin/class-admin.php:155
 msgid "Superdraft plugin settings"
 msgstr ""
 
-#: includes/admin/class-admin.php:144
+#: includes/admin/class-admin.php:168
 msgid "Superdraft API keys"
 msgstr ""
 
-#: includes/admin/class-admin.php:249
+#: includes/admin/class-admin.php:273
 msgid "Details"
 msgstr ""
 
-#: includes/admin/class-admin.php:250
+#: includes/admin/class-admin.php:274
 msgid "URL"
 msgstr ""
 
-#: includes/admin/class-admin.php:251
+#: includes/admin/class-admin.php:275
 msgid "Model Parameter"
 msgstr ""
 
-#: includes/admin/class-admin.php:252
-#: views/api-setup.php:45
+#: includes/admin/class-admin.php:276
+#: views/api-setup.php:64
+#: views/page-wizard.php:178
 msgid "API Key"
 msgstr ""
 
-#: includes/admin/class-admin.php:253
+#: includes/admin/class-admin.php:277
 msgid "Headers"
 msgstr ""
 
-#: includes/admin/class-admin.php:254
+#: includes/admin/class-admin.php:278
 msgid "Remove"
 msgstr ""
 
-#: includes/admin/class-admin.php:255
+#: includes/admin/class-admin.php:279
 msgid "Please fill out all required fields."
 msgstr ""
 
-#: includes/admin/class-admin.php:256
+#: includes/admin/class-admin.php:280
 msgid "Are you sure you want to remove this model?"
 msgstr ""
 
-#: includes/admin/class-admin.php:257
+#: includes/admin/class-admin.php:281
 msgid "Error saving model"
 msgstr ""
 
-#: includes/admin/class-admin.php:318
-#: includes/admin/class-admin.php:356
+#: includes/admin/class-admin.php:349
+#: includes/admin/class-admin.php:387
+#: includes/admin/class-wizard.php:186
+#: includes/admin/class-wizard.php:312
+#: includes/admin/class-wizard.php:520
+#: includes/admin/class-wizard.php:534
 msgid "You do not have permission to do this."
 msgstr ""
 
-#: includes/admin/class-admin.php:324
+#: includes/admin/class-admin.php:355
 msgid "Invalid model data."
 msgstr ""
 
-#: includes/admin/class-admin.php:342
+#: includes/admin/class-admin.php:373
 msgid "Custom model added successfully."
 msgstr ""
 
-#: includes/admin/class-admin.php:362
+#: includes/admin/class-admin.php:393
 msgid "Invalid model index."
 msgstr ""
 
-#: includes/admin/class-admin.php:368
+#: includes/admin/class-admin.php:399
 msgid "Model not found."
 msgstr ""
 
-#: includes/admin/class-admin.php:383
+#: includes/admin/class-admin.php:414
 msgid "Custom model removed successfully."
 msgstr ""
 
-#: includes/admin/class-admin.php:521
-#: views/api-setup.php:34
+#: includes/admin/class-admin.php:641
+msgid "No image edits"
+msgstr ""
+
+#: includes/admin/class-admin.php:722
+msgid "(Unavailable)"
+msgstr ""
+
+#: includes/admin/class-admin.php:728
 msgid "Custom Models"
 msgstr ""
 
-#: includes/admin/class-autocomplete.php:257
+#: includes/admin/class-autocomplete.php:266
 #: includes/admin/class-writing-tips.php:160
 msgid "Invalid response format from API"
 msgstr ""
 
-#: includes/admin/class-autocomplete.php:342
+#: includes/admin/class-autocomplete.php:351
 #: includes/api/class-custom-api.php:142
 msgid "Error communicating with the API."
+msgstr ""
+
+#: includes/admin/class-images.php:138
+#: includes/admin/class-images.php:424
+msgid "Image generation module is disabled"
+msgstr ""
+
+#: includes/admin/class-images.php:143
+msgid "Image editing is disabled"
+msgstr ""
+
+#: includes/admin/class-images.php:151
+msgid "Missing postId, featuredImageId, or prompt"
+msgstr ""
+
+#: includes/admin/class-images.php:155
+#: includes/admin/class-images.php:419
+msgid "You do not have permission to edit this post"
+msgstr ""
+
+#: includes/admin/class-images.php:160
+#: includes/api/class-replicate-image-api.php:137
+msgid "Featured image file not found or path is invalid"
+msgstr ""
+
+#: includes/admin/class-images.php:171
+#: includes/admin/class-images.php:436
+msgid "OpenAI API key is missing"
+msgstr ""
+
+#: includes/admin/class-images.php:183
+#: includes/admin/class-images.php:446
+msgid "Google API key is missing"
+msgstr ""
+
+#: includes/admin/class-images.php:192
+#: includes/api/class-replicate-image-api.php:143
+msgid "Could not read featured image file."
+msgstr ""
+
+#: includes/admin/class-images.php:223
+#: includes/admin/class-images.php:457
+msgid "Failed to decode base64 image data from Google Gemini."
+msgstr ""
+
+#: includes/admin/class-images.php:230
+#: includes/admin/class-images.php:463
+msgid "Replicate API key is missing"
+msgstr ""
+
+#. translators: %s: model name.
+#: includes/admin/class-images.php:251
+msgid "Image editing is not available for the selected model (%s)."
+msgstr ""
+
+#: includes/admin/class-images.php:290
+msgid "API returned empty image data after editing"
+msgstr ""
+
+#. translators: %s: error message.
+#: includes/admin/class-images.php:297
+msgid "Failed to save edited image: %s"
+msgstr ""
+
+#: includes/admin/class-images.php:332
+msgid "Edited image generated successfully"
+msgstr ""
+
+#: includes/admin/class-images.php:350
+msgid "Missing parameters"
+msgstr ""
+
+#: includes/admin/class-images.php:355
+msgid "Invalid post ID"
+msgstr ""
+
+#: includes/admin/class-images.php:361
+msgid "Invalid prompt model"
+msgstr ""
+
+#: includes/admin/class-images.php:366
+#: includes/admin/class-writing-tips.php:133
+msgid "Invalid prompt template"
+msgstr ""
+
+#: includes/admin/class-images.php:415
+msgid "Missing postId or prompt"
+msgstr ""
+
+#. translators: %s: model name.
+#: includes/admin/class-images.php:471
+msgid "Unknown or unsupported image model: %s"
+msgstr ""
+
+#: includes/admin/class-images.php:504
+msgid "API returned empty image data after generation"
+msgstr ""
+
+#. translators: %s: error message.
+#: includes/admin/class-images.php:511
+msgid "Failed to save generated image: %s"
+msgstr ""
+
+#: includes/admin/class-images.php:545
+msgid "Featured image generated and set successfully"
 msgstr ""
 
 #: includes/admin/class-logs-list-table.php:45
@@ -161,86 +284,175 @@ msgstr ""
 msgid "User"
 msgstr ""
 
-#: includes/admin/class-logs-list-table.php:55
+#: includes/admin/class-logs-list-table.php:56
 msgid "Message"
 msgstr ""
 
-#: includes/admin/class-logs-list-table.php:106
+#: includes/admin/class-logs-list-table.php:107
 msgid "N/A"
 msgstr ""
 
-#: includes/admin/class-logs-list-table.php:111
+#: includes/admin/class-logs-list-table.php:112
 msgid "View Message"
 msgstr ""
 
-#: includes/admin/class-logs-list-table.php:142
+#: includes/admin/class-logs-list-table.php:143
 msgid "All tools"
 msgstr ""
 
-#: includes/admin/class-logs-list-table.php:149
+#: includes/admin/class-logs-list-table.php:150
 msgid "Filter"
 msgstr ""
 
-#: includes/admin/class-tags-categories.php:157
+#: includes/admin/class-tags-categories.php:159
 msgid "Auto-select Categories"
 msgstr ""
 
-#: includes/admin/class-tags-categories.php:158
+#: includes/admin/class-tags-categories.php:160
 msgid "Auto-select Tags"
 msgstr ""
 
-#: includes/admin/class-tags-categories.php:392
+#: includes/admin/class-tags-categories.php:394
 msgid "Invalid response format from API or no terms selected"
 msgstr ""
 
 #. translators: %s is the taxonomy name.
-#: includes/admin/class-tags-categories.php:442
+#: includes/admin/class-tags-categories.php:444
 msgid "Superdraft is processing auto-select for posts (%s)"
 msgstr ""
 
-#: includes/admin/class-tags-categories.php:443
+#: includes/admin/class-tags-categories.php:445
 #: assets/admin/js/dist/tags-categories.js:1
 msgid "Categories"
 msgstr ""
 
-#: includes/admin/class-tags-categories.php:443
+#: includes/admin/class-tags-categories.php:445
 #: assets/admin/js/dist/tags-categories.js:1
 msgid "Tags"
 msgstr ""
 
 #. translators: %1$d is the number of posts processed, %2$d is the total number of posts, %3$d is the percentage.
-#: includes/admin/class-tags-categories.php:453
+#: includes/admin/class-tags-categories.php:455
 msgid "Progress: %1$d of %2$d posts processed (%3$d%%)"
 msgstr ""
 
 #. translators: %s is the time remaining.
-#: includes/admin/class-tags-categories.php:463
+#: includes/admin/class-tags-categories.php:465
 msgid "Estimated completion in %s"
 msgstr ""
 
-#: includes/admin/class-tags-categories.php:472
+#: includes/admin/class-tags-categories.php:474
 msgid "Cancel Process"
 msgstr ""
 
 #. translators: %s: Taxonomy name
-#: includes/admin/class-tags-categories.php:523
+#: includes/admin/class-tags-categories.php:525
 msgid "Suggest New %s"
 msgstr ""
 
-#: includes/admin/class-tags-categories.php:526
+#: includes/admin/class-tags-categories.php:528
 msgid "AI-powered suggestions for new terms based on your content."
 msgstr ""
 
-#: includes/admin/class-tags-categories.php:528
+#: includes/admin/class-tags-categories.php:530
 msgid "Generate Suggestions"
 msgstr ""
 
-#: includes/admin/class-writing-tips.php:133
-#: includes/admin/class-images.php:366
-msgid "Invalid prompt template"
+#: includes/admin/class-wizard.php:111
+msgid "Please enter a valid API key."
 msgstr ""
 
-#: includes/api/class-anthropic-api.php:176
+#: includes/admin/class-wizard.php:112
+msgid "Testing connection..."
+msgstr ""
+
+#: includes/admin/class-wizard.php:113
+#: includes/admin/class-wizard.php:335
+msgid "Connection successful! Your API key is valid."
+msgstr ""
+
+#: includes/admin/class-wizard.php:114
+msgid "Connection failed. Please check your API key and try again."
+msgstr ""
+
+#: includes/admin/class-wizard.php:115
+msgid "Saving..."
+msgstr ""
+
+#: includes/admin/class-wizard.php:173
+msgid "Connection successful!"
+msgstr ""
+
+#: includes/admin/class-wizard.php:192
+#: includes/admin/class-wizard.php:319
+msgid "Invalid provider or API key."
+msgstr ""
+
+#: includes/admin/class-wizard.php:247
+msgid "API key saved successfully."
+msgstr ""
+
+#: includes/admin/class-wizard.php:379
+msgid "Invalid provider selected."
+msgstr ""
+
+#: includes/admin/class-wizard.php:391
+msgid "Could not connect to the API. Please check your internet connection."
+msgstr ""
+
+#: includes/admin/class-wizard.php:402
+msgid "Invalid API key or API error. Please check your key and try again."
+msgstr ""
+
+#: includes/admin/class-wizard.php:406
+msgid "Invalid API key. Please check your key and try again."
+msgstr ""
+
+#: includes/admin/class-wizard.php:423
+msgid "API key cannot be empty."
+msgstr ""
+
+#: includes/admin/class-wizard.php:429
+msgid "OpenAI API keys should start with \"sk-\"."
+msgstr ""
+
+#: includes/admin/class-wizard.php:434
+msgid "Anthropic API keys should start with \"sk-ant-\"."
+msgstr ""
+
+#: includes/admin/class-wizard.php:439
+msgid "xAI API keys should start with \"xai-\"."
+msgstr ""
+
+#: includes/admin/class-wizard.php:445
+msgid "Google API key seems too short. Please check your key."
+msgstr ""
+
+#: includes/admin/class-wizard.php:480
+msgid "Enter your custom model name, endpoint URL, and API key."
+msgstr ""
+
+#: includes/admin/class-wizard.php:524
+msgid "Wizard dismissed."
+msgstr ""
+
+#: includes/admin/class-wizard.php:540
+msgid "Modules saved successfully."
+msgstr ""
+
+#: includes/admin/class-wizard.php:656
+msgid "Welcome to Superdraft! Let's set up your AI writing assistant."
+msgstr ""
+
+#: includes/admin/class-wizard.php:658
+msgid "Start Setup Wizard"
+msgstr ""
+
+#: includes/admin/class-wizard.php:661
+msgid "Dismiss"
+msgstr ""
+
+#: includes/api/class-anthropic-api.php:186
 msgid "Error communicating with the Anthropic API."
 msgstr ""
 
@@ -248,8 +460,87 @@ msgstr ""
 msgid "Error communicating with the Google Gemini API."
 msgstr ""
 
+#: includes/api/class-google-gemini-image-api.php:132
+msgid "Error communicating with the Google Gemini Image API."
+msgstr ""
+
+#: includes/api/class-google-gemini-image-api.php:144
+msgid "No image data found in the API response."
+msgstr ""
+
 #: includes/api/class-openai-api.php:148
 msgid "Error communicating with the OpenAI API."
+msgstr ""
+
+#: includes/api/class-openai-image-api.php:93
+#: includes/api/class-openai-image-api.php:234
+msgid "Unknown API error"
+msgstr ""
+
+#. translators: %s: error message.
+#: includes/api/class-openai-image-api.php:95
+msgid "OpenAI API Error: %s"
+msgstr ""
+
+#: includes/api/class-openai-image-api.php:101
+msgid "No image data found in the OpenAI API response."
+msgstr ""
+
+#: includes/api/class-openai-image-api.php:109
+msgid "Failed to decode base64 image data from OpenAI."
+msgstr ""
+
+#: includes/api/class-openai-image-api.php:129
+msgid "PHP 5.5+ with CURLFile support is required for reliable image editing with wp_remote_post."
+msgstr ""
+
+#: includes/api/class-openai-image-api.php:135
+msgid "The cURL transport for WP_Http is not available, cannot guarantee multipart upload."
+msgstr ""
+
+#: includes/api/class-openai-image-api.php:139
+msgid "No reference image path provided for editing."
+msgstr ""
+
+#. translators: %s: image path.
+#: includes/api/class-openai-image-api.php:144
+msgid "Reference image file not found: %s"
+msgstr ""
+
+#. translators: %1$d: HTTP response code, %2$s: error message.
+#: includes/api/class-openai-image-api.php:243
+msgid "OpenAI Edit API Error (%1$d): %2$s"
+msgstr ""
+
+#: includes/api/class-openai-image-api.php:249
+msgid "Invalid or empty JSON response received from OpenAI Edit API."
+msgstr ""
+
+#: includes/api/class-openai-image-api.php:257
+msgid "Failed to decode base64 edited image data from OpenAI."
+msgstr ""
+
+#. translators: %s: error message.
+#: includes/api/class-replicate-image-api.php:95
+#: includes/api/class-replicate-image-api.php:234
+msgid "Replicate API error: %s"
+msgstr ""
+
+#: includes/api/class-replicate-image-api.php:101
+#: includes/api/class-replicate-image-api.php:240
+msgid "Replicate API returned no output."
+msgstr ""
+
+#: includes/api/class-replicate-image-api.php:115
+msgid "Failed to download generated image."
+msgstr ""
+
+#: includes/api/class-replicate-image-api.php:151
+msgid "Failed to base64-encode image data for Replicate."
+msgstr ""
+
+#: includes/api/class-replicate-image-api.php:254
+msgid "Failed to download edited image from Replicate."
 msgstr ""
 
 #: views/api-setup.php:18
@@ -268,27 +559,44 @@ msgstr ""
 msgid "xAI API Key"
 msgstr ""
 
-#: views/api-setup.php:42
+#: views/api-setup.php:34
+msgid "Replicate API Token"
+msgstr ""
+
+#. translators: %s: replicate.com link.
+#: views/api-setup.php:44
+msgid "The Replicate API offers a variety of models for image generation. You can find more information at %s."
+msgstr ""
+
+#: views/api-setup.php:53
+msgid "Custom Language Models"
+msgstr ""
+
+#: views/api-setup.php:61
+#: views/page-wizard.php:220
 msgid "Model Name (User-defined Label)"
 msgstr ""
 
-#: views/api-setup.php:43
+#: views/api-setup.php:62
+#: views/page-wizard.php:233
 msgid "API Endpoint URL"
 msgstr ""
 
-#: views/api-setup.php:44
+#: views/api-setup.php:63
+#: views/page-wizard.php:247
 msgid "\"model\" Parameter Value"
 msgstr ""
 
-#: views/api-setup.php:46
+#: views/api-setup.php:65
+#: views/page-wizard.php:259
 msgid "Additional Headers (one per line, name=value)"
 msgstr ""
 
-#: views/api-setup.php:47
+#: views/api-setup.php:66
 msgid "Save Custom Model"
 msgstr ""
 
-#: views/api-setup.php:52
+#: views/api-setup.php:71
 msgid "Add any custom models you want to use with Superdraft. These models will be available in the model selection dropdown. The API must be compatible with the OpenAI API."
 msgstr ""
 
@@ -297,204 +605,491 @@ msgid "Superdraft Settings"
 msgstr ""
 
 #: views/page-settings.php:22
-#: views/page-settings.php:49
+#: views/page-settings.php:53
 msgid "Auto Tags & Categories"
 msgstr ""
 
 #: views/page-settings.php:23
+#: views/page-wizard.php:96
 #: assets/admin/js/dist/writing-tips.js:1
 msgid "Writing Tips"
 msgstr ""
 
 #: views/page-settings.php:24
+#: views/page-wizard.php:81
 msgid "Autocomplete"
 msgstr ""
 
 #: views/page-settings.php:25
-#: views/page-settings.php:292
+#: views/page-wizard.php:91
+msgid "Image Generation"
+msgstr ""
+
+#: views/page-settings.php:26
+#: views/page-settings.php:333
+#: views/page-wizard.php:121
+#: views/page-wizard.php:168
 msgid "API Setup"
 msgstr ""
 
-#: views/page-settings.php:50
+#: views/page-settings.php:54
 msgid "Suggest new tags and categories based on your content, and automatically choose the right tags and categories for your posts. Also works in bulk edit mode."
 msgstr ""
 
-#: views/page-settings.php:53
+#: views/page-settings.php:57
 msgid "Enable Auto Tags & Categories"
 msgstr ""
 
-#: views/page-settings.php:57
+#: views/page-settings.php:61
 msgid "Automatically categorize and tag posts using AI"
 msgstr ""
 
-#: views/page-settings.php:61
+#: views/page-settings.php:65
 msgid "Never Deselect Terms"
 msgstr ""
 
-#: views/page-settings.php:66
+#: views/page-settings.php:70
 msgid "When this option is enabled, the AI will never deselect terms that are already selected for a post, only suggest new ones"
 msgstr ""
 
-#: views/page-settings.php:70
+#: views/page-settings.php:74
 msgid "New Term Suggestions"
 msgstr ""
 
-#: views/page-settings.php:75
+#: views/page-settings.php:79
 msgid "Minimum number of terms to suggest when creating new tags/categories. Default: 3"
 msgstr ""
 
-#: views/page-settings.php:79
+#: views/page-settings.php:83
 msgid "Context for Suggestions"
 msgstr ""
 
-#: views/page-settings.php:84
+#: views/page-settings.php:88
 msgid "Number of post excerpts to use as context for generating suggestions. Default: 20"
 msgstr ""
 
-#: views/page-settings.php:88
-#: views/page-settings.php:146
-#: views/page-settings.php:236
+#: views/page-settings.php:92
+#: views/page-settings.php:150
+#: views/page-settings.php:240
 msgid "Select AI Model"
 msgstr ""
 
-#: views/page-settings.php:113
+#: views/page-settings.php:117
 msgid "AI Writing Tips"
 msgstr ""
 
-#: views/page-settings.php:114
+#: views/page-settings.php:118
 msgid "Get writing, SEO, and readability tips while editing your posts."
 msgstr ""
 
-#: views/page-settings.php:117
+#: views/page-settings.php:121
 msgid "Enable AI Writing Tips"
 msgstr ""
 
-#: views/page-settings.php:122
+#: views/page-settings.php:126
 msgid "Provide tips while editing"
 msgstr ""
 
-#: views/page-settings.php:126
+#: views/page-settings.php:130
 msgid "Minimum Tips"
 msgstr ""
 
-#: views/page-settings.php:132
+#: views/page-settings.php:136
 msgid "Minimum number of tips to generate. The AI may add more if needed."
 msgstr ""
 
-#: views/page-settings.php:136
+#: views/page-settings.php:140
 msgid "Auto-update Interval"
 msgstr ""
 
-#: views/page-settings.php:142
+#: views/page-settings.php:146
 msgid "Automatically update tips every X minutes while editing (only if content changes). Set to 0 to disable and update manually."
 msgstr ""
 
-#: views/page-settings.php:157
+#: views/page-settings.php:161
 msgid "Autocomplete for Post Contents"
 msgstr ""
 
-#: views/page-settings.php:158
+#: views/page-settings.php:162
 msgid "Get AI-powered autocomplete suggestions while writing your posts. Type the trigger prefix to see suggestions and continue typing a word to influence the suggestions."
 msgstr ""
 
-#: views/page-settings.php:161
+#: views/page-settings.php:165
 msgid "Enable AI Autocomplete"
 msgstr ""
 
-#: views/page-settings.php:166
+#: views/page-settings.php:170
 msgid "Provide autocomplete suggestions while writing content"
 msgstr ""
 
-#: views/page-settings.php:170
+#: views/page-settings.php:174
 msgid "Trigger Prefix"
 msgstr ""
 
-#: views/page-settings.php:176
+#: views/page-settings.php:180
 msgid "Character(s) that trigger autocomplete suggestions. Default: ~"
 msgstr ""
 
-#: views/page-settings.php:180
+#: views/page-settings.php:184
 msgid "Empty Search Suggestions"
 msgstr ""
 
-#: views/page-settings.php:187
+#: views/page-settings.php:191
 msgid "Show suggestions when only the trigger prefix is typed"
 msgstr ""
 
-#: views/page-settings.php:189
+#: views/page-settings.php:193
 msgid "When disabled, suggestions will only show when typing one or more characters after the trigger prefix."
 msgstr ""
 
-#: views/page-settings.php:193
+#: views/page-settings.php:197
 msgid "Number of Suggestions"
 msgstr ""
 
-#: views/page-settings.php:199
+#: views/page-settings.php:203
 msgid "Number of suggestions to show (1-10). Default: 3"
 msgstr ""
 
-#: views/page-settings.php:203
+#: views/page-settings.php:207
 msgid "Context Length"
 msgstr ""
 
-#: views/page-settings.php:209
+#: views/page-settings.php:213
 msgid "Small (2 blocks)"
 msgstr ""
 
-#: views/page-settings.php:214
+#: views/page-settings.php:218
 msgid "Large (6 blocks)"
 msgstr ""
 
-#: views/page-settings.php:219
+#: views/page-settings.php:223
 msgid "Full Post"
 msgstr ""
 
-#: views/page-settings.php:222
+#: views/page-settings.php:226
 msgid "Amount of text to use as context for generating suggestions."
 msgstr ""
 
-#: views/page-settings.php:226
+#: views/page-settings.php:230
 msgid "Debounce Delay"
 msgstr ""
 
-#: views/page-settings.php:232
+#: views/page-settings.php:236
 msgid "Delay in milliseconds before showing suggestions. Default: 500"
 msgstr ""
 
-#: views/page-settings.php:245
+#: views/page-settings.php:249
+#: views/page-wizard.php:76
 msgid "Smart Compose"
 msgstr ""
 
-#: views/page-settings.php:248
+#: views/page-settings.php:252
 msgid "Smart Compose Settings"
 msgstr ""
 
-#: views/page-settings.php:254
+#: views/page-settings.php:258
 msgid "Enable Smart Compose (beta)"
 msgstr ""
 
-#: views/page-settings.php:256
-msgid "Provides real-time suggestions as you type in paragraph blocks."
+#: views/page-settings.php:261
+msgid "Provides real-time suggestions as you type in paragraph blocks. Use a fast-responding model for the best experience."
 msgstr ""
 
-#: views/page-settings.php:261
+#: views/page-settings.php:267
 msgid "Smart Compose Model"
 msgstr ""
 
-#: views/page-settings.php:269
+#: views/page-settings.php:275
 msgid "Smart Compose Delay"
 msgstr ""
 
-#: views/page-settings.php:275
+#: views/page-settings.php:281
 msgid "Delay in milliseconds before showing Smart Compose suggestions. Default: 1500"
 msgstr ""
 
-#: views/page-settings.php:279
+#: views/page-settings.php:285
 msgid "Smart Compose Max Tokens"
 msgstr ""
 
-#: views/page-settings.php:285
+#: views/page-settings.php:291
 msgid "Maximum number of tokens to generate for Smart Compose suggestions. One token is generally one word or a few characters in English. Default: 10"
+msgstr ""
+
+#: views/page-settings.php:298
+msgid "AI Image Generation"
+msgstr ""
+
+#: views/page-settings.php:299
+msgid "Generate a featured image for your post using AI based on a textual prompt."
+msgstr ""
+
+#: views/page-settings.php:302
+msgid "Enable AI Image Generation"
+msgstr ""
+
+#: views/page-settings.php:307
+msgid "Generate featured images using AI"
+msgstr ""
+
+#: views/page-settings.php:311
+msgid "Select Image Generation Model"
+msgstr ""
+
+#: views/page-settings.php:317
+msgid "Select Image Editing Model"
+msgstr ""
+
+#: views/page-settings.php:323
+msgid "Prompt Generator Model"
+msgstr ""
+
+#: views/page-settings.php:326
+msgid "Model used to generate image prompts based on your post content."
+msgstr ""
+
+#: views/page-wizard.php:36
+msgid "GPT-4o, GPT-4o-mini, o3, and more"
+msgstr ""
+
+#: views/page-wizard.php:42
+msgid "Claude 3.5 Sonnet, Claude 3 Opus, and more"
+msgstr ""
+
+#: views/page-wizard.php:48
+msgid "Gemini 2.5 Pro, Gemini 2.5 Flash, and more"
+msgstr ""
+
+#: views/page-wizard.php:54
+msgid "Grok 3, Grok 3 Mini, and more"
+msgstr ""
+
+#: views/page-wizard.php:59
+msgid "Custom / Other"
+msgstr ""
+
+#: views/page-wizard.php:60
+msgid "Use a custom API endpoint"
+msgstr ""
+
+#: views/page-wizard.php:77
+msgid "Contextual typeahead AI suggestions in the editor."
+msgstr ""
+
+#: views/page-wizard.php:82
+msgid "Complete sentences and paragraphs with AI."
+msgstr ""
+
+#: views/page-wizard.php:86
+msgid "AI Tags & Categories"
+msgstr ""
+
+#: views/page-wizard.php:87
+msgid "Auto-suggest and bulk-generate relevant tags and categories for your posts."
+msgstr ""
+
+#: views/page-wizard.php:92
+msgid "Generate and edit featured images with AI prompts."
+msgstr ""
+
+#: views/page-wizard.php:97
+msgid "SEO, readability suggestions, and expert help in the editor sidebar."
+msgstr ""
+
+#: views/page-wizard.php:109
+msgid "Welcome to Superdraft!"
+msgstr ""
+
+#: views/page-wizard.php:110
+msgid "Let's set up your AI writing assistant in just a few steps."
+msgstr ""
+
+#: views/page-wizard.php:117
+msgid "Provider"
+msgstr ""
+
+#: views/page-wizard.php:125
+msgid "Features"
+msgstr ""
+
+#: views/page-wizard.php:129
+msgid "Try it!"
+msgstr ""
+
+#: views/page-wizard.php:137
+msgid "Choose Your AI Provider"
+msgstr ""
+
+#: views/page-wizard.php:138
+msgid "Select the AI provider you want to use. You can change this later in settings."
+msgstr ""
+
+#: views/page-wizard.php:147
+msgid "Already configured"
+msgstr ""
+
+#: views/page-wizard.php:153
+msgid "You can add custom models in the Settings page after setup."
+msgstr ""
+
+#: views/page-wizard.php:158
+msgid "Skip to Settings"
+msgstr ""
+
+#: views/page-wizard.php:161
+#: views/page-wizard.php:285
+#: views/page-wizard.php:366
+msgid "Next"
+msgstr ""
+
+#: views/page-wizard.php:170
+msgid "Enter your API key. Superdraft will test it before continuing and choose sensible models for each feature."
+msgstr ""
+
+#: views/page-wizard.php:175
+msgid "Enter Your API Key"
+msgstr ""
+
+#: views/page-wizard.php:196
+msgid "Enter your API key here."
+msgstr ""
+
+#: views/page-wizard.php:202
+msgid "Get an OpenAI API key →"
+msgstr ""
+
+#: views/page-wizard.php:205
+msgid "Get an Anthropic API key →"
+msgstr ""
+
+#: views/page-wizard.php:208
+msgid "Get a Google API key →"
+msgstr ""
+
+#: views/page-wizard.php:211
+msgid "Get an xAI API key →"
+msgstr ""
+
+#: views/page-wizard.php:216
+msgid "Custom endpoint parameters"
+msgstr ""
+
+#: views/page-wizard.php:241
+msgid "https://example.com/v1/chat/completions"
+msgstr ""
+
+#: views/page-wizard.php:267
+msgid "The API must be compatible with the OpenAI chat completions format."
+msgstr ""
+
+#: views/page-wizard.php:282
+#: views/page-wizard.php:363
+#: views/page-wizard.php:402
+msgid "Back"
+msgstr ""
+
+#: views/page-wizard.php:292
+msgid "Enable Features"
+msgstr ""
+
+#: views/page-wizard.php:294
+msgid "Choose which AI features to enable. You can always change these later in Settings."
+msgstr ""
+
+#: views/page-wizard.php:298
+msgid "Previous feature"
+msgstr ""
+
+#: views/page-wizard.php:312
+msgid "Enabled"
+msgstr ""
+
+#: views/page-wizard.php:342
+msgid "Next feature"
+msgstr ""
+
+#. translators: %s: Feature name
+#: views/page-wizard.php:354
+msgid "Feature: %s"
+msgstr ""
+
+#: views/page-wizard.php:373
+msgid "You're All Set!"
+msgstr ""
+
+#: views/page-wizard.php:375
+msgid "Your selected AI features are ready. Start a new post, or dive straight into the settings."
+msgstr ""
+
+#: views/page-wizard.php:378
+msgid "No AI features are enabled yet. You can finish setup now and turn features on later from Settings."
+msgstr ""
+
+#: views/page-wizard.php:383
+msgid "Free and open source"
+msgstr ""
+
+#: views/page-wizard.php:384
+msgid "Help Superdraft reach more writers"
+msgstr ""
+
+#: views/page-wizard.php:386
+msgid "Superdraft is completely free to use. If it earns a place in your workflow, please consider sharing it with another WordPress user or mentioning it in your community. Word of mouth helps keep the project visible."
+msgstr ""
+
+#: views/page-wizard.php:389
+msgid "View and Share the Project"
+msgstr ""
+
+#: views/page-wizard.php:395
+msgid "Create a New Post"
+msgstr ""
+
+#: views/page-wizard.php:405
+msgid "Finish & Go to Settings"
+msgstr ""
+
+#: views/page-wizard.php:413
+msgid "I'll set this up later — Dismiss Wizard"
+msgstr ""
+
+#: assets/admin/js/dist/images.js:1
+msgid "Auto-generate prompt"
+msgstr ""
+
+#: assets/admin/js/dist/images.js:1
+msgid "An unexpected error occurred."
+msgstr ""
+
+#: assets/admin/js/dist/images.js:1
+msgid "Image generated successfully."
+msgstr ""
+
+#: assets/admin/js/dist/images.js:1
+msgid "Generation completed but no image ID received."
+msgstr ""
+
+#: assets/admin/js/dist/images.js:1
+msgid "Image edited successfully."
+msgstr ""
+
+#: assets/admin/js/dist/images.js:1
+msgid "Edit completed but no image ID received."
+msgstr ""
+
+#: assets/admin/js/dist/images.js:1
+msgid "Generate"
+msgstr ""
+
+#: assets/admin/js/dist/images.js:1
+msgid "Edit"
+msgstr ""
+
+#: assets/admin/js/dist/images.js:1
+msgid "Prompt"
+msgstr ""
+
+#: assets/admin/js/dist/images.js:1
+msgid "Processing image..."
 msgstr ""
 
 #: assets/admin/js/dist/tags-categories.js:1
@@ -554,314 +1149,6 @@ msgstr ""
 
 #: assets/admin/js/dist/writing-tips.js:4
 msgid "Add Item"
-msgstr ""
-
-
-#: includes/admin/class-admin.php:697
-msgid "(Unavailable)"
-msgstr ""
-
-#: views/page-settings.php:295
-msgid "AI Image Generation"
-msgstr ""
-
-#: includes/admin/class-images.php:290
-msgid "API returned empty image data after editing"
-msgstr ""
-
-#: includes/admin/class-images.php:504
-msgid "API returned empty image data after generation"
-msgstr ""
-
-#: includes/admin/class-images.php:192
-#: includes/api/class-replicate-image-api.php:143
-msgid "Could not read featured image file."
-msgstr ""
-
-#: views/api-setup.php:53
-msgid "Custom Language Models"
-msgstr ""
-
-#: includes/admin/class-images.php:332
-msgid "Edited image generated successfully"
-msgstr ""
-
-#: views/page-settings.php:299
-msgid "Enable AI Image Generation"
-msgstr ""
-
-#: includes/api/class-google-gemini-image-api.php:132
-msgid "Error communicating with the Google Gemini Image API."
-msgstr ""
-
-#: includes/api/class-replicate-image-api.php:151
-msgid "Failed to base64-encode image data for Replicate."
-msgstr ""
-
-#: includes/api/class-openai-image-api.php:257
-msgid "Failed to decode base64 edited image data from OpenAI."
-msgstr ""
-
-#: includes/admin/class-images.php:223 includes/admin/class-images.php:457
-msgid "Failed to decode base64 image data from Google Gemini."
-msgstr ""
-
-#: includes/api/class-openai-image-api.php:109
-msgid "Failed to decode base64 image data from OpenAI."
-msgstr ""
-
-#: includes/api/class-replicate-image-api.php:254
-msgid "Failed to download edited image from Replicate."
-msgstr ""
-
-#: includes/api/class-replicate-image-api.php:115
-msgid "Failed to download generated image."
-msgstr ""
-
-#. %s: error message.
-#: includes/admin/class-images.php:297
-#, php-format
-msgid "Failed to save edited image: %s"
-msgstr ""
-
-#. %s: error message.
-#: includes/admin/class-images.php:511
-#, php-format
-msgid "Failed to save generated image: %s"
-msgstr ""
-
-#: includes/admin/class-images.php:160
-#: includes/api/class-replicate-image-api.php:137
-msgid "Featured image file not found or path is invalid"
-msgstr ""
-
-#: includes/admin/class-images.php:545
-msgid "Featured image generated and set successfully"
-msgstr ""
-
-#: views/page-settings.php:296
-msgid "Generate a featured image for your post using AI based on a textual prompt."
-msgstr ""
-
-#: views/page-settings.php:304
-msgid "Generate featured images using AI"
-msgstr ""
-
-#: includes/admin/class-images.php:183 includes/admin/class-images.php:446
-msgid "Google API key is missing"
-msgstr ""
-
-#: includes/admin/class-images.php:143
-msgid "Image editing is disabled"
-msgstr ""
-
-#. %s: model name.
-#: includes/admin/class-images.php:251
-#, php-format
-msgid "Image editing is not available for the selected model (%s)."
-msgstr ""
-
-#: views/page-settings.php:25
-msgid "Image Generation"
-msgstr ""
-
-#: includes/admin/class-images.php:138 includes/admin/class-images.php:424
-msgid "Image generation module is disabled"
-msgstr ""
-
-#: includes/api/class-openai-image-api.php:249
-msgid "Invalid or empty JSON response received from OpenAI Edit API."
-msgstr ""
-
-#: includes/admin/class-images.php:355
-msgid "Invalid post ID"
-msgstr ""
-
-#: includes/admin/class-images.php:361
-msgid "Invalid prompt model"
-msgstr ""
-
-#: includes/admin/class-images.php:350
-msgid "Missing parameters"
-msgstr ""
-
-#: includes/admin/class-images.php:415
-msgid "Missing postId or prompt"
-msgstr ""
-
-#: includes/admin/class-images.php:151
-msgid "Missing postId, featuredImageId, or prompt"
-msgstr ""
-
-#: views/page-settings.php:323
-msgid "Model used to generate image prompts based on your post content."
-msgstr ""
-
-#: includes/api/class-google-gemini-image-api.php:144
-msgid "No image data found in the API response."
-msgstr ""
-
-#: includes/api/class-openai-image-api.php:101
-msgid "No image data found in the OpenAI API response."
-msgstr ""
-
-#: includes/admin/class-admin.php:616
-msgid "No image edits"
-msgstr ""
-
-#: includes/api/class-openai-image-api.php:139
-msgid "No reference image path provided for editing."
-msgstr ""
-
-#. %s: error message.
-#: includes/api/class-openai-image-api.php:95
-#, php-format
-msgid "OpenAI API Error: %s"
-msgstr ""
-
-#: includes/admin/class-images.php:171 includes/admin/class-images.php:436
-msgid "OpenAI API key is missing"
-msgstr ""
-
-#. %1$d: HTTP response code, %2$s: error message.
-#: includes/api/class-openai-image-api.php:243
-#, php-format
-msgid "OpenAI Edit API Error (%1$d): %2$s"
-msgstr ""
-
-#: includes/api/class-openai-image-api.php:129
-msgid "PHP 5.5+ with CURLFile support is required for reliable image editing with wp_remote_post."
-msgstr ""
-
-#: views/page-settings.php:320
-msgid "Prompt Generator Model"
-msgstr ""
-
-#: views/page-settings.php:258
-msgid "Provides real-time suggestions as you type in paragraph blocks. Use a fast-responding model for the best experience."
-msgstr ""
-
-#. %s: image path.
-#: includes/api/class-openai-image-api.php:144
-#, php-format
-msgid "Reference image file not found: %s"
-msgstr ""
-
-#. %s: error message.
-#: includes/api/class-replicate-image-api.php:95
-#: includes/api/class-replicate-image-api.php:234
-#, php-format
-msgid "Replicate API error: %s"
-msgstr ""
-
-#: includes/admin/class-images.php:230 includes/admin/class-images.php:463
-msgid "Replicate API key is missing"
-msgstr ""
-
-#: includes/api/class-replicate-image-api.php:101
-#: includes/api/class-replicate-image-api.php:240
-msgid "Replicate API returned no output."
-msgstr ""
-
-#: views/api-setup.php:34
-msgid "Replicate API Token"
-msgstr ""
-
-#: views/page-settings.php:314
-msgid "Select Image Editing Model"
-msgstr ""
-
-#: views/page-settings.php:308
-msgid "Select Image Generation Model"
-msgstr ""
-
-#: includes/api/class-openai-image-api.php:135
-msgid "The cURL transport for WP_Http is not available, cannot guarantee multipart upload."
-msgstr ""
-
-#. %s: replicate.com link.
-#: views/api-setup.php:44
-#, php-format
-msgid "The Replicate API offers a variety of models for image generation. You can find more information at %s."
-msgstr ""
-
-#: includes/api/class-openai-image-api.php:93
-#: includes/api/class-openai-image-api.php:234
-msgid "Unknown API error"
-msgstr ""
-
-#. %s: model name.
-#: includes/admin/class-images.php:471
-#, php-format
-msgid "Unknown or unsupported image model: %s"
-msgstr ""
-
-#: includes/admin/class-images.php:155 includes/admin/class-images.php:419
-msgid "You do not have permission to edit this post"
-msgstr ""
-
-#: assets/admin/js/dist/images.js:61
-msgid "Auto-generate prompt"
-msgstr ""
-
-#: assets/admin/js/dist/images.js:125
-msgid "An unexpected error occurred."
-msgstr ""
-
-#: assets/admin/js/dist/images.js:170
-msgid "Image generated successfully."
-msgstr ""
-
-#: assets/admin/js/dist/images.js:177
-msgid "Generation completed but no image ID received."
-msgstr ""
-
-#: assets/admin/js/dist/images.js:199
-msgid "Image edited successfully."
-msgstr ""
-
-#: assets/admin/js/dist/images.js:205
-msgid "Edit completed but no image ID received."
-msgstr ""
-
-#: assets/admin/js/dist/images.js:236
-msgid "Generate"
-msgstr ""
-
-#: assets/admin/js/dist/images.js:247
-msgid "Edit"
-msgstr ""
-
-#: assets/admin/js/dist/images.js:256
-msgid "Prompt"
-msgstr ""
-
-#: assets/admin/js/dist/images.js:261
-msgid "Describe the new image..."
-msgstr ""
-
-#: assets/admin/js/dist/images.js:262
-msgid "Describe the changes..."
-msgstr ""
-
-#: assets/admin/js/dist/images.js:277
-msgid "Generating..."
-msgstr ""
-
-#: assets/admin/js/dist/images.js:277
-msgid "Editing..."
-msgstr ""
-
-#: assets/admin/js/dist/images.js:278
-msgid "Generate Image"
-msgstr ""
-
-#: assets/admin/js/dist/images.js:278
-msgid "Apply Edits"
-msgstr ""
-
-#: assets/admin/js/dist/images.js:312
-msgid "Processing image..."
 msgstr ""
 
 #: assets/admin/js/taxonomy-suggestions.js:33

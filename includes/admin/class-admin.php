@@ -47,8 +47,13 @@ class Admin {
 			'images',
 		];
 		foreach ( $modules as $module ) {
-			$enabled = get_option( 'superdraft_settings', [] );
-			if ( isset( $enabled[ $module ]['enabled'] ) && $enabled[ $module ]['enabled'] ) {
+			$enabled        = get_option( 'superdraft_settings', [] );
+			$module_enabled = isset( $enabled[ $module ]['enabled'] ) && $enabled[ $module ]['enabled'];
+			if ( 'autocomplete' === $module && ! empty( $enabled['autocomplete']['smart_compose_enabled'] ) ) {
+				$module_enabled = true;
+			}
+
+			if ( $module_enabled ) {
 				$module_class = 'Superdraft\\' . str_replace( ' ', '_', ucwords( str_replace( [ '-', '_' ], ' ', $module ) ) );
 				if ( class_exists( $module_class ) ) {
 					new $module_class();

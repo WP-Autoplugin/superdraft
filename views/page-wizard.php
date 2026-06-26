@@ -12,7 +12,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$api_keys = get_option( 'superdraft_api_keys', [] );
+$api_keys      = get_option( 'superdraft_api_keys', [] );
+$custom_models = get_option( 'superdraft_custom_models', [] );
+if ( ! is_array( $api_keys ) ) {
+	$api_keys = [];
+}
+if ( ! is_array( $custom_models ) ) {
+	$custom_models = [];
+}
+
+$custom_model_defaults = [
+	'name'           => '',
+	'url'            => '',
+	'modelParameter' => '',
+	'apiKey'         => '',
+	'headers'        => [],
+];
+
+if ( ! empty( $custom_models ) ) {
+	$custom_model_defaults = array_merge( $custom_model_defaults, (array) end( $custom_models ) );
+}
 
 $providers = [
 	'openai'    => [
@@ -43,7 +62,7 @@ $providers = [
 		'name' => __( 'Custom / Other', 'superdraft' ),
 		'desc' => __( 'Use a custom API endpoint', 'superdraft' ),
 		'icon' => 'custom',
-		'key'  => '',
+		'key'  => $api_keys['custom'] ?? $custom_model_defaults['apiKey'],
 	],
 ];
 
@@ -58,7 +77,7 @@ if ( isset( $_GET['step'] ) ) {
 $modules = [
 	'smart_compose'   => [
 		'title' => __( 'Smart Compose', 'superdraft' ),
-		'desc'  => __( 'AI-powered suggestions as you type in the editor.', 'superdraft' ),
+		'desc'  => __( 'Contextual typeahead AI suggestions in the editor.', 'superdraft' ),
 		'icon'  => '✍️',
 	],
 	'autocomplete'    => [
@@ -68,17 +87,17 @@ $modules = [
 	],
 	'tags_categories' => [
 		'title' => __( 'AI Tags & Categories', 'superdraft' ),
-		'desc'  => __( 'Auto-suggest and bulk-generate tags for your posts.', 'superdraft' ),
+		'desc'  => __( 'Auto-suggest and bulk-generate relevant tags and categories for your posts.', 'superdraft' ),
 		'icon'  => '🏷️',
 	],
 	'images'          => [
 		'title' => __( 'Image Generation', 'superdraft' ),
-		'desc'  => __( 'Generate featured images with AI prompts.', 'superdraft' ),
+		'desc'  => __( 'Generate and edit featured images with AI prompts.', 'superdraft' ),
 		'icon'  => '🖼️',
 	],
 	'writing_tips'    => [
 		'title' => __( 'Writing Tips', 'superdraft' ),
-		'desc'  => __( 'SEO and readability suggestions in the sidebar.', 'superdraft' ),
+		'desc'  => __( 'SEO, readability suggestions, and expert help in the editor sidebar.', 'superdraft' ),
 		'icon'  => '💡',
 	],
 ];
@@ -194,10 +213,65 @@ if ( ! is_array( $enabled_modules ) ) {
 						<a href="https://console.x.ai/" target="_blank" class="key-link" data-provider="xai">
 							<?php esc_html_e( 'Get an xAI API key →', 'superdraft' ); ?>
 						</a>
-						<span class="key-link" data-provider="custom">
-							<?php esc_html_e( 'Enter your custom API endpoint details.', 'superdraft' ); ?>
-						</span>
 					</div>
+
+					<details class="superdraft-wizard-custom-details" open>
+						<summary><?php esc_html_e( 'Custom endpoint parameters', 'superdraft' ); ?></summary>
+						<div class="superdraft-wizard-custom-fields">
+							<div class="form-field">
+								<label for="superdraft-wizard-custom-name">
+									<?php esc_html_e( 'Model Name (User-defined Label)', 'superdraft' ); ?>
+									<span class="required">*</span>
+								</label>
+								<input
+									type="text"
+									id="superdraft-wizard-custom-name"
+									class="regular-text"
+									value="<?php echo esc_attr( $custom_model_defaults['name'] ); ?>"
+								/>
+							</div>
+
+							<div class="form-field">
+								<label for="superdraft-wizard-custom-url">
+									<?php esc_html_e( 'API Endpoint URL', 'superdraft' ); ?>
+									<span class="required">*</span>
+								</label>
+								<input
+									type="url"
+									id="superdraft-wizard-custom-url"
+									class="regular-text"
+									value="<?php echo esc_url( $custom_model_defaults['url'] ); ?>"
+									placeholder="<?php esc_attr_e( 'https://example.com/v1/chat/completions', 'superdraft' ); ?>"
+								/>
+							</div>
+
+							<div class="form-field">
+								<label for="superdraft-wizard-custom-parameter">
+									<?php esc_html_e( '"model" Parameter Value', 'superdraft' ); ?>
+								</label>
+								<input
+									type="text"
+									id="superdraft-wizard-custom-parameter"
+									class="regular-text"
+									value="<?php echo esc_attr( $custom_model_defaults['modelParameter'] ); ?>"
+								/>
+							</div>
+
+							<div class="form-field">
+								<label for="superdraft-wizard-custom-headers">
+									<?php esc_html_e( 'Additional Headers (one per line, name=value)', 'superdraft' ); ?>
+								</label>
+								<textarea
+									id="superdraft-wizard-custom-headers"
+									class="large-text"
+									rows="4"
+								><?php echo esc_textarea( implode( "\n", (array) $custom_model_defaults['headers'] ) ); ?></textarea>
+								<p class="description">
+									<?php esc_html_e( 'The API must be compatible with the OpenAI chat completions format.', 'superdraft' ); ?>
+								</p>
+							</div>
+						</div>
+					</details>
 
 					<div class="superdraft-wizard-test-result" style="display:none;">
 						<div class="test-result-icon"></div>
@@ -238,7 +312,7 @@ if ( ! is_array( $enabled_modules ) ) {
 							<div class="module-toggle">
 								<input type="checkbox" id="module-<?php echo esc_attr( $key ); ?>" class="module-checkbox" checked />
 								<label for="module-<?php echo esc_attr( $key ); ?>" class="toggle-label"></label>
-								<span class="toggle-status"><?php esc_html_e( 'Enabled', 'superdraft' ); ?></span>
+								<label for="module-<?php echo esc_attr( $key ); ?>" class="toggle-status"><?php esc_html_e( 'Enabled', 'superdraft' ); ?></label>
 							</div>
 						</div>
 						<p class="module-description"><?php echo esc_html( $module['desc'] ); ?></p>
@@ -300,25 +374,26 @@ if ( ! is_array( $enabled_modules ) ) {
 		<!-- Step 4: Try it now -->
 		<div class="superdraft-wizard-step-content" data-step="4" style="display:none;">
 			<h2><?php esc_html_e( 'You\'re All Set!', 'superdraft' ); ?></h2>
-			<p class="description">
-				<?php esc_html_e( 'Your AI writing assistant is ready. Try it out by creating a demo post, or dive straight into the settings.', 'superdraft' ); ?>
+			<p class="description superdraft-wizard-ready-message">
+				<?php esc_html_e( 'Your selected AI features are ready. Start a new post, or dive straight into the settings.', 'superdraft' ); ?>
+			</p>
+			<p class="description superdraft-wizard-no-features-message" style="display:none;">
+				<?php esc_html_e( 'No AI features are enabled yet. You can finish setup now and turn features on later from Settings.', 'superdraft' ); ?>
 			</p>
 
 			<div class="superdraft-wizard-try-it">
-				<div class="superdraft-wizard-features-grid">
-					<?php foreach ( $modules as $key => $module ) : ?>
-					<div class="feature-card" data-module="<?php echo esc_attr( $key ); ?>">
-						<span class="feature-icon"><?php echo esc_html( $module['icon'] ); ?></span>
-						<h3><?php echo esc_html( $module['title'] ); ?></h3>
-						<p><?php echo esc_html( $module['desc'] ); ?></p>
-					</div>
-					<?php endforeach; ?>
+				<div class="superdraft-wizard-support-note">
+					<p class="support-note-kicker"><?php esc_html_e( 'Free and open source', 'superdraft' ); ?></p>
+					<h3><?php esc_html_e( 'Help Superdraft reach more writers', 'superdraft' ); ?></h3>
+					<p>
+						<?php esc_html_e( 'Superdraft is completely free to use. If it earns a place in your workflow, please consider sharing it with another WordPress user or mentioning it in your community. Word of mouth helps keep the project visible.', 'superdraft' ); ?>
+					</p>
+					<a href="https://github.com/WP-Autoplugin/superdraft" target="_blank" rel="noopener noreferrer" class="button button-secondary">
+						<?php esc_html_e( 'View and Share the Project', 'superdraft' ); ?>
+					</a>
 				</div>
 
-				<div class="superdraft-wizard-demo-actions">
-					<button type="button" class="button button-primary superdraft-wizard-create-demo">
-						<?php esc_html_e( 'Create a Demo Post', 'superdraft' ); ?>
-					</button>
+				<div class="superdraft-wizard-post-actions">
 					<a href="<?php echo esc_url( admin_url( 'post-new.php' ) ); ?>" class="button button-secondary">
 						<?php esc_html_e( 'Create a New Post', 'superdraft' ); ?>
 					</a>
@@ -346,5 +421,6 @@ if ( ! is_array( $enabled_modules ) ) {
 <script type="text/javascript">
 // Pass enabled modules to JS.
 var superdraftWizardApiKeys = <?php echo wp_json_encode( $api_keys ); ?>;
+var superdraftWizardCustomModel = <?php echo wp_json_encode( $custom_model_defaults ); ?>;
 var superdraftEnabledModules = <?php echo wp_json_encode( $enabled_modules ); ?>;
 </script>
