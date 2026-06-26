@@ -591,12 +591,19 @@ input[type="checkbox"].module-checkbox {
 
 .module-preview-svg {
 	width: 100%;
+	height: auto;
 }
 
 .module-preview-svg svg {
 	width: 100%;
+	max-width: 400px;
 	height: auto;
 	display: block;
+	margin: 0 auto;
+	overflow: visible !important;
+	border-radius: 0 !important;
+	box-shadow: none !important;
+	border: none !important;
 }
 
 /* Dots Navigation */

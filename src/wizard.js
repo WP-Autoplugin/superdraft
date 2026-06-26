@@ -174,6 +174,22 @@
 			// Update nav buttons
 			$('.carousel-prev').prop('disabled', this.totalSlides <= 1);
 			$('.carousel-next').prop('disabled', this.totalSlides <= 1);
+
+			// Restart SVG animation on the active slide
+			this.restartSvgAnimation();
+		},
+
+		restartSvgAnimation: function() {
+			var $activeSlide = $('.carousel-slide-wrapper .superdraft-wizard-module-card').eq(this.currentSlide);
+			var $svgContainer = $activeSlide.find('.module-preview-svg');
+			var $svg = $svgContainer.find('svg');
+			
+			if ($svg.length) {
+				// Clone the SVG element to restart all CSS animations
+				var svgHtml = $svgContainer.html();
+				$svgContainer.html('');
+				$svgContainer.html(svgHtml);
+			}
 		},
 
 		updateProgressBar: function() {
