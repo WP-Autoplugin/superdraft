@@ -119,7 +119,7 @@ class Settings_Config {
 				],
 				'smart_compose_max_tokens' => [
 					'type'     => 'integer',
-					'default'  => 100,
+					'default'  => 10,
 					'sanitize' => 'absint',
 				],
 			],

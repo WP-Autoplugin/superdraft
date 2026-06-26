@@ -13,8 +13,8 @@
 		totalSteps: 4,
 		selectedProvider: '',
 		apiKey: '',
-		selectedModel: '',
 		connectionTested: false,
+		connectionAdvanceTimer: null,
 		enabledModules: {},
 		currentSlide: 0,
 		totalSlides: 0,
@@ -34,26 +34,21 @@
 				Wizard.selectedProvider = $(this).data('provider');
 				Wizard.updateKeyHint();
 				Wizard.updateKeyLinks();
+				Wizard.populateSavedApiKey();
 				Wizard.enableNextButton();
 			});
 
 			// API key input.
 			$(document).on('input', '#superdraft-wizard-api-key', function() {
 				Wizard.apiKey = $(this).val().trim();
-				Wizard.connectionTested = false;
-				Wizard.enableNextButton();
-			});
-
-			// Model selection.
-			$(document).on('change', '#superdraft-wizard-model', function() {
-				Wizard.selectedModel = $(this).val();
+				Wizard.resetConnectionState();
 				Wizard.enableNextButton();
 			});
 
 			// Navigation buttons.
 			$(document).on('click', '.superdraft-wizard-next', function(e) {
 				e.preventDefault();
-				Wizard.nextStep();
+				Wizard.nextStep($(this));
 			});
 
 			$(document).on('click', '.superdraft-wizard-prev', function(e) {
@@ -220,16 +215,23 @@
 			if (step === 2) {
 				this.updateKeyHint();
 				this.updateKeyLinks();
-				this.populateModels();
+				this.populateSavedApiKey();
 			} else if (step === 3) {
-				this.updateModuleModels();
+				this.clearConnectionAdvanceTimer();
 			} else if (step === 4) {
 				this.saveSettings();
 				this.updateSummary();
 			}
 		},
 
-		nextStep: function() {
+		nextStep: function($trigger) {
+			if (this.currentStep === 2 && !this.connectionTested) {
+				if (this.apiKey) {
+					this.testConnection($trigger);
+				}
+				return;
+			}
+
 			if (this.currentStep < this.totalSteps) {
 				this.showStep(this.currentStep + 1);
 			}
@@ -239,17 +241,6 @@
 			if (this.currentStep > 1) {
 				this.showStep(this.currentStep - 1);
 			}
-		},
-
-		getProviderName: function(provider) {
-			var names = {
-				'openai': 'OpenAI',
-				'anthropic': 'Anthropic',
-				'google': 'Google / Gemini',
-				'xai': 'xAI',
-				'custom': 'Custom'
-			};
-			return names[provider] || provider;
 		},
 
 		updateKeyHint: function() {
@@ -268,13 +259,23 @@
 			$('.superdraft-wizard-key-links .key-link[data-provider="' + this.selectedProvider + '"]').addClass('active');
 		},
 
+		populateSavedApiKey: function() {
+			var savedKeys = typeof superdraftWizardApiKeys === 'object' && superdraftWizardApiKeys ? superdraftWizardApiKeys : {};
+			var savedKey = savedKeys[this.selectedProvider] || '';
+
+			this.apiKey = savedKey;
+			$('#superdraft-wizard-api-key').val(savedKey);
+			this.resetConnectionState();
+			this.enableNextButton();
+		},
+
 		enableNextButton: function() {
 			var $btn = $('.superdraft-wizard-step-content[data-step="' + this.currentStep + '"] .superdraft-wizard-next');
 
 			if (this.currentStep === 1) {
 				$btn.prop('disabled', !this.selectedProvider);
 			} else if (this.currentStep === 2) {
-				$btn.prop('disabled', !this.apiKey || !this.connectionTested || !this.selectedModel);
+				$btn.prop('disabled', !this.apiKey);
 			} else if (this.currentStep === 3) {
 				// Module step - always enabled since we have defaults.
 				$btn.prop('disabled', false);
@@ -285,39 +286,17 @@
 			$('.superdraft-wizard-step-content[data-step="' + this.currentStep + '"] .superdraft-wizard-next').prop('disabled', true);
 		},
 
-		populateModels: function() {
-			var $select = $('#superdraft-wizard-model');
-			$select.empty();
-			$select.append('<option value="">' + (superdraftWizard.i18n.selectModel || 'Select a model...') + '</option>');
-
-			var providerModels = superdraftWizard.models[this.getProviderName(this.selectedProvider)];
-			if (providerModels) {
-				$.each(providerModels, function(key, label) {
-					$select.append('<option value="' + key + '">' + label + '</option>');
-				});
-			}
-
-			// Select recommended model.
-			var recommended = '';
-			if (typeof superdraftRecommendedModels !== 'undefined') {
-				recommended = superdraftRecommendedModels[this.selectedProvider] || '';
-			}
-			if (recommended) {
-				$select.val(recommended);
-				this.selectedModel = recommended;
-				this.enableNextButton();
+		clearConnectionAdvanceTimer: function() {
+			if (this.connectionAdvanceTimer) {
+				clearTimeout(this.connectionAdvanceTimer);
+				this.connectionAdvanceTimer = null;
 			}
 		},
 
-		updateModuleModels: function() {
-			// Update the model display in each module card.
-			$('.superdraft-wizard-module-card').each(function() {
-				var modelName = Wizard.selectedModel;
-				if (superdraftWizard.models && superdraftWizard.models[Wizard.getProviderName(Wizard.selectedProvider)]) {
-					modelName = superdraftWizard.models[Wizard.getProviderName(Wizard.selectedProvider)][Wizard.selectedModel] || Wizard.selectedModel;
-				}
-				$(this).find('.module-model').text(modelName);
-			});
+		resetConnectionState: function() {
+			this.clearConnectionAdvanceTimer();
+			this.connectionTested = false;
+			$('.superdraft-wizard-test-result').hide().removeClass('success error');
 		},
 
 		updateSummary: function() {
@@ -332,9 +311,12 @@
 			});
 		},
 
-		testConnection: function() {
-			var $btn = $('.superdraft-wizard-test-btn');
+		testConnection: function($trigger) {
+			var $btn = $trigger && $trigger.length ? $trigger : $('.superdraft-wizard-test-btn');
 			var $result = $('.superdraft-wizard-test-result');
+			var originalText = $btn.data('original-text') || $btn.text();
+
+			$btn.data('original-text', originalText);
 
 			$btn.prop('disabled', true).text(superdraftWizard.i18n.testing || 'Testing...');
 			$result.hide().removeClass('success error');
@@ -351,35 +333,42 @@
 				success: function(response) {
 					if (response.success) {
 						$result.addClass('success')
-							.find('.test-result-icon').text('✅');
+							.find('.test-result-icon').text('✓');
 						$result.find('.test-result-message').text(response.data || superdraftWizard.i18n.connectionSuccess);
 						Wizard.connectionTested = true;
 						Wizard.enableNextButton();
+						Wizard.clearConnectionAdvanceTimer();
+						Wizard.connectionAdvanceTimer = setTimeout(function() {
+							if (Wizard.currentStep === 2 && Wizard.connectionTested) {
+								Wizard.nextStep();
+							}
+						}, 1500);
 					} else {
 						$result.addClass('error')
-							.find('.test-result-icon').text('❌');
+							.find('.test-result-icon').text('×');
 						$result.find('.test-result-message').text(response.data || superdraftWizard.i18n.connectionError);
 						Wizard.connectionTested = false;
-						Wizard.disableNextButton();
+						Wizard.enableNextButton();
 					}
 					$result.show();
 				},
 				error: function() {
 					$result.addClass('error')
-						.find('.test-result-icon').text('❌');
+						.find('.test-result-icon').text('×');
 					$result.find('.test-result-message').text(superdraftWizard.i18n.connectionError);
 					$result.show();
 					Wizard.connectionTested = false;
-					Wizard.disableNextButton();
+					Wizard.enableNextButton();
 				},
 				complete: function() {
-					$btn.prop('disabled', false).text('Test Connection');
+					$btn.prop('disabled', false).text(originalText);
+					Wizard.enableNextButton();
 				}
 			});
 		},
 
 		saveSettings: function() {
-			// Save API key and model.
+			// Save API key and feature-specific model defaults.
 			$.ajax({
 				url: superdraftWizard.ajax_url,
 				type: 'POST',
@@ -387,8 +376,7 @@
 					action: 'superdraft_wizard_save_api',
 					nonce: superdraftWizard.nonce,
 					provider: this.selectedProvider,
-					api_key: this.apiKey,
-					model: this.selectedModel
+					api_key: this.apiKey
 				},
 				success: function(response) {
 					if (response.success) {

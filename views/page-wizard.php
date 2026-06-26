@@ -12,83 +12,74 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$models = Admin::get_models();
-
-$recommended_models = [
-	'openai'    => 'gpt-4o-mini',
-	'anthropic' => 'claude-3-5-haiku-20241022',
-	'google'    => 'gemini-2.0-flash',
-	'xai'       => 'grok-3-mini',
-	'custom'    => '',
-];
-
 $api_keys = get_option( 'superdraft_api_keys', [] );
-$settings = get_option( 'superdraft_settings', [] );
 
 $providers = [
 	'openai'    => [
-		'name'  => 'OpenAI',
-		'desc'  => __( 'GPT-4o, GPT-4o-mini, o3, and more', 'superdraft' ),
-		'icon'  => 'openai',
-		'key'   => $api_keys['openai'] ?? '',
+		'name' => 'OpenAI',
+		'desc' => __( 'GPT-4o, GPT-4o-mini, o3, and more', 'superdraft' ),
+		'icon' => 'openai',
+		'key'  => $api_keys['openai'] ?? '',
 	],
 	'anthropic' => [
-		'name'  => 'Anthropic',
-		'desc'  => __( 'Claude 3.5 Sonnet, Claude 3 Opus, and more', 'superdraft' ),
-		'icon'  => 'anthropic',
-		'key'   => $api_keys['anthropic'] ?? '',
+		'name' => 'Anthropic',
+		'desc' => __( 'Claude 3.5 Sonnet, Claude 3 Opus, and more', 'superdraft' ),
+		'icon' => 'anthropic',
+		'key'  => $api_keys['anthropic'] ?? '',
 	],
 	'google'    => [
-		'name'  => 'Google / Gemini',
-		'desc'  => __( 'Gemini 2.5 Pro, Gemini 2.5 Flash, and more', 'superdraft' ),
-		'icon'  => 'google',
-		'key'   => $api_keys['google'] ?? '',
+		'name' => 'Google / Gemini',
+		'desc' => __( 'Gemini 2.5 Pro, Gemini 2.5 Flash, and more', 'superdraft' ),
+		'icon' => 'google',
+		'key'  => $api_keys['google'] ?? '',
 	],
 	'xai'       => [
-		'name'  => 'xAI',
-		'desc'  => __( 'Grok 3, Grok 3 Mini, and more', 'superdraft' ),
-		'icon'  => 'xai',
-		'key'   => $api_keys['xai'] ?? '',
+		'name' => 'xAI',
+		'desc' => __( 'Grok 3, Grok 3 Mini, and more', 'superdraft' ),
+		'icon' => 'xai',
+		'key'  => $api_keys['xai'] ?? '',
 	],
 	'custom'    => [
-		'name'  => __( 'Custom / Other', 'superdraft' ),
-		'desc'  => __( 'Use a custom API endpoint', 'superdraft' ),
-		'icon'  => 'custom',
-		'key'   => '',
+		'name' => __( 'Custom / Other', 'superdraft' ),
+		'desc' => __( 'Use a custom API endpoint', 'superdraft' ),
+		'icon' => 'custom',
+		'key'  => '',
 	],
 ];
 
 $current_step = 1;
+// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only wizard step selector.
 if ( isset( $_GET['step'] ) ) {
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only wizard step selector.
 	$current_step = absint( $_GET['step'] );
 }
 
 // Module definitions with descriptions.
 $modules = [
-	'smart_compose' => [
-		'title'       => __( 'Smart Compose', 'superdraft' ),
-		'desc'        => __( 'AI-powered suggestions as you type in the editor.', 'superdraft' ),
-		'icon'        => '✍️',
+	'smart_compose'   => [
+		'title' => __( 'Smart Compose', 'superdraft' ),
+		'desc'  => __( 'AI-powered suggestions as you type in the editor.', 'superdraft' ),
+		'icon'  => '✍️',
 	],
-	'autocomplete' => [
-		'title'       => __( 'Autocomplete', 'superdraft' ),
-		'desc'        => __( 'Complete sentences and paragraphs with AI.', 'superdraft' ),
-		'icon'        => '🔮',
+	'autocomplete'    => [
+		'title' => __( 'Autocomplete', 'superdraft' ),
+		'desc'  => __( 'Complete sentences and paragraphs with AI.', 'superdraft' ),
+		'icon'  => '🔮',
 	],
 	'tags_categories' => [
-		'title'       => __( 'AI Tags & Categories', 'superdraft' ),
-		'desc'        => __( 'Auto-suggest and bulk-generate tags for your posts.', 'superdraft' ),
-		'icon'        => '🏷️',
+		'title' => __( 'AI Tags & Categories', 'superdraft' ),
+		'desc'  => __( 'Auto-suggest and bulk-generate tags for your posts.', 'superdraft' ),
+		'icon'  => '🏷️',
 	],
-	'images' => [
-		'title'       => __( 'Image Generation', 'superdraft' ),
-		'desc'        => __( 'Generate featured images with AI prompts.', 'superdraft' ),
-		'icon'        => '🖼️',
+	'images'          => [
+		'title' => __( 'Image Generation', 'superdraft' ),
+		'desc'  => __( 'Generate featured images with AI prompts.', 'superdraft' ),
+		'icon'  => '🖼️',
 	],
-	'writing_tips' => [
-		'title'       => __( 'Writing Tips', 'superdraft' ),
-		'desc'        => __( 'SEO and readability suggestions in the sidebar.', 'superdraft' ),
-		'icon'        => '💡',
+	'writing_tips'    => [
+		'title' => __( 'Writing Tips', 'superdraft' ),
+		'desc'  => __( 'SEO and readability suggestions in the sidebar.', 'superdraft' ),
+		'icon'  => '💡',
 	],
 ];
 
@@ -156,22 +147,35 @@ if ( ! is_array( $enabled_modules ) ) {
 			</div>
 		</div>
 
-		<!-- Step 2: API Setup (merged key + test + model) -->
+		<!-- Step 2: API Setup -->
 		<div class="superdraft-wizard-step-content" data-step="2" style="display:none;">
 			<h2><?php esc_html_e( 'API Setup', 'superdraft' ); ?></h2>
 			<p class="description">
-				<?php esc_html_e( 'Enter your API key, test the connection, and select your default model.', 'superdraft' ); ?>
+				<?php esc_html_e( 'Enter your API key. Superdraft will test it before continuing and choose sensible models for each feature.', 'superdraft' ); ?>
 			</p>
 
 			<div class="superdraft-wizard-api-setup">
 				<div class="api-setup-section">
-					<h3><?php esc_html_e( '1. Enter Your API Key', 'superdraft' ); ?></h3>
+					<h3><?php esc_html_e( 'Enter Your API Key', 'superdraft' ); ?></h3>
 					<div class="form-field">
 						<label for="superdraft-wizard-api-key">
 							<?php esc_html_e( 'API Key', 'superdraft' ); ?>
 							<span class="required">*</span>
 						</label>
-						<input type="password" id="superdraft-wizard-api-key" class="regular-text" placeholder="" />
+						<input
+							type="text"
+							id="superdraft-wizard-api-key"
+							class="regular-text"
+							placeholder=""
+							autocomplete="off"
+							autocapitalize="off"
+							autocorrect="off"
+							spellcheck="false"
+							data-lpignore="true"
+							data-1p-ignore="true"
+							data-bwignore="true"
+							style="-webkit-text-security: disc;"
+						/>
 						<p class="description" id="superdraft-wizard-key-hint">
 							<?php esc_html_e( 'Enter your API key here.', 'superdraft' ); ?>
 						</p>
@@ -194,34 +198,10 @@ if ( ! is_array( $enabled_modules ) ) {
 							<?php esc_html_e( 'Enter your custom API endpoint details.', 'superdraft' ); ?>
 						</span>
 					</div>
-				</div>
 
-				<div class="api-setup-section">
-					<h3><?php esc_html_e( '2. Test Connection', 'superdraft' ); ?></h3>
-					<p class="description">
-						<?php esc_html_e( 'Click the button below to verify your API key works.', 'superdraft' ); ?>
-					</p>
-					<button type="button" class="button button-primary superdraft-wizard-test-btn">
-						<?php esc_html_e( 'Test Connection', 'superdraft' ); ?>
-					</button>
 					<div class="superdraft-wizard-test-result" style="display:none;">
 						<div class="test-result-icon"></div>
 						<div class="test-result-message"></div>
-					</div>
-				</div>
-
-				<div class="api-setup-section">
-					<h3><?php esc_html_e( '3. Choose Default Model', 'superdraft' ); ?></h3>
-					<div class="form-field">
-						<label for="superdraft-wizard-model">
-							<?php esc_html_e( 'Default Model', 'superdraft' ); ?>
-						</label>
-						<select id="superdraft-wizard-model" class="regular-text">
-							<option value=""><?php esc_html_e( 'Select a model...', 'superdraft' ); ?></option>
-						</select>
-						<p class="description">
-							<?php esc_html_e( 'This model will be used for all features. You can customize per feature later.', 'superdraft' ); ?>
-						</p>
 					</div>
 				</div>
 			</div>
@@ -265,7 +245,7 @@ if ( ! is_array( $enabled_modules ) ) {
 						<div class="module-preview">
 							<div class="module-preview-svg">
 								<?php
-								$svg_map = [
+								$svg_map  = [
 									'smart_compose'   => 'smart-compose.svg',
 									'autocomplete'    => 'autocomplete.svg',
 									'tags_categories' => 'auto-tags.svg',
@@ -274,9 +254,9 @@ if ( ! is_array( $enabled_modules ) ) {
 								];
 								$svg_file = $svg_map[ $key ] ?? '';
 								if ( $svg_file && file_exists( SUPERDRAFT_DIR . 'assets/admin/images/features/' . $svg_file ) ) :
-									echo file_get_contents( SUPERDRAFT_DIR . 'assets/admin/images/features/' . $svg_file ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+										echo file_get_contents( SUPERDRAFT_DIR . 'assets/admin/images/features/' . $svg_file ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents, WordPress.Security.EscapeOutput.OutputNotEscaped -- Local bundled SVG preview.
 								else :
-								?>
+									?>
 								<svg class="preview-placeholder" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
 									<rect x="10" y="10" width="180" height="80" rx="5" fill="#f0f6fc" />
 									<text x="100" y="55" text-anchor="middle" font-size="14" fill="#2271b1"><?php echo esc_html( $module['title'] ); ?></text>
@@ -296,9 +276,15 @@ if ( ! is_array( $enabled_modules ) ) {
 			</div>
 
 			<div class="carousel-dots">
-				<?php $module_index = 0; foreach ( $modules as $key => $module ) : ?>
+				<?php
+				$module_index = 0;
+				foreach ( $modules as $key => $module ) :
+					?>
 					<button type="button" class="carousel-dot" data-slide="<?php echo esc_attr( $module_index ); ?>" aria-label="<?php printf( /* translators: %s: Feature name */ esc_attr__( 'Feature: %s', 'superdraft' ), esc_attr( $module['title'] ) ); ?>" aria-current="<?php echo 0 === $module_index ? 'true' : 'false'; ?>"></button>
-				<?php $module_index++; endforeach; ?>
+					<?php
+					++$module_index;
+				endforeach;
+				?>
 			</div>
 
 			<div class="superdraft-wizard-actions">
@@ -358,7 +344,7 @@ if ( ! is_array( $enabled_modules ) ) {
 </div>
 
 <script type="text/javascript">
-// Pass recommended models and enabled modules to JS.
-var superdraftRecommendedModels = <?php echo wp_json_encode( $recommended_models ); ?>;
+// Pass enabled modules to JS.
+var superdraftWizardApiKeys = <?php echo wp_json_encode( $api_keys ); ?>;
 var superdraftEnabledModules = <?php echo wp_json_encode( $enabled_modules ); ?>;
 </script>

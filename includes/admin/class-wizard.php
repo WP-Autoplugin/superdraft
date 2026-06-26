@@ -36,7 +36,7 @@ class Wizard {
 	/**
 	 * Check if the wizard should be shown.
 	 *
-     * @return bool
+	 * @return bool
 	 */
 	public static function should_show_wizard() {
 		// If dismissed, don't show.
@@ -65,6 +65,7 @@ class Wizard {
 			return;
 		}
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin page check.
 		if ( isset( $_GET['page'] ) && 'superdraft-wizard' === sanitize_text_field( wp_unslash( $_GET['page'] ) ) ) {
 			return;
 		}
@@ -101,15 +102,12 @@ class Wizard {
 		wp_enqueue_style( 'superdraft-wizard-css', SUPERDRAFT_URL . 'assets/admin/css/wizard.css', [], SUPERDRAFT_VERSION );
 		wp_enqueue_script( 'superdraft-wizard-js', SUPERDRAFT_URL . 'assets/admin/js/dist/wizard.js', [ 'jquery' ], SUPERDRAFT_VERSION, true );
 
-		$models = Admin::get_models();
-
 		wp_localize_script(
 			'superdraft-wizard-js',
 			'superdraftWizard',
 			[
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
 				'nonce'    => wp_create_nonce( 'superdraft_wizard_nonce' ),
-				'models'   => $models,
 				'i18n'     => [
 					'invalidKey'        => __( 'Please enter a valid API key.', 'superdraft' ),
 					'testing'           => __( 'Testing connection...', 'superdraft' ),
@@ -163,10 +161,22 @@ class Wizard {
 		$result = $this->test_api_key( $provider, $api_key );
 
 		if ( is_wp_error( $result ) ) {
-			return new \WP_REST_Response( [ 'success' => false, 'message' => $result->get_error_message() ], 400 );
+			return new \WP_REST_Response(
+				[
+					'success' => false,
+					'message' => $result->get_error_message(),
+				],
+				400
+			);
 		}
 
-		return new \WP_REST_Response( [ 'success' => true, 'message' => __( 'Connection successful!', 'superdraft' ) ], 200 );
+		return new \WP_REST_Response(
+			[
+				'success' => true,
+				'message' => __( 'Connection successful!', 'superdraft' ),
+			],
+			200
+		);
 	}
 
 	/**
@@ -181,8 +191,6 @@ class Wizard {
 
 		$provider = isset( $_POST['provider'] ) ? sanitize_text_field( wp_unslash( $_POST['provider'] ) ) : '';
 		$api_key  = isset( $_POST['api_key'] ) ? sanitize_text_field( wp_unslash( $_POST['api_key'] ) ) : '';
-		$model    = isset( $_POST['model'] ) ? sanitize_text_field( wp_unslash( $_POST['model'] ) ) : '';
-
 		if ( empty( $provider ) || empty( $api_key ) ) {
 			wp_send_json_error( __( 'Invalid provider or API key.', 'superdraft' ) );
 		}
@@ -195,25 +203,93 @@ class Wizard {
 		$api_keys[ $provider ] = $api_key;
 		update_option( 'superdraft_api_keys', $api_keys );
 
-		// Also save the default model in settings.
+		// Save feature-specific model defaults in settings.
 		$settings = get_option( 'superdraft_settings', [] );
 		if ( ! is_array( $settings ) ) {
 			$settings = [];
 		}
 
-		// Set default model for all modules.
-		$modules = [ 'tags_categories', 'writing_tips', 'autocomplete', 'images' ];
-		foreach ( $modules as $module ) {
-			if ( isset( $settings[ $module ] ) ) {
-				$settings[ $module ]['model'] = $model;
-			} else {
-				$settings[ $module ] = [ 'model' => $model ];
-			}
+		$model_defaults = self::get_provider_model_defaults( $provider );
+		if ( ! isset( $settings['tags_categories'] ) || ! is_array( $settings['tags_categories'] ) ) {
+			$settings['tags_categories'] = [];
 		}
+		if ( ! isset( $settings['writing_tips'] ) || ! is_array( $settings['writing_tips'] ) ) {
+			$settings['writing_tips'] = [];
+		}
+		if ( ! isset( $settings['autocomplete'] ) || ! is_array( $settings['autocomplete'] ) ) {
+			$settings['autocomplete'] = [];
+		}
+		if ( ! isset( $settings['images'] ) || ! is_array( $settings['images'] ) ) {
+			$settings['images'] = [];
+		}
+
+		$settings['tags_categories']['model']                 = $model_defaults['tags_categories'];
+		$settings['tags_categories']['suggestions_context']   = 5;
+		$settings['writing_tips']['model']                    = $model_defaults['writing_tips'];
+		$settings['autocomplete']['model']                    = $model_defaults['autocomplete'];
+		$settings['autocomplete']['context_length']           = 1;
+		$settings['autocomplete']['smart_compose_model']      = $model_defaults['smart_compose'];
+		$settings['autocomplete']['smart_compose_max_tokens'] = 10;
+		$settings['images']['prompt_model']                   = $model_defaults['image_prompt'];
 
 		update_option( 'superdraft_settings', $settings );
 
 		wp_send_json_success( __( 'API key saved successfully.', 'superdraft' ) );
+	}
+
+	/**
+	 * Get provider-specific wizard model defaults.
+	 *
+	 * These favor low-latency models for inline UX, a stronger fast model for
+	 * autocomplete, and the strongest practical model for review-style features.
+	 *
+	 * @param string|null $provider Optional provider key.
+	 * @return array
+	 */
+	public static function get_provider_model_defaults( $provider = null ) {
+		$defaults = [
+			'openai'    => [
+				'smart_compose'   => 'gpt-5-nano',
+				'autocomplete'    => 'gpt-5.1-instant',
+				'tags_categories' => 'gpt-5.1-instant',
+				'writing_tips'    => 'gpt-5.2',
+				'image_prompt'    => 'gpt-5.1-instant',
+			],
+			'anthropic' => [
+				'smart_compose'   => 'claude-3-haiku-20240307',
+				'autocomplete'    => 'claude-3-5-haiku-20241022',
+				'tags_categories' => 'claude-3-5-haiku-20241022',
+				'writing_tips'    => 'claude-opus-4-5-20251101',
+				'image_prompt'    => 'claude-3-5-haiku-20241022',
+			],
+			'google'    => [
+				'smart_compose'   => 'gemini-2.5-flash-lite',
+				'autocomplete'    => 'gemini-2.5-flash',
+				'tags_categories' => 'gemini-2.5-flash',
+				'writing_tips'    => 'gemini-3-pro-preview',
+				'image_prompt'    => 'gemini-2.5-flash',
+			],
+			'xai'       => [
+				'smart_compose'   => 'grok-3-mini',
+				'autocomplete'    => 'grok-4-1-fast-non-reasoning',
+				'tags_categories' => 'grok-4-1-fast-non-reasoning',
+				'writing_tips'    => 'grok-4',
+				'image_prompt'    => 'grok-4-1-fast-non-reasoning',
+			],
+			'custom'    => [
+				'smart_compose'   => '',
+				'autocomplete'    => '',
+				'tags_categories' => '',
+				'writing_tips'    => '',
+				'image_prompt'    => '',
+			],
+		];
+
+		if ( null !== $provider ) {
+			return $defaults[ $provider ] ?? $defaults['custom'];
+		}
+
+		return $defaults;
 	}
 
 	/**
@@ -264,19 +340,19 @@ class Wizard {
 
 		switch ( $provider ) {
 			case 'openai':
-				$test_url = 'https://api.openai.com/v1/models';
+				$test_url                 = 'https://api.openai.com/v1/models';
 				$headers['Authorization'] = 'Bearer ' . $api_key;
 				break;
 			case 'anthropic':
-				$test_url = 'https://api.anthropic.com/v1/models';
-				$headers['x-api-key'] = $api_key;
+				$test_url                     = 'https://api.anthropic.com/v1/models';
+				$headers['x-api-key']         = $api_key;
 				$headers['anthropic-version'] = '2023-06-01';
 				break;
 			case 'google':
 				$test_url = 'https://generativelanguage.googleapis.com/v1beta/models?key=' . $api_key;
 				break;
 			case 'xai':
-				$test_url = 'https://api.x.ai/v1/models';
+				$test_url                 = 'https://api.x.ai/v1/models';
 				$headers['Authorization'] = 'Bearer ' . $api_key;
 				break;
 			case 'custom':
@@ -411,7 +487,7 @@ class Wizard {
 
 		wp_send_json_success(
 			[
-				'post_id' => $post_id,
+				'post_id'  => $post_id,
 				'edit_url' => admin_url( 'post.php?post=' . $post_id . '&action=edit' ),
 			]
 		);
@@ -427,7 +503,7 @@ class Wizard {
 			wp_send_json_error( __( 'You do not have permission to do this.', 'superdraft' ) );
 		}
 
-		$modules = isset( $_POST['modules'] ) ? array_map( 'sanitize_text_field', wp_unslash( (array) $_POST['modules'] ) ) : [];
+		$modules  = isset( $_POST['modules'] ) ? array_map( 'sanitize_text_field', wp_unslash( (array) $_POST['modules'] ) ) : [];
 		$settings = get_option( 'superdraft_settings', [] );
 
 		if ( ! is_array( $settings ) ) {
@@ -513,6 +589,7 @@ class Wizard {
 		}
 
 		// Don't show on the wizard page itself.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin page check.
 		if ( isset( $_GET['page'] ) && 'superdraft-wizard' === sanitize_text_field( wp_unslash( $_GET['page'] ) ) ) {
 			return;
 		}
