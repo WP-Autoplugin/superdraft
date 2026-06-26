@@ -585,7 +585,7 @@ input[type="checkbox"].module-checkbox {
 
 .module-preview {
 	border-radius: 8px;
-	overflow: hidden;
+	overflow: visible;
 	background: transparent;
 }
 
