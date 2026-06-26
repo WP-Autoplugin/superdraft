@@ -1,19 +1,19 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 220" width="100%" height="100%" style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+<svg class="sd-feature-svg sd-feature-smart-compose" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 220" width="100%" height="100%" style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
   <style>
     /* Base Skeleton Styles */
-    .skeleton-bg { fill: #f9fafb; }
-    .skeleton-static { fill: #e5e7eb; rx: 4px; }
-    .skeleton-text { fill: #9ca3af; rx: 4px; }
-    .skeleton-suggest { fill: #d1d5db; rx: 4px; }
-    .caret { stroke: #3b82f6; stroke-width: 2; stroke-linecap: round; }
+    .sd-feature-smart-compose .skeleton-bg { fill: #f9fafb; }
+    .sd-feature-smart-compose .skeleton-static { fill: #e5e7eb; rx: 4px; }
+    .sd-feature-smart-compose .skeleton-text { fill: #9ca3af; rx: 4px; }
+    .sd-feature-smart-compose .skeleton-suggest { fill: #d1d5db; rx: 4px; }
+    .sd-feature-smart-compose .caret { stroke: #3b82f6; stroke-width: 2; stroke-linecap: round; }
     
     /* New: The 'Pop' Halo effect */
-    .pop-halo { fill: none; stroke: #3b82f6; stroke-width: 1.5; rx: 6px; opacity: 0; }
+    .sd-feature-smart-compose .pop-halo { fill: none; stroke: #3b82f6; stroke-width: 1.5; rx: 6px; opacity: 0; }
 
     /* --- ANIMATION TIMELINE (4.5 Second Loop) --- */
     
-    /* 1. Active Text Typing & Expansion */
-    @keyframes type-sequence {
+    /* 1. Active Text Typing and Expansion */
+    @keyframes sd-smart-compose-type-sequence {
       0%, 10%   { width: 45px; fill: #9ca3af; }  /* Initial state */
       35%, 65%  { width: 125px; fill: #9ca3af; } /* User types and pauses */
       67%       { fill: #3b82f6; }               /* FLASH: Bright blue at instant of 'Tab' */
@@ -22,7 +22,7 @@
     }
 
     /* 2. Caret Movement tracking the text edge */
-    @keyframes caret-move {
+    @keyframes sd-smart-compose-caret-move {
       0%, 10%   { transform: translateX(45px); }
       35%, 65%  { transform: translateX(125px); }
       72%, 92%  { transform: translateX(215px); }
@@ -30,20 +30,20 @@
     }
 
     /* 3. Caret Blinking Effect */
-    @keyframes caret-blink {
+    @keyframes sd-smart-compose-caret-blink {
       0%, 49%   { opacity: 1; }
       50%, 99%  { opacity: 0; }
     }
 
     /* 4. Smart Suggestion Behavior (Unchanged) */
-    @keyframes suggestion-behavior {
+    @keyframes sd-smart-compose-suggestion-behavior {
       0%, 39%   { opacity: 0; }    /* Hidden while typing */
       42%, 65%  { opacity: 0.45; } /* AI Suggestion pops up faintly */
       67%, 100% { opacity: 0; }    /* Vanishes instantly when accepted */
     }
 
     /* 5. NEW: The Halo Pulse (Visualizing the 'Accept' action) */
-    @keyframes pop-pulse {
+    @keyframes sd-smart-compose-pop-pulse {
       0%, 65%   { opacity: 0; transform: scale(0.6); } /* Hidden, pre-scaled down */
       66%       { opacity: 0.8; transform: scale(0.6); } /* Instant trigger */
       72%       { opacity: 0; transform: scale(1.1); }   /* Scale up and fade out quickly */
@@ -51,11 +51,11 @@
     }
 
     /* Apply classes to elements */
-    .anim-text { animation: type-sequence 4.5s infinite cubic-bezier(0.4, 0, 0.2, 1); }
-    .anim-caret { animation: caret-move 4.5s infinite cubic-bezier(0.4, 0, 0.2, 1); }
-    .anim-blink { animation: caret-blink 0.8s infinite; }
-    .anim-suggest { animation: suggestion-behavior 4.5s infinite ease-in-out; }
-    .anim-halo { animation: pop-pulse 4.5s infinite ease-out; transform-origin: 215px 115px; } /* Pulse centered on new caret pos */
+    .sd-feature-smart-compose .anim-text { animation: sd-smart-compose-type-sequence 4.5s infinite cubic-bezier(0.4, 0, 0.2, 1); }
+    .sd-feature-smart-compose .anim-caret { animation: sd-smart-compose-caret-move 4.5s infinite cubic-bezier(0.4, 0, 0.2, 1); }
+    .sd-feature-smart-compose .anim-blink { animation: sd-smart-compose-caret-blink 0.8s infinite; }
+    .sd-feature-smart-compose .anim-suggest { animation: sd-smart-compose-suggestion-behavior 4.5s infinite ease-in-out; }
+    .sd-feature-smart-compose .anim-halo { animation: sd-smart-compose-pop-pulse 4.5s infinite ease-out; transform-origin: 215px 115px; } /* Pulse centered on new caret pos */
   </style>
 
   <g id="window-header">

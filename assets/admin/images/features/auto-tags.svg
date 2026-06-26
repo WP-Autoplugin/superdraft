@@ -1,27 +1,27 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 220" width="100%" height="100%" style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+<svg class="sd-feature-svg sd-feature-auto-tags" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 220" width="100%" height="100%" style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
   <style>
     /* Base Skeleton Styles */
-    .skeleton-title { fill: #9ca3af; rx: 4px; }
-    .skeleton-static { fill: #e5e7eb; rx: 4px; }
-    .divider { fill: #f3f4f6; rx: 1px; }
+    .sd-feature-auto-tags .skeleton-title { fill: #9ca3af; rx: 4px; }
+    .sd-feature-auto-tags .skeleton-static { fill: #e5e7eb; rx: 4px; }
+    .sd-feature-auto-tags .divider { fill: #f3f4f6; rx: 1px; }
     
-    /* Tag & Halo Styles */
-    .pop-halo { fill: none; stroke: #3b82f6; stroke-width: 1.5; rx: 11px; opacity: 0; }
-    .tag-inner { fill: #ffffff; }
+    /* Tag and Halo Styles */
+    .sd-feature-auto-tags .pop-halo { fill: none; stroke: #3b82f6; stroke-width: 1.5; rx: 11px; opacity: 0; }
+    .sd-feature-auto-tags .tag-inner { fill: #ffffff; }
 
     /* --- ANIMATION TIMELINE (6 Second Loop) --- */
 
     /* Tag 1 Animations (Triggers at 15%) */
-    @keyframes tag1-visibility {
+    @keyframes sd-auto-tags-tag1-visibility {
       0%, 14%   { opacity: 0; transform: translateY(5px); }
       15%, 85%  { opacity: 1; transform: translateY(0); }
       90%, 100% { opacity: 0; transform: translateY(0); }
     }
-    @keyframes tag1-color {
+    @keyframes sd-auto-tags-tag1-color {
       0%, 15%   { fill: #3b82f6; } /* Pops in bright blue */
       20%, 100% { fill: #d1d5db; } /* Settles to neutral gray */
     }
-    @keyframes halo1-pulse {
+    @keyframes sd-auto-tags-halo1-pulse {
       0%, 14%   { opacity: 0; transform: scale(0.8); }
       15%       { opacity: 0.8; transform: scale(0.8); }
       22%       { opacity: 0; transform: scale(1.3); }
@@ -29,16 +29,16 @@
     }
 
     /* Tag 2 Animations (Triggers at 30%) */
-    @keyframes tag2-visibility {
+    @keyframes sd-auto-tags-tag2-visibility {
       0%, 29%   { opacity: 0; transform: translateY(5px); }
       30%, 85%  { opacity: 1; transform: translateY(0); }
       90%, 100% { opacity: 0; transform: translateY(0); }
     }
-    @keyframes tag2-color {
+    @keyframes sd-auto-tags-tag2-color {
       0%, 30%   { fill: #3b82f6; }
       35%, 100% { fill: #d1d5db; }
     }
-    @keyframes halo2-pulse {
+    @keyframes sd-auto-tags-halo2-pulse {
       0%, 29%   { opacity: 0; transform: scale(0.8); }
       30%       { opacity: 0.8; transform: scale(0.8); }
       37%       { opacity: 0; transform: scale(1.3); }
@@ -46,16 +46,16 @@
     }
 
     /* Tag 3 Animations (Triggers at 45%) */
-    @keyframes tag3-visibility {
+    @keyframes sd-auto-tags-tag3-visibility {
       0%, 44%   { opacity: 0; transform: translateY(5px); }
       45%, 85%  { opacity: 1; transform: translateY(0); }
       90%, 100% { opacity: 0; transform: translateY(0); }
     }
-    @keyframes tag3-color {
+    @keyframes sd-auto-tags-tag3-color {
       0%, 45%   { fill: #3b82f6; }
       50%, 100% { fill: #d1d5db; }
     }
-    @keyframes halo3-pulse {
+    @keyframes sd-auto-tags-halo3-pulse {
       0%, 44%   { opacity: 0; transform: scale(0.8); }
       45%       { opacity: 0.8; transform: scale(0.8); }
       52%       { opacity: 0; transform: scale(1.3); }
@@ -63,17 +63,17 @@
     }
 
     /* Apply classes */
-    .anim-tag1-vis { animation: tag1-visibility 6s infinite cubic-bezier(0.4, 0, 0.2, 1); }
-    .anim-tag1-col { animation: tag1-color 6s infinite ease-out; }
-    .anim-halo1    { animation: halo1-pulse 6s infinite ease-out; transform-origin: 57.5px 176px; }
+    .sd-feature-auto-tags .anim-tag1-vis { animation: sd-auto-tags-tag1-visibility 6s infinite cubic-bezier(0.4, 0, 0.2, 1); }
+    .sd-feature-auto-tags .anim-tag1-col { animation: sd-auto-tags-tag1-color 6s infinite ease-out; }
+    .sd-feature-auto-tags .anim-halo1    { animation: sd-auto-tags-halo1-pulse 6s infinite ease-out; transform-origin: 57.5px 176px; }
 
-    .anim-tag2-vis { animation: tag2-visibility 6s infinite cubic-bezier(0.4, 0, 0.2, 1); }
-    .anim-tag2-col { animation: tag2-color 6s infinite ease-out; }
-    .anim-halo2    { animation: halo2-pulse 6s infinite ease-out; transform-origin: 140px 176px; }
+    .sd-feature-auto-tags .anim-tag2-vis { animation: sd-auto-tags-tag2-visibility 6s infinite cubic-bezier(0.4, 0, 0.2, 1); }
+    .sd-feature-auto-tags .anim-tag2-col { animation: sd-auto-tags-tag2-color 6s infinite ease-out; }
+    .sd-feature-auto-tags .anim-halo2    { animation: sd-auto-tags-halo2-pulse 6s infinite ease-out; transform-origin: 140px 176px; }
 
-    .anim-tag3-vis { animation: tag3-visibility 6s infinite cubic-bezier(0.4, 0, 0.2, 1); }
-    .anim-tag3-col { animation: tag3-color 6s infinite ease-out; }
-    .anim-halo3    { animation: halo3-pulse 6s infinite ease-out; transform-origin: 220px 176px; }
+    .sd-feature-auto-tags .anim-tag3-vis { animation: sd-auto-tags-tag3-visibility 6s infinite cubic-bezier(0.4, 0, 0.2, 1); }
+    .sd-feature-auto-tags .anim-tag3-col { animation: sd-auto-tags-tag3-color 6s infinite ease-out; }
+    .sd-feature-auto-tags .anim-halo3    { animation: sd-auto-tags-halo3-pulse 6s infinite ease-out; transform-origin: 220px 176px; }
   </style>
 
   <g id="window-header">
