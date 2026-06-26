@@ -462,16 +462,22 @@
 	flex: 1;
 	max-width: 600px;
 	overflow: hidden;
+	position: relative;
+	width: 100%;
 }
 
 .carousel-slide-wrapper {
 	display: flex;
+	width: calc(100% * var(--total-slides, 1));
 	transition: transform 0.4s ease-in-out;
 }
 
 .carousel-slide-wrapper > .superdraft-wizard-module-card {
-	flex: 0 0 100%;
-	width: 100%;
+	flex: 0 0 calc(100% / var(--total-slides, 1));
+	width: calc(100% / var(--total-slides, 1));
+	min-width: 0;
+	box-sizing: border-box;
+	max-width: calc(100% / var(--total-slides, 1));
 }
 
 .superdraft-wizard-module-card {
@@ -512,8 +518,20 @@
 	gap: 10px;
 }
 
-.module-checkbox {
-	display: none;
+.module-toggle .module-checkbox,
+input[type="checkbox"].module-checkbox {
+	position: absolute !important;
+	left: -9999px !important;
+	top: -9999px !important;
+	opacity: 0 !important;
+	width: 0 !important;
+	height: 0 !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	border: none !important;
+	appearance: none !important;
+	-moz-appearance: none !important;
+	-webkit-appearance: none !important;
 }
 
 .toggle-label {
@@ -540,11 +558,11 @@
 	box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
 
-.module-checkbox:checked + .toggle-label {
+.module-toggle .module-checkbox:checked + .toggle-label {
 	background: #2271b1;
 }
 
-.module-checkbox:checked + .toggle-label::after {
+.module-toggle .module-checkbox:checked + .toggle-label::after {
 	transform: translateX(28px);
 }
 

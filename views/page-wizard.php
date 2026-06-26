@@ -257,10 +257,7 @@ if ( ! is_array( $enabled_modules ) ) {
 							<h3><?php echo esc_html( $module['title'] ); ?></h3>
 							<div class="module-toggle">
 								<input type="checkbox" id="module-<?php echo esc_attr( $key ); ?>" class="module-checkbox" checked />
-								<label for="module-<?php echo esc_attr( $key ); ?>" class="toggle-label">
-									<span class="toggle-track"></span>
-									<span class="toggle-thumb"></span>
-								</label>
+								<label for="module-<?php echo esc_attr( $key ); ?>" class="toggle-label"></label>
 								<span class="toggle-status"><?php esc_html_e( 'Enabled', 'superdraft' ); ?></span>
 							</div>
 						</div>

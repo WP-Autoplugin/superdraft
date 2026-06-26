@@ -131,6 +131,8 @@
 				// Wrap cards in a sliding container
 				var $wrapper = $('<div class="carousel-slide-wrapper"></div>');
 				$cards.wrapAll($wrapper);
+				// Set CSS variable for width calculation
+				$wrapper.css('--total-slides', this.totalSlides);
 				this.updateCarousel();
 			} else {
 				$('.carousel-nav').hide();
