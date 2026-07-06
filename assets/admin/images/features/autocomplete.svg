@@ -9,15 +9,17 @@
     .sd-feature-autocomplete .dropdown-box { fill: #ffffff; stroke: #e5e7eb; stroke-width: 1; rx: 6px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.05)); }
     .sd-feature-autocomplete .dropdown-item { fill: #cbd5e1; rx: 3px; }
     .sd-feature-autocomplete .dropdown-highlight { fill: #eff6ff; rx: 4px; opacity: 0; }
+    .sd-feature-autocomplete .pop-halo { fill: none; stroke: #3b82f6; stroke-width: 1.5; rx: 6px; opacity: 0; }
 
     /* --- ANIMATION TIMELINE (6.5 Second Loop) --- */
     
     /* 1. Main Text Typing and Large Expansion (Sentence Injection shifted back for longer navigation) */
     @keyframes sd-autocomplete-multi-type-sequence {
-      0%, 7%    { width: 35px; }   /* Initial short text */
-      24%, 74%  { width: 95px; }   /* User types, triggers dropdown, and navigates */
-      80%, 94%  { width: 285px; }  /* "Enter" pressed: Whole sentence is injected */
-      98%, 100% { width: 35px; }   /* Reset */
+      0%, 7%    { width: 35px; fill: #9ca3af; }   /* Initial short text */
+      24%, 74%  { width: 95px; fill: #9ca3af; }   /* User types, triggers dropdown, and navigates */
+      77%       { width: 285px; fill: #3b82f6; }   /* "Enter" pressed: New text pops blue */
+      82%, 94%  { width: 285px; fill: #9ca3af; }   /* Suggestion is inserted and returns to normal */
+      98%, 100% { width: 35px; fill: #9ca3af; }    /* Reset */
     }
 
     /* 2. Caret Tracking */
@@ -50,12 +52,21 @@
       75%, 100% { opacity: 0; transform: translateY(18px); } /* Fades out as option is chosen */
     }
 
+    /* 6. Blue pop pulse for the selected completion insertion */
+    @keyframes sd-autocomplete-pop-pulse {
+      0%, 74%   { opacity: 0; transform: scale(0.6); }
+      76%       { opacity: 0.8; transform: scale(0.6); }
+      82%       { opacity: 0; transform: scale(1.1); }
+      100%      { opacity: 0; }
+    }
+
     /* Apply classes to elements */
     .sd-feature-autocomplete .anim-text { animation: sd-autocomplete-multi-type-sequence 6.5s infinite cubic-bezier(0.4, 0, 0.2, 1); }
     .sd-feature-autocomplete .anim-caret { animation: sd-autocomplete-multi-caret-move 6.5s infinite cubic-bezier(0.4, 0, 0.2, 1); }
     .sd-feature-autocomplete .anim-blink { animation: sd-autocomplete-multi-caret-blink 0.8s infinite; }
     .sd-feature-autocomplete .anim-dropdown { animation: sd-autocomplete-dropdown-fade 6.5s infinite cubic-bezier(0.4, 0, 1, 1); transform-origin: 95px 125px; }
     .sd-feature-autocomplete .anim-highlighter { animation: sd-autocomplete-selection-hesitation 6.5s infinite cubic-bezier(0.4, 0, 0.2, 1); }
+    .sd-feature-autocomplete .anim-halo { animation: sd-autocomplete-pop-pulse 6.5s infinite ease-out; transform-origin: 245px 115px; }
   </style>
 
   <g id="window-header">
@@ -69,6 +80,8 @@
     <rect x="25" y="80" width="210" height="10" class="skeleton-static" />
 
     <rect x="25" y="110" height="10" class="skeleton-text anim-text" />
+
+    <rect x="225" y="105" width="40" height="20" class="pop-halo anim-halo" />
 
     <g class="anim-caret">
       <line x1="28" y1="107" x2="28" y2="123" class="caret anim-blink" />

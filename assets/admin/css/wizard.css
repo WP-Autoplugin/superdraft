@@ -550,22 +550,25 @@
 	display: flex;
 	align-items: center;
 	gap: 10px;
+	position: relative;
 }
 
 .module-toggle .module-checkbox,
 input[type="checkbox"].module-checkbox {
 	position: absolute !important;
-	left: -9999px !important;
-	top: -9999px !important;
+	left: 0 !important;
+	top: 0 !important;
 	opacity: 0 !important;
-	width: 0 !important;
-	height: 0 !important;
+	width: 60px !important;
+	height: 32px !important;
 	margin: 0 !important;
 	padding: 0 !important;
 	border: none !important;
 	appearance: none !important;
 	-moz-appearance: none !important;
 	-webkit-appearance: none !important;
+	cursor: pointer !important;
+	z-index: 1;
 }
 
 .toggle-label {
