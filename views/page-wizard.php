@@ -152,9 +152,6 @@ if ( ! is_array( $enabled_modules ) ) {
 				</div>
 				<?php endforeach; ?>
 			</div>
-			<p class="description" style="margin-top:10px;">
-				<?php esc_html_e( 'You can add custom models in the Settings page after setup.', 'superdraft' ); ?>
-			</p>
 
 			<div class="superdraft-wizard-actions">
 				<a href="<?php echo esc_url( admin_url( 'admin.php?page=superdraft-settings' ) ); ?>" class="button button-secondary">
