@@ -69,6 +69,64 @@ jQuery(document).ready(function($) {
     // Custom models
     let customModels = JSON.parse($('#superdraft_custom_models').val() || '[]');
 
+    $(document).on('click', '.superdraft-test-api-key', function() {
+        const $button = $(this);
+        const $field = $button.closest('.superdraft-api-key-field');
+        const $input = $field.find('input');
+        const originalText = $button.data('original-text') || $button.text();
+        const apiKey = ($input.val() || '').trim();
+        const resetTimer = $button.data('reset-timer');
+
+        function setTemporaryButtonState(text, className) {
+            $button
+                .removeClass('superdraft-test-ok superdraft-test-fail')
+                .addClass(className)
+                .prop('disabled', false)
+                .text(text);
+
+            $button.data('reset-timer', setTimeout(function() {
+                $button
+                    .removeClass('superdraft-test-ok superdraft-test-fail')
+                    .text(originalText);
+            }, 3000));
+        }
+
+        $button.data('original-text', originalText);
+        if (resetTimer) {
+            clearTimeout(resetTimer);
+        }
+        $button.removeClass('superdraft-test-ok superdraft-test-fail');
+
+        if (!apiKey) {
+            setTemporaryButtonState(superdraft.i18n.testFail, 'superdraft-test-fail');
+            return;
+        }
+
+        $button
+            .prop('disabled', true)
+            .text(superdraft.i18n.testing);
+
+        $.ajax({
+            url: superdraft.ajax_url || ajaxurl,
+            method: 'POST',
+            data: {
+                action: 'superdraft_test_api_key',
+                provider: $button.data('provider'),
+                api_key: apiKey,
+                nonce: superdraft.nonce
+            },
+            success: function(response) {
+                setTemporaryButtonState(
+                    response.success ? superdraft.i18n.testOk : superdraft.i18n.testFail,
+                    response.success ? 'superdraft-test-ok' : 'superdraft-test-fail'
+                );
+            },
+            error: function() {
+                setTemporaryButtonState(superdraft.i18n.testFail, 'superdraft-test-fail');
+            }
+        });
+    });
+
     function updateCustomModelsList() {
         const $list = $('.custom-models-items').empty();
         customModels.forEach((model, index) => {

@@ -10,6 +10,34 @@
 	margin-top: 0;
 }
 
+.superdraft-api-key-field {
+	display: flex;
+	gap: 8px;
+	align-items: flex-start;
+	max-width: 800px;
+}
+
+.superdraft-api-key-field .large-text {
+	flex: 1 1 auto;
+	max-width: 640px;
+}
+
+.superdraft-api-key-field .button {
+	flex: 0 0 auto;
+}
+
+.superdraft-api-key-field .superdraft-test-ok {
+	border-color: #008a20;
+	color: #008a20;
+	font-weight: 600;
+}
+
+.superdraft-api-key-field .superdraft-test-fail {
+	border-color: #b32d2e;
+	color: #b32d2e;
+	font-weight: 600;
+}
+
 tr.superdraft-module-toggle-row:has(input:checked):first-child th,
 tr.superdraft-module-toggle-row:has(input:checked):first-child td {
 	border-bottom: 1px solid #ccd0d4;

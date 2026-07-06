@@ -13,30 +13,54 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 ?>
+<?php $api_keys = get_option( 'superdraft_api_keys', [] ); ?>
 <table class="form-table">
 	<tr valign="top">
 		<th scope="row"><?php esc_html_e( 'OpenAI API Key', 'superdraft' ); ?></th>
-		<td><input type="password" name="superdraft_api_keys[openai]" value="<?php echo esc_attr( get_option( 'superdraft_api_keys' )['openai'] ); ?>" class="large-text" /></td>
+		<td>
+			<div class="superdraft-api-key-field">
+				<input type="password" name="superdraft_api_keys[openai]" value="<?php echo esc_attr( $api_keys['openai'] ?? '' ); ?>" class="large-text" />
+				<button type="button" class="button superdraft-test-api-key" data-provider="openai"><?php esc_html_e( 'Test', 'superdraft' ); ?></button>
+			</div>
+		</td>
 	</tr>
 	<tr valign="top">
 		<th scope="row"><?php esc_html_e( 'Anthropic API Key', 'superdraft' ); ?></th>
-		<td><input type="password" name="superdraft_api_keys[anthropic]" value="<?php echo esc_attr( get_option( 'superdraft_api_keys' )['anthropic'] ); ?>" class="large-text" /></td>
+		<td>
+			<div class="superdraft-api-key-field">
+				<input type="password" name="superdraft_api_keys[anthropic]" value="<?php echo esc_attr( $api_keys['anthropic'] ?? '' ); ?>" class="large-text" />
+				<button type="button" class="button superdraft-test-api-key" data-provider="anthropic"><?php esc_html_e( 'Test', 'superdraft' ); ?></button>
+			</div>
+		</td>
 	</tr>
 	<tr valign="top">
 		<th scope="row"><?php esc_html_e( 'Google Gemini API Key', 'superdraft' ); ?></th>
-		<td><input type="password" name="superdraft_api_keys[google]" value="<?php echo esc_attr( get_option( 'superdraft_api_keys' )['google'] ); ?>" class="large-text" /></td>
+		<td>
+			<div class="superdraft-api-key-field">
+				<input type="password" name="superdraft_api_keys[google]" value="<?php echo esc_attr( $api_keys['google'] ?? '' ); ?>" class="large-text" />
+				<button type="button" class="button superdraft-test-api-key" data-provider="google"><?php esc_html_e( 'Test', 'superdraft' ); ?></button>
+			</div>
+		</td>
 	</tr>
 	<tr valign="top">
 		<th scope="row"><?php esc_html_e( 'xAI API Key', 'superdraft' ); ?></th>
-		<td><input type="password" name="superdraft_api_keys[xai]" value="<?php echo esc_attr( get_option( 'superdraft_api_keys' )['xai'] ); ?>" class="large-text" /></td>
+		<td>
+			<div class="superdraft-api-key-field">
+				<input type="password" name="superdraft_api_keys[xai]" value="<?php echo esc_attr( $api_keys['xai'] ?? '' ); ?>" class="large-text" />
+				<button type="button" class="button superdraft-test-api-key" data-provider="xai"><?php esc_html_e( 'Test', 'superdraft' ); ?></button>
+			</div>
+		</td>
 	</tr>
 	<tr valign="top">
 		<th scope="row"><?php esc_html_e( 'Replicate API Token', 'superdraft' ); ?></th>
 		<td>
-			<input type="password"
-				name="superdraft_api_keys[replicate]"
-				value="<?php echo esc_attr( get_option( 'superdraft_api_keys' )['replicate'] ); ?>"
-				class="large-text" />
+			<div class="superdraft-api-key-field">
+				<input type="password"
+					name="superdraft_api_keys[replicate]"
+					value="<?php echo esc_attr( $api_keys['replicate'] ?? '' ); ?>"
+					class="large-text" />
+				<button type="button" class="button superdraft-test-api-key" data-provider="replicate"><?php esc_html_e( 'Test', 'superdraft' ); ?></button>
+			</div>
 			<p class="description">
 				<?php
 				printf(

@@ -38,6 +38,7 @@ class Admin {
 		// AJAX actions for custom models.
 		add_action( 'wp_ajax_superdraft_add_model', [ $this, 'ajax_add_model' ] );
 		add_action( 'wp_ajax_superdraft_remove_model', [ $this, 'ajax_remove_model' ] );
+		add_action( 'wp_ajax_superdraft_test_api_key', [ $this, 'ajax_test_api_key' ] );
 
 		// Initialize enabled modules.
 		$modules = [
@@ -260,7 +261,7 @@ class Admin {
 			wp_enqueue_style( 'superdraft-admin-css', SUPERDRAFT_URL . 'assets/admin/css/settings.css', [], SUPERDRAFT_VERSION );
 
 			// Enqueue JS.
-			wp_enqueue_script( 'superdraft-admin-js', SUPERDRAFT_URL . 'assets/admin/js/settings.js', [], SUPERDRAFT_VERSION, true );
+			wp_enqueue_script( 'superdraft-admin-js', SUPERDRAFT_URL . 'assets/admin/js/settings.js', [ 'jquery' ], SUPERDRAFT_VERSION, true );
 
 			// Localize script for AJAX and i18n.
 			wp_localize_script(
@@ -270,15 +271,19 @@ class Admin {
 					'ajax_url' => admin_url( 'admin-ajax.php' ),
 					'nonce'    => wp_create_nonce( 'superdraft_settings_nonce' ),
 					'i18n'     => [
-						'details'          => __( 'Details', 'superdraft' ),
-						'url'              => __( 'URL', 'superdraft' ),
-						'modelParameter'   => __( 'Model Parameter', 'superdraft' ),
-						'apiKey'           => __( 'API Key', 'superdraft' ),
-						'headers'          => __( 'Headers', 'superdraft' ),
-						'remove'           => __( 'Remove', 'superdraft' ),
-						'fillOutFields'    => __( 'Please fill out all required fields.', 'superdraft' ),
-						'removeModel'      => __( 'Are you sure you want to remove this model?', 'superdraft' ),
-						'errorSavingModel' => __( 'Error saving model', 'superdraft' ),
+						'details'           => __( 'Details', 'superdraft' ),
+						'url'               => __( 'URL', 'superdraft' ),
+						'modelParameter'    => __( 'Model Parameter', 'superdraft' ),
+						'apiKey'            => __( 'API Key', 'superdraft' ),
+						'headers'           => __( 'Headers', 'superdraft' ),
+						'remove'            => __( 'Remove', 'superdraft' ),
+						'fillOutFields'     => __( 'Please fill out all required fields.', 'superdraft' ),
+						'removeModel'       => __( 'Are you sure you want to remove this model?', 'superdraft' ),
+						'errorSavingModel'  => __( 'Error saving model', 'superdraft' ),
+						'testConnection'    => __( 'Test', 'superdraft' ),
+						'testing'           => __( 'Testing...', 'superdraft' ),
+						'testOk'            => __( 'OK', 'superdraft' ),
+						'testFail'          => __( 'FAIL', 'superdraft' ),
 					],
 				]
 			);
@@ -335,6 +340,32 @@ class Admin {
 			'apiKey'         => isset( $model['apiKey'] ) ? sanitize_text_field( $model['apiKey'] ) : '',
 			'headers'        => isset( $model['headers'] ) ? array_map( 'sanitize_text_field', (array) $model['headers'] ) : [],
 		];
+	}
+
+	/**
+	 * AJAX handler for testing an API key from Settings.
+	 */
+	public function ajax_test_api_key() {
+		check_ajax_referer( 'superdraft_settings_nonce', 'nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( __( 'You do not have permission to do this.', 'superdraft' ) );
+		}
+
+		$provider = isset( $_POST['provider'] ) ? sanitize_key( wp_unslash( $_POST['provider'] ) ) : '';
+		$api_key  = isset( $_POST['api_key'] ) ? sanitize_text_field( wp_unslash( $_POST['api_key'] ) ) : '';
+
+		if ( empty( $provider ) || empty( $api_key ) ) {
+			wp_send_json_error( __( 'Invalid provider or API key.', 'superdraft' ) );
+		}
+
+		$result = API_Key_Tester::test( $provider, $api_key );
+
+		if ( is_wp_error( $result ) ) {
+			wp_send_json_error( $result->get_error_message() );
+		}
+
+		wp_send_json_success( __( 'Connection successful! Your API key is valid.', 'superdraft' ) );
 	}
 
 	/**
