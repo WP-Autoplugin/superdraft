@@ -23,6 +23,8 @@ Superdraft is a free WordPress plugin that enhances your content creation workfl
 
 ### AI-Generated Tags & Categories
 
+<img src="assets/admin/images/features/auto-tags.svg" alt="Animated preview of AI-generated tags and categories" width="520">
+
 Suggests new tags and categories based on your content, and automatically chooses the right tags and categories for your posts.
 
 This feature also works in **bulk edit** mode: select multiple posts and let Superdraft set tags and categories for all of them in a background process. To avoid API rate limits, bulk processing is done with a delay between each post, which can be adjusted with the `superdraft_bulk_process_interval` filter (see the *Action and Filter Hooks* section below).
@@ -56,6 +58,8 @@ Features include:
 
 ### AI Topic & Writing Recommendations
 
+<img src="assets/admin/images/features/writing-tips.svg" alt="Animated preview of AI topic and writing recommendations" width="520">
+
 Get real-time writing assistance and content improvement tips directly in your editor sidebar. Features include:
 
 - Writing tips and topic suggestions based on your content
@@ -76,6 +80,8 @@ Get real-time writing assistance and content improvement tips directly in your e
 </details>
 
 ### AI Autocomplete
+
+<img src="assets/admin/images/features/autocomplete.svg" alt="Animated preview of AI autocomplete" width="520">
 
 Context-aware text completion suggestions that appear in a dropdown, after typing a customizable trigger prefix. Features include:
 
@@ -98,6 +104,8 @@ Context-aware text completion suggestions that appear in a dropdown, after typin
 
 ### Smart Compose
 
+<img src="assets/admin/images/features/smart-compose.svg" alt="Animated preview of Smart Compose" width="520">
+
 Inline sentence completion that works as you type, similar to Gmail's Smart Compose. Features include:
 
 - Real-time context-aware completion suggestions that appear as you write
@@ -116,6 +124,8 @@ Inline sentence completion that works as you type, similar to Gmail's Smart Comp
 </details>
 
 ### Image Generation & Editing
+
+<img src="assets/admin/images/features/image-gen.svg" alt="Animated preview of image generation and editing" width="520">
 
 Generate and edit featured images directly in the post editor using AI. Features include:
 

@@ -26,6 +26,10 @@ define( 'SUPERDRAFT_URL', plugin_dir_url( __FILE__ ) );
 // Include the autoloader.
 require_once SUPERDRAFT_DIR . 'vendor/autoload.php';
 
+// Include wizard class explicitly (in case autoloader hasn't been regenerated).
+require_once SUPERDRAFT_DIR . 'includes/admin/class-api-key-tester.php';
+require_once SUPERDRAFT_DIR . 'includes/admin/class-wizard.php';
+
 // Load the Action Scheduler.
 require_once SUPERDRAFT_DIR . 'vendor/woocommerce/action-scheduler/action-scheduler.php';
 
@@ -35,11 +39,17 @@ register_activation_hook( __FILE__, [ 'Superdraft\Logger', 'activate' ] );
 // Set default options.
 register_activation_hook( __FILE__, [ 'Superdraft\Admin', 'set_default_options' ] );
 
+// Trigger wizard redirect on activation.
+register_activation_hook( __FILE__, [ 'Superdraft\Wizard', 'trigger_redirect' ] );
+
 /**
  * Initialize the plugin.
  */
 function superdraft_init() {
 	load_plugin_textdomain( 'superdraft', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 	$admin = new Superdraft\Admin();
+
+	// Initialize wizard.
+	new Superdraft\Wizard();
 }
 add_action( 'plugins_loaded', 'superdraft_init' );

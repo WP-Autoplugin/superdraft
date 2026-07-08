@@ -1,0 +1,137 @@
+<svg class="sd-feature-svg sd-feature-writing-tips" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 220" width="100%" height="100%" style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+  <style>
+    /* Base Skeleton Styles */
+    .sd-feature-writing-tips .skeleton-static { fill: #e5e7eb; rx: 4px; }
+    .sd-feature-writing-tips .btn-main { fill: #3b82f6; rx: 6px; }
+    .sd-feature-writing-tips .skeleton-light { fill: #f3f4f6; rx: 4px; }
+    
+    /* Pop Halo and Notification Base */
+    .sd-feature-writing-tips .pop-halo { fill: none; stroke: #3b82f6; stroke-width: 1.5; rx: 6px; opacity: 0; }
+    .sd-feature-writing-tips .notif-block { fill: #ffffff; stroke: #f3f4f6; stroke-width: 1; rx: 6px; opacity: 0; }
+    .sd-feature-writing-tips .notif-text { fill: #d1d5db; rx: 3px; }
+    
+    /* Notification Icons */
+    .sd-feature-writing-tips .ico-suc { fill: #10b981; } /* Green ✅ */
+    .sd-feature-writing-tips .ico-err { fill: #ef4444; } /* Red ❌ */
+    .sd-feature-writing-tips .ico-war { fill: #f59e0b; } /* Yellow ⚠️ */
+
+    /* --- RESTRUCTURED TIMELINE (8 Second Loop) --- */
+
+    /* 1. Button "Click" (Triggers at 10% after brief initial linger) */
+    @keyframes sd-writing-tips-btn-click {
+      0%, 9%    { transform: scale(1); }
+      12%       { transform: scale(0.90); } /* Contract */
+      15%, 100% { transform: scale(1); }    /* Return */
+    }
+
+    /* 2. Content "Shine" Processing (Runs from 15% to 45%, right after click) */
+    @keyframes sd-writing-tips-shine-analysis {
+      0%, 14%   { fill: #e5e7eb; opacity: 1; }
+      /* Pulse Phase 1 */
+      20%       { fill: #3b82f6; opacity: 0.2; }
+      25%       { fill: #e5e7eb; opacity: 1; }
+      /* Pulse Phase 2 */
+      30%       { fill: #3b82f6; opacity: 0.2; }
+      35%       { fill: #e5e7eb; opacity: 1; }
+      /* Pulse Phase 3 */
+      40%       { fill: #3b82f6; opacity: 0.2; }
+      45%, 100% { fill: #e5e7eb; opacity: 1; }
+    }
+
+    /* 3. Notification 1 Pop (Triggers at 45% right as processing ends) */
+    @keyframes sd-writing-tips-notif1-pop {
+      0%, 44%   { opacity: 0; transform: translateY(5px); }
+      45%, 85%  { opacity: 1; transform: translateY(0); }
+      90%, 100% { opacity: 0; transform: translateY(0); }
+    }
+    @keyframes sd-writing-tips-halo1-pulse {
+      0%, 44%   { opacity: 0; transform: scale(0.8); }
+      45%       { opacity: 0.8; transform: scale(0.8); }
+      52%       { opacity: 0; transform: scale(1.3); }
+      53%, 100% { opacity: 0; }
+    }
+
+    /* 4. Notification 2 Pop (Triggers at 55%) */
+    @keyframes sd-writing-tips-notif2-pop {
+      0%, 54%   { opacity: 0; transform: translateY(5px); }
+      55%, 85%  { opacity: 1; transform: translateY(0); }
+      90%, 100% { opacity: 0; transform: translateY(0); }
+    }
+    @keyframes sd-writing-tips-halo2-pulse {
+      0%, 54%   { opacity: 0; transform: scale(0.8); }
+      55%       { opacity: 0.8; transform: scale(0.8); }
+      62%       { opacity: 0; transform: scale(1.3); }
+      63%, 100% { opacity: 0; }
+    }
+
+    /* 5. Notification 3 Pop (Triggers at 65%) */
+    @keyframes sd-writing-tips-notif3-pop {
+      0%, 64%   { opacity: 0; transform: translateY(5px); }
+      65%, 85%  { opacity: 1; transform: translateY(0); }
+      90%, 100% { opacity: 0; transform: translateY(0); }
+    }
+    @keyframes sd-writing-tips-halo3-pulse {
+      0%, 64%   { opacity: 0; transform: scale(0.8); }
+      65%       { opacity: 0.8; transform: scale(0.8); }
+      72%       { opacity: 0; transform: scale(1.3); }
+      73%, 100% { opacity: 0; }
+    }
+
+    /* Apply classes */
+    .sd-feature-writing-tips .anim-click { animation: sd-writing-tips-btn-click 8s infinite ease-in-out; transform-origin: 325px 75px; }
+    .sd-feature-writing-tips .anim-shine { animation: sd-writing-tips-shine-analysis 8s infinite ease-in-out; }
+    
+    .sd-feature-writing-tips .anim-notif1-pop { animation: sd-writing-tips-notif1-pop 8s infinite cubic-bezier(0.4, 0, 0.2, 1); }
+    .sd-feature-writing-tips .anim-halo1 { animation: sd-writing-tips-halo1-pulse 8s infinite ease-out; transform-origin: 325px 115px; }
+
+    .sd-feature-writing-tips .anim-notif2-pop { animation: sd-writing-tips-notif2-pop 8s infinite cubic-bezier(0.4, 0, 0.2, 1); }
+    .sd-feature-writing-tips .anim-halo2 { animation: sd-writing-tips-halo2-pulse 8s infinite ease-out; transform-origin: 325px 150px; }
+
+    .sd-feature-writing-tips .anim-notif3-pop { animation: sd-writing-tips-notif3-pop 8s infinite cubic-bezier(0.4, 0, 0.2, 1); }
+    .sd-feature-writing-tips .anim-halo3 { animation: sd-writing-tips-halo3-pulse 8s infinite ease-out; transform-origin: 325px 185px; }
+  </style>
+
+  <g id="window-header">
+    <circle cx="25" cy="22" r="4" fill="#ef4444" opacity="0.7"/>
+    <circle cx="39" cy="22" r="4" fill="#f59e0b" opacity="0.7"/>
+    <circle cx="53" cy="22" r="4" fill="#10b981" opacity="0.7"/>
+  </g>
+
+  <g id="content-body">
+    <rect x="25" y="55" width="220" height="14" class="skeleton-static anim-shine" />
+    
+    <rect x="25" y="85" width="220" height="10" class="skeleton-static anim-shine" />
+    <rect x="25" y="105" width="220" height="10" class="skeleton-static anim-shine" />
+    <rect x="25" y="125" width="190" height="10" class="skeleton-static anim-shine" />
+    <rect x="25" y="145" width="220" height="10" class="skeleton-static anim-shine" />
+    <rect x="25" y="165" width="160" height="10" class="skeleton-static anim-shine" />
+  </g>
+
+  <g id="sidebar">
+    <g class="anim-click">
+      <rect x="270" y="55" width="110" height="40" class="btn-main" />
+      <rect x="285" y="69" width="80" height="12" class="skeleton-light" />
+    </g>
+
+    <g class="anim-notif1-pop">
+      <rect x="270" y="105" width="110" height="20" class="pop-halo anim-halo1" />
+      <rect x="270" y="105" width="110" height="20" class="notif-block" />
+      <circle cx="282" cy="115" r="5" class="ico-suc" />
+      <rect x="295" y="113" width="70" height="4" class="notif-text" />
+    </g>
+
+    <g class="anim-notif2-pop">
+      <rect x="270" y="140" width="110" height="20" class="pop-halo anim-halo2" />
+      <rect x="270" y="140" width="110" height="20" class="notif-block" />
+      <circle cx="282" cy="150" r="5" class="ico-err" />
+      <rect x="295" y="148" width="70" height="4" class="notif-text" />
+    </g>
+
+    <g class="anim-notif3-pop">
+      <rect x="270" y="175" width="110" height="20" class="pop-halo anim-halo3" />
+      <rect x="270" y="175" width="110" height="20" class="notif-block" />
+      <circle cx="282" cy="185" r="5" class="ico-war" />
+      <rect x="295" y="183" width="70" height="4" class="notif-text" />
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,113 @@
+<svg class="sd-feature-svg sd-feature-image-gen" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 220" width="100%" height="100%" style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+  <style>
+    /* Base Skeleton Styles */
+    .sd-feature-image-gen .skeleton-title { fill: #9ca3af; rx: 4px; }
+    .sd-feature-image-gen .skeleton-static { fill: #e5e7eb; rx: 4px; }
+    .sd-feature-image-gen .skeleton-image-bg { rx: 8px; }
+    
+    /* Pop Effects and Halo */
+    .sd-feature-image-gen .pop-halo { fill: none; stroke: #3b82f6; stroke-width: 1.5; rx: 11px; opacity: 0; }
+    .sd-feature-image-gen .image-details { fill: none; stroke: #a1a1aa; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .sd-feature-image-gen .sun-detail { fill: #ffffff; stroke: inherit; }
+    .sd-feature-image-gen .cloud-detail { fill: #ffffff; stroke: none; opacity: 0; }
+
+    /* --- ANIMATION TIMELINE (6 Second Loop) --- */
+
+    /* Image Visibility and Fade-out */
+    @keyframes sd-image-gen-image-behavior {
+      0%, 12%   { opacity: 0; transform: translateY(5px); }
+      13%, 85%  { opacity: 1; transform: translateY(0); }
+      90%, 100% { opacity: 0; transform: translateY(0); }
+    }
+
+    /* Image Color Transition (Flash Blue on Pop 1 and Pop 2) */
+    @keyframes sd-image-gen-image-color {
+      0%, 12%  { fill: #e5e7eb; }
+      13%      { fill: #3b82f6; } /* Pop 1: Generation */
+      18%, 49% { fill: #d1d5db; } /* Extended Linger State 1 */
+      50%      { fill: #3b82f6; } /* Pop 2: Editing */
+      55%, 85% { fill: #d1d5db; } /* Linger State 2 */
+      90%, 100%{ fill: #e5e7eb; }
+    }
+
+    /* Image Details Stroke Transition */
+    @keyframes sd-image-gen-details-color {
+       0%, 12%  { stroke: #a1a1aa; }
+       13%      { stroke: #dbeafe; } 
+       18%, 49% { stroke: #a1a1aa; }
+       50%      { stroke: #dbeafe; } 
+       55%, 85% { stroke: #a1a1aa; }
+       90%, 100%{ stroke: #a1a1aa; }
+    }
+
+    /* Halo Pulse (Triggers at 13% and 50%) */
+    @keyframes sd-image-gen-halo-pulse {
+      0%, 12%   { opacity: 0; transform: scale(0.8); }
+      13%       { opacity: 0.8; transform: scale(0.8); } 
+      20%       { opacity: 0; transform: scale(1.3); }
+      21%, 49%  { opacity: 0; }
+      50%       { opacity: 0.8; transform: scale(0.8); } 
+      57%       { opacity: 0; transform: scale(1.3); }
+      58%, 100% { opacity: 0; }
+    }
+
+    /* Sun Position Move (Shifts Up and Right, away from the cloud) */
+    @keyframes sd-image-gen-sun-move {
+      0%, 49%   { transform: translate(0, 0); } 
+      50%, 100% { transform: translate(14px, -10px); } 
+    }
+
+    /* Cloud Appearance */
+    @keyframes sd-image-gen-cloud-behavior {
+      0%, 49%   { opacity: 0; transform: scale(0.8); }
+      50%, 100% { opacity: 1; transform: scale(1); }
+    }
+
+    /* Apply classes */
+    .sd-feature-image-gen .anim-image-behav { animation: sd-image-gen-image-behavior 6s infinite cubic-bezier(0.4, 0, 0.2, 1); }
+    .sd-feature-image-gen .anim-image-col   { animation: sd-image-gen-image-color 6s infinite ease-out; }
+    .sd-feature-image-gen .anim-details-col { animation: sd-image-gen-details-color 6s infinite ease-out; }
+    .sd-feature-image-gen .anim-halo       { animation: sd-image-gen-halo-pulse 6s infinite ease-out; transform-origin: 75px 105px; }
+    .sd-feature-image-gen .anim-sun-move   { animation: sd-image-gen-sun-move 6s infinite cubic-bezier(0.4, 0, 0.2, 1); }
+    .sd-feature-image-gen .anim-cloud-vis   { animation: sd-image-gen-cloud-behavior 6s infinite cubic-bezier(0.4, 0, 0.2, 1); transform-origin: 70px 70px; }
+
+  </style>
+
+  <g id="window-header">
+    <circle cx="25" cy="22" r="4" fill="#ef4444" opacity="0.7"/>
+    <circle cx="39" cy="22" r="4" fill="#f59e0b" opacity="0.7"/>
+    <circle cx="53" cy="22" r="4" fill="#10b981" opacity="0.7"/>
+  </g>
+
+  <g id="post-body">
+    <rect x="150" y="55" width="220" height="14" class="skeleton-title" />
+    <rect x="150" y="85" width="220" height="10" class="skeleton-static" />
+    <rect x="150" y="105" width="200" height="10" class="skeleton-static" />
+    <rect x="150" y="125" width="180" height="10" class="skeleton-static" />
+    <rect x="150" y="145" width="140" height="10" class="skeleton-static" />
+  </g>
+
+  <g id="generating-editing-image" class="anim-image-behav">
+    
+    <rect x="20" y="50" width="110" height="110" class="pop-halo anim-halo" />
+
+    <rect x="25" y="55" width="100" height="100" class="skeleton-image-bg anim-image-col" />
+
+    <g class="image-details anim-details-col">
+       
+       <g class="anim-sun-move">
+         <circle cx="92" cy="75" r="7" class="sun-detail" />
+       </g>
+       
+       <g class="anim-cloud-vis cloud-detail">
+         <circle cx="50" cy="73" r="5" />
+         <circle cx="57" cy="68" r="6" />
+         <circle cx="65" cy="73" r="5" />
+         <rect x="50" y="73" width="15" height="5" />
+       </g>
+       
+       <polyline points="35,135 60,110 80,125 100,105 115,120" />
+    </g>
+
+  </g>
+</svg>

@@ -1,0 +1,105 @@
+<svg class="sd-feature-svg sd-feature-autocomplete" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240" width="100%" height="100%" style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+  <style>
+    /* Base Skeleton Styles */
+    .sd-feature-autocomplete .skeleton-static { fill: #e5e7eb; rx: 4px; }
+    .sd-feature-autocomplete .skeleton-text { fill: #9ca3af; rx: 4px; }
+    .sd-feature-autocomplete .caret { stroke: #3b82f6; stroke-width: 2; stroke-linecap: round; }
+    
+    /* Dropdown Specific Styles */
+    .sd-feature-autocomplete .dropdown-box { fill: #ffffff; stroke: #e5e7eb; stroke-width: 1; rx: 6px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.05)); }
+    .sd-feature-autocomplete .dropdown-item { fill: #cbd5e1; rx: 3px; }
+    .sd-feature-autocomplete .dropdown-highlight { fill: #eff6ff; rx: 4px; opacity: 0; }
+    .sd-feature-autocomplete .pop-halo { fill: none; stroke: #3b82f6; stroke-width: 1.5; rx: 6px; opacity: 0; }
+
+    /* --- ANIMATION TIMELINE (6.5 Second Loop) --- */
+    
+    /* 1. Main Text Typing and Large Expansion (Sentence Injection shifted back for longer navigation) */
+    @keyframes sd-autocomplete-multi-type-sequence {
+      0%, 7%    { width: 35px; fill: #9ca3af; }   /* Initial short text */
+      24%, 74%  { width: 95px; fill: #9ca3af; }   /* User types, triggers dropdown, and navigates */
+      77%       { width: 285px; fill: #3b82f6; }   /* "Enter" pressed: New text pops blue */
+      82%, 94%  { width: 285px; fill: #9ca3af; }   /* Suggestion is inserted and returns to normal */
+      98%, 100% { width: 35px; fill: #9ca3af; }    /* Reset */
+    }
+
+    /* 2. Caret Tracking */
+    @keyframes sd-autocomplete-multi-caret-move {
+      0%, 7%    { transform: translateX(35px); }
+      24%, 74%  { transform: translateX(95px); }
+      80%, 94%  { transform: translateX(285px); }
+      98%, 100% { transform: translateX(35px); }
+    }
+
+    /* 3. Caret Blink */
+    @keyframes sd-autocomplete-multi-caret-blink {
+      0%, 49%   { opacity: 1; }
+      50%, 99%  { opacity: 0; }
+    }
+
+    /* 4. Dropdown Container Visibility */
+    @keyframes sd-autocomplete-dropdown-fade {
+      0%, 28%   { opacity: 0; transform: translateY(-5px); } /* Hidden initially */
+      32%, 74%  { opacity: 1; transform: translateY(0); }    /* Appears next to caret */
+      77%, 100% { opacity: 0; transform: translateY(3px); }  /* Disappears on selection */
+    }
+
+    /* 5. UPDATED: Keyboard Hesitation Sequence */
+    @keyframes sd-autocomplete-selection-hesitation {
+      0%, 32%   { opacity: 0; transform: translateY(34px); } /* Hidden (Starts on Row 3) */
+      35%       { opacity: 1; transform: translateY(34px); } /* Highlights Row 3 (Bottom) */
+      45%, 53%  { opacity: 1; transform: translateY(2px); }  /* Jumps to Row 1 (Top) - Tap Up, Up! */
+      63%, 74%  { opacity: 1; transform: translateY(18px); } /* Steps down to Row 2 (Middle) - Tap Down... */
+      75%, 100% { opacity: 0; transform: translateY(18px); } /* Fades out as option is chosen */
+    }
+
+    /* 6. Blue pop pulse for the selected completion insertion */
+    @keyframes sd-autocomplete-pop-pulse {
+      0%, 74%   { opacity: 0; transform: scale(0.6); }
+      76%       { opacity: 0.8; transform: scale(0.6); }
+      82%       { opacity: 0; transform: scale(1.1); }
+      100%      { opacity: 0; }
+    }
+
+    /* Apply classes to elements */
+    .sd-feature-autocomplete .anim-text { animation: sd-autocomplete-multi-type-sequence 6.5s infinite cubic-bezier(0.4, 0, 0.2, 1); }
+    .sd-feature-autocomplete .anim-caret { animation: sd-autocomplete-multi-caret-move 6.5s infinite cubic-bezier(0.4, 0, 0.2, 1); }
+    .sd-feature-autocomplete .anim-blink { animation: sd-autocomplete-multi-caret-blink 0.8s infinite; }
+    .sd-feature-autocomplete .anim-dropdown { animation: sd-autocomplete-dropdown-fade 6.5s infinite cubic-bezier(0.4, 0, 1, 1); transform-origin: 95px 125px; }
+    .sd-feature-autocomplete .anim-highlighter { animation: sd-autocomplete-selection-hesitation 6.5s infinite cubic-bezier(0.4, 0, 0.2, 1); }
+    .sd-feature-autocomplete .anim-halo { animation: sd-autocomplete-pop-pulse 6.5s infinite ease-out; transform-origin: 245px 115px; }
+  </style>
+
+  <g id="window-header">
+    <circle cx="25" cy="22" r="4" fill="#ef4444" opacity="0.7"/>
+    <circle cx="39" cy="22" r="4" fill="#f59e0b" opacity="0.7"/>
+    <circle cx="53" cy="22" r="4" fill="#10b981" opacity="0.7"/>
+  </g>
+
+  <g id="skeleton-body">
+    <rect x="25" y="55" width="350" height="10" class="skeleton-static" />
+    <rect x="25" y="80" width="210" height="10" class="skeleton-static" />
+
+    <rect x="25" y="110" height="10" class="skeleton-text anim-text" />
+
+    <rect x="225" y="105" width="40" height="20" class="pop-halo anim-halo" />
+
+    <g class="anim-caret">
+      <line x1="28" y1="107" x2="28" y2="123" class="caret anim-blink" />
+    </g>
+
+    <rect x="25" y="140" width="310" height="10" class="skeleton-static" />
+    
+    <g class="anim-dropdown" transform="translate(0, 0)">
+      <rect x="95" y="128" width="130" height="56" class="dropdown-box" />
+      
+      <rect x="97" y="130" width="126" height="16" class="dropdown-highlight anim-highlighter" />
+      
+      <rect x="105" y="136" width="70" height="5" class="dropdown-item" />
+      
+      <rect x="105" y="152" width="105" height="5" class="dropdown-item" />
+      
+      <rect x="105" y="168" width="85" height="5" class="dropdown-item" />
+    </g>
+    
+  </g>
+</svg>

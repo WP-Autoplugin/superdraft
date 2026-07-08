@@ -38,6 +38,7 @@ class Admin {
 		// AJAX actions for custom models.
 		add_action( 'wp_ajax_superdraft_add_model', [ $this, 'ajax_add_model' ] );
 		add_action( 'wp_ajax_superdraft_remove_model', [ $this, 'ajax_remove_model' ] );
+		add_action( 'wp_ajax_superdraft_test_api_key', [ $this, 'ajax_test_api_key' ] );
 
 		// Initialize enabled modules.
 		$modules = [
@@ -47,8 +48,13 @@ class Admin {
 			'images',
 		];
 		foreach ( $modules as $module ) {
-			$enabled = get_option( 'superdraft_settings', [] );
-			if ( isset( $enabled[ $module ]['enabled'] ) && $enabled[ $module ]['enabled'] ) {
+			$enabled        = get_option( 'superdraft_settings', [] );
+			$module_enabled = isset( $enabled[ $module ]['enabled'] ) && $enabled[ $module ]['enabled'];
+			if ( 'autocomplete' === $module && ! empty( $enabled['autocomplete']['smart_compose_enabled'] ) ) {
+				$module_enabled = true;
+			}
+
+			if ( $module_enabled ) {
 				$module_class = 'Superdraft\\' . str_replace( ' ', '_', ucwords( str_replace( [ '-', '_' ], ' ', $module ) ) );
 				if ( class_exists( $module_class ) ) {
 					new $module_class();
@@ -80,6 +86,28 @@ class Admin {
 			'manage_options',
 			'superdraft-logs',
 			[ $this, 'render_api_logs_page' ]
+		);
+
+		// Add wizard page (accessible via URL, hidden from menu via CSS).
+		add_submenu_page(
+			'superdraft-settings',
+			__( 'Setup Wizard', 'superdraft' ),
+			__( 'Setup Wizard', 'superdraft' ),
+			'manage_options',
+			'superdraft-wizard',
+			[ $this, 'render_wizard_page' ]
+		);
+
+		// Hide the wizard menu item via CSS.
+		add_action(
+			'admin_head',
+			function () {
+				echo '<style>
+				li a[href="admin.php?page=superdraft-wizard"] {
+					display: none !important;
+				}
+			</style>';
+			}
 		);
 
 		// Modify the first submenu item to show "Settings" instead of "Superdraft".
@@ -236,7 +264,7 @@ class Admin {
 			wp_enqueue_style( 'superdraft-admin-css', SUPERDRAFT_URL . 'assets/admin/css/settings.css', [], SUPERDRAFT_VERSION );
 
 			// Enqueue JS.
-			wp_enqueue_script( 'superdraft-admin-js', SUPERDRAFT_URL . 'assets/admin/js/settings.js', [], SUPERDRAFT_VERSION, true );
+			wp_enqueue_script( 'superdraft-admin-js', SUPERDRAFT_URL . 'assets/admin/js/settings.js', [ 'jquery' ], SUPERDRAFT_VERSION, true );
 
 			// Localize script for AJAX and i18n.
 			wp_localize_script(
@@ -255,6 +283,10 @@ class Admin {
 						'fillOutFields'    => __( 'Please fill out all required fields.', 'superdraft' ),
 						'removeModel'      => __( 'Are you sure you want to remove this model?', 'superdraft' ),
 						'errorSavingModel' => __( 'Error saving model', 'superdraft' ),
+						'testConnection'   => __( 'Test', 'superdraft' ),
+						'testing'          => __( 'Testing...', 'superdraft' ),
+						'testOk'           => __( 'OK', 'superdraft' ),
+						'testFail'         => __( 'FAIL', 'superdraft' ),
 					],
 				]
 			);
@@ -272,6 +304,13 @@ class Admin {
 	 */
 	public function render_settings_page() {
 		include SUPERDRAFT_DIR . 'views/page-settings.php';
+	}
+
+	/**
+	 * Render the wizard page.
+	 */
+	public function render_wizard_page() {
+		include SUPERDRAFT_DIR . 'views/page-wizard.php';
 	}
 
 	/**
@@ -304,6 +343,32 @@ class Admin {
 			'apiKey'         => isset( $model['apiKey'] ) ? sanitize_text_field( $model['apiKey'] ) : '',
 			'headers'        => isset( $model['headers'] ) ? array_map( 'sanitize_text_field', (array) $model['headers'] ) : [],
 		];
+	}
+
+	/**
+	 * AJAX handler for testing an API key from Settings.
+	 */
+	public function ajax_test_api_key() {
+		check_ajax_referer( 'superdraft_settings_nonce', 'nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( __( 'You do not have permission to do this.', 'superdraft' ) );
+		}
+
+		$provider = isset( $_POST['provider'] ) ? sanitize_key( wp_unslash( $_POST['provider'] ) ) : '';
+		$api_key  = isset( $_POST['api_key'] ) ? sanitize_text_field( wp_unslash( $_POST['api_key'] ) ) : '';
+
+		if ( empty( $provider ) || empty( $api_key ) ) {
+			wp_send_json_error( __( 'Invalid provider or API key.', 'superdraft' ) );
+		}
+
+		$result = API_Key_Tester::test( $provider, $api_key );
+
+		if ( is_wp_error( $result ) ) {
+			wp_send_json_error( $result->get_error_message() );
+		}
+
+		wp_send_json_success( __( 'Connection successful! Your API key is valid.', 'superdraft' ) );
 	}
 
 	/**
@@ -390,65 +455,65 @@ class Admin {
 	 *
 	 * @return array Models.
 	 */
-    public static function get_models() {
-        self::$models = [
-                'OpenAI'    => [
-                        'gpt-5.2'              => 'GPT-5.2',
-                        'gpt-5.2-pro'          => 'GPT-5.2 Pro',
-                        'gpt-5.2-codex'        => 'GPT-5.2 Codex',
-                        'gpt-5.1-instant'      => 'GPT-5.1 Instant',
-                        'gpt-5.1-thinking'     => 'GPT-5.1 Thinking',
-                        'gpt-5'                => 'GPT-5',
-                        'gpt-5-mini'           => 'GPT-5 mini',
-                        'gpt-5-nano'           => 'GPT-5 nano',
-                        'gpt-4.1-2025-04-14'   => 'GPT-4.1',
-                        'gpt-4.1-mini-2025-04-14' => 'GPT-4.1 mini',
-                        'gpt-4.1-nano-2025-04-14' => 'GPT-4.1 nano',
-                        'gpt-4o'               => 'GPT-4o',
-                        'gpt-4o-mini'          => 'GPT-4o mini',
-                        'gpt-4o-latest'        => 'GPT-4o-latest',
-                        'chatgpt-4o-latest'    => 'ChatGPT-4o-latest',
-                        'o3'                   => 'o3',
-                        'o3-pro'               => 'o3-pro',
-                        'o3-mini'              => 'o3-mini',
-                        'o4-mini'              => 'o4-mini',
-                        'o1'                   => 'o1',
-                        'gpt-4-turbo'          => 'GPT-4 Turbo',
-                        'gpt-3.5-turbo'        => 'GPT-3.5 Turbo',
-                ],
-                'Anthropic' => [
-                        'claude-opus-4-5-20251101'   => 'Claude Opus 4.5',
-                        'claude-sonnet-4-5-20250929' => 'Claude Sonnet 4.5',
-                        'claude-haiku-4-5-20251001'  => 'Claude Haiku 4.5',
-                        'claude-opus-4-1-20250805'   => 'Claude Opus 4.1',
-                        'claude-opus-4-20250514'     => 'Claude Opus 4',
-                        'claude-sonnet-4-20250514'   => 'Claude Sonnet 4',
-                        'claude-3-5-sonnet-20241022' => 'Claude 3.5 Sonnet (2024-10-22)',
-                        'claude-3-5-sonnet-20240620' => 'Claude 3.5 Sonnet (2024-06-20)',
-                        'claude-3-5-haiku-20241022'  => 'Claude 3.5 Haiku',
-                        'claude-3-haiku-20240307'    => 'Claude 3 Haiku',
-                ],
-                'Google'    => [
-                        'gemini-3-pro-preview'  => 'Gemini 3 Pro Preview',
-                        'gemini-3-flash-preview' => 'Gemini 3 Flash Preview',
-                        'gemini-2.5-pro'        => 'Gemini 2.5 Pro',
-                        'gemini-2.5-flash'      => 'Gemini 2.5 Flash',
-                        'gemini-2.5-flash-lite' => 'Gemini 2.5 Flash Lite',
-                        'gemini-2.0-flash'      => 'Gemini 2.0 Flash',
-                        'gemini-2.0-flash-lite' => 'Gemini 2.0 Flash Lite',
-                        'gemma-3-27b-it'        => 'Gemma 3 27B',
-                ],
-                'xAI'       => [
-                        'grok-4-1-fast-reasoning'     => 'Grok 4.1 Fast Reasoning',
-                        'grok-4-1-fast-non-reasoning' => 'Grok 4.1 Fast Non-Reasoning',
-                        'grok-code-fast-1'            => 'Grok Code Fast 1',
-                        'grok-4'                      => 'Grok 4',
-                        'grok-4-latest'               => 'Grok 4 Latest',
-                        'grok-3'                      => 'Grok 3',
-                        'grok-3-mini'                 => 'Grok 3 Mini',
-                        'grok-2-1212'                 => 'Grok 2',
-                ],
-        ];
+	public static function get_models() {
+		self::$models = [
+			'OpenAI'    => [
+				'gpt-5.2'                 => 'GPT-5.2',
+				'gpt-5.2-pro'             => 'GPT-5.2 Pro',
+				'gpt-5.2-codex'           => 'GPT-5.2 Codex',
+				'gpt-5.1-instant'         => 'GPT-5.1 Instant',
+				'gpt-5.1-thinking'        => 'GPT-5.1 Thinking',
+				'gpt-5'                   => 'GPT-5',
+				'gpt-5-mini'              => 'GPT-5 mini',
+				'gpt-5-nano'              => 'GPT-5 nano',
+				'gpt-4.1-2025-04-14'      => 'GPT-4.1',
+				'gpt-4.1-mini-2025-04-14' => 'GPT-4.1 mini',
+				'gpt-4.1-nano-2025-04-14' => 'GPT-4.1 nano',
+				'gpt-4o'                  => 'GPT-4o',
+				'gpt-4o-mini'             => 'GPT-4o mini',
+				'gpt-4o-latest'           => 'GPT-4o-latest',
+				'chatgpt-4o-latest'       => 'ChatGPT-4o-latest',
+				'o3'                      => 'o3',
+				'o3-pro'                  => 'o3-pro',
+				'o3-mini'                 => 'o3-mini',
+				'o4-mini'                 => 'o4-mini',
+				'o1'                      => 'o1',
+				'gpt-4-turbo'             => 'GPT-4 Turbo',
+				'gpt-3.5-turbo'           => 'GPT-3.5 Turbo',
+			],
+			'Anthropic' => [
+				'claude-opus-4-5-20251101'   => 'Claude Opus 4.5',
+				'claude-sonnet-4-5-20250929' => 'Claude Sonnet 4.5',
+				'claude-haiku-4-5-20251001'  => 'Claude Haiku 4.5',
+				'claude-opus-4-1-20250805'   => 'Claude Opus 4.1',
+				'claude-opus-4-20250514'     => 'Claude Opus 4',
+				'claude-sonnet-4-20250514'   => 'Claude Sonnet 4',
+				'claude-3-5-sonnet-20241022' => 'Claude 3.5 Sonnet (2024-10-22)',
+				'claude-3-5-sonnet-20240620' => 'Claude 3.5 Sonnet (2024-06-20)',
+				'claude-3-5-haiku-20241022'  => 'Claude 3.5 Haiku',
+				'claude-3-haiku-20240307'    => 'Claude 3 Haiku',
+			],
+			'Google'    => [
+				'gemini-3-pro-preview'   => 'Gemini 3 Pro Preview',
+				'gemini-3-flash-preview' => 'Gemini 3 Flash Preview',
+				'gemini-2.5-pro'         => 'Gemini 2.5 Pro',
+				'gemini-2.5-flash'       => 'Gemini 2.5 Flash',
+				'gemini-2.5-flash-lite'  => 'Gemini 2.5 Flash Lite',
+				'gemini-2.0-flash'       => 'Gemini 2.0 Flash',
+				'gemini-2.0-flash-lite'  => 'Gemini 2.0 Flash Lite',
+				'gemma-3-27b-it'         => 'Gemma 3 27B',
+			],
+			'xAI'       => [
+				'grok-4-1-fast-reasoning'     => 'Grok 4.1 Fast Reasoning',
+				'grok-4-1-fast-non-reasoning' => 'Grok 4.1 Fast Non-Reasoning',
+				'grok-code-fast-1'            => 'Grok Code Fast 1',
+				'grok-4'                      => 'Grok 4',
+				'grok-4-latest'               => 'Grok 4 Latest',
+				'grok-3'                      => 'Grok 3',
+				'grok-3-mini'                 => 'Grok 3 Mini',
+				'grok-2-1212'                 => 'Grok 2',
+			],
+		];
 
 		$custom_models = get_option( 'superdraft_custom_models', [] );
 		$group_label   = 'Custom Models'; // Note: this is mapped to a translation later.
@@ -538,11 +603,11 @@ class Admin {
 		if ( 'image_model' === $model_key ) {
 			$image_models = [
 				'Google'    => [
-					'gemini-2.5-flash-image' => 'Gemini 2.5 Flash Image (Nano-Banana)',
+					'gemini-2.5-flash-image'     => 'Gemini 2.5 Flash Image (Nano-Banana)',
 					'gemini-3-pro-image-preview' => 'Gemini 3 Pro Image (Nano-Banana Pro)',
 				],
 				'OpenAI'    => [
-					'gpt-image-1' => 'GPT Image 1',
+					'gpt-image-1'      => 'GPT Image 1',
 					'gpt-image-1-mini' => 'GPT Image 1 Mini',
 				],
 				'Replicate' => [
@@ -610,11 +675,11 @@ class Admin {
 			$no_edit_option      = [ '' => __( 'No image edits', 'superdraft' ) ]; // phpcs:ignore WordPress.Arrays.ArrayDeclarationSpacing.AssignmentAlignment -- Single assignment clarity.
 			$grouped_edit_models = [
 				'Google'    => [
-					'gemini-3-pro-image-preview'     => 'Gemini 3 Pro Image (Nano-Banana Pro)',
-					'gemini-2.5-flash-image' => 'Gemini 2.5 Flash Image (Nano-Banana)',
+					'gemini-3-pro-image-preview' => 'Gemini 3 Pro Image (Nano-Banana Pro)',
+					'gemini-2.5-flash-image'     => 'Gemini 2.5 Flash Image (Nano-Banana)',
 				],
 				'OpenAI'    => [
-					'gpt-image-1' => 'GPT Image 1',
+					'gpt-image-1'      => 'GPT Image 1',
 					'gpt-image-1-mini' => 'GPT Image 1 Mini',
 				],
 				'Replicate' => [
