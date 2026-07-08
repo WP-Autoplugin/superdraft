@@ -179,7 +179,7 @@ if ( ! is_array( $enabled_modules ) ) {
 							<span class="required">*</span>
 						</label>
 						<input
-							type="text"
+							type="password"
 							id="superdraft-wizard-api-key"
 							class="regular-text"
 							placeholder=""
@@ -190,7 +190,6 @@ if ( ! is_array( $enabled_modules ) ) {
 							data-lpignore="true"
 							data-1p-ignore="true"
 							data-bwignore="true"
-							style="-webkit-text-security: disc;"
 						/>
 						<p class="description" id="superdraft-wizard-key-hint">
 							<?php esc_html_e( 'Enter your API key here.', 'superdraft' ); ?>
