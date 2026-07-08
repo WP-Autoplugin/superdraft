@@ -197,16 +197,16 @@ if ( ! is_array( $enabled_modules ) ) {
 					</div>
 
 					<div class="superdraft-wizard-key-links">
-						<a href="https://platform.openai.com/api-keys" target="_blank" class="key-link" data-provider="openai">
+						<a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer" class="key-link" data-provider="openai">
 							<?php esc_html_e( 'Get an OpenAI API key →', 'superdraft' ); ?>
 						</a>
-						<a href="https://console.anthropic.com/settings/keys" target="_blank" class="key-link" data-provider="anthropic">
+						<a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener noreferrer" class="key-link" data-provider="anthropic">
 							<?php esc_html_e( 'Get an Anthropic API key →', 'superdraft' ); ?>
 						</a>
-						<a href="https://aistudio.google.com/app/apikey" target="_blank" class="key-link" data-provider="google">
+						<a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" class="key-link" data-provider="google">
 							<?php esc_html_e( 'Get a Google API key →', 'superdraft' ); ?>
 						</a>
-						<a href="https://console.x.ai/" target="_blank" class="key-link" data-provider="xai">
+						<a href="https://console.x.ai/" target="_blank" rel="noopener noreferrer" class="key-link" data-provider="xai">
 							<?php esc_html_e( 'Get an xAI API key →', 'superdraft' ); ?>
 						</a>
 					</div>
