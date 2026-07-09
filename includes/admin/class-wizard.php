@@ -40,7 +40,7 @@ class Wizard {
 	 * must be registered even though it should not appear in the admin menu.
 	 */
 	public function add_wizard_page() {
-		add_submenu_page(
+		$hook = add_submenu_page(
 			null,
 			__( 'Superdraft Setup Wizard', 'superdraft' ),
 			__( 'Setup Wizard', 'superdraft' ),
@@ -48,6 +48,20 @@ class Wizard {
 			'superdraft-wizard',
 			[ $this, 'render_wizard_page' ]
 		);
+
+		if ( $hook ) {
+			add_action( "load-{$hook}", [ $this, 'set_page_title' ] );
+		}
+	}
+
+	/**
+	 * Set the title for the hidden wizard page.
+	 */
+	public function set_page_title() {
+		global $title;
+
+		// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- Hidden pages do not have a menu item from which WordPress can determine a title.
+		$title = __( 'Superdraft Setup Wizard', 'superdraft' );
 	}
 
 	/**
