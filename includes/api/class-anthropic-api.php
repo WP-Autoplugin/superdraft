@@ -62,6 +62,10 @@ class Anthropic_API extends API {
 				'temperature' => 0.2,
 				'max_tokens'  => 8192,
 			],
+			'claude-4-5-haiku-latest'    => [
+				'temperature' => 0.2,
+				'max_tokens'  => 8192,
+			],
 			'claude-3-5-haiku-latest'    => [
 				'temperature' => 0.2,
 				'max_tokens'  => 8192,

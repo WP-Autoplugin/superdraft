@@ -49,6 +49,20 @@ class Tags_Categories {
 	}
 
 	/**
+	 * Register taxonomy suggestion hooks for all enabled taxonomies.
+	 */
+	public function register_taxonomy_suggestion_hooks() {
+		$settings           = get_option( 'superdraft_settings', [] );
+		$enabled_taxonomies = $settings['tags_categories']['enabled_taxonomies'] ?? [ 'category', 'post_tag' ];
+
+		foreach ( $enabled_taxonomies as $taxonomy ) {
+			if ( taxonomy_exists( $taxonomy ) ) {
+				add_action( "{$taxonomy}_add_form_fields", [ $this, 'render_suggestion_form' ] );
+			}
+		}
+	}
+
+	/**
 	 * Register the taxonomy auto-select endpoint.
 	 */
 	public function register_taxonomy_autoselect_endpoint() {
@@ -156,8 +170,23 @@ class Tags_Categories {
 			return $bulk_actions;
 		}
 
-		$bulk_actions['superdraft_auto_select_categories'] = __( 'Auto-select Categories', 'superdraft' );
-		$bulk_actions['superdraft_auto_select_tags']       = __( 'Auto-select Tags', 'superdraft' );
+		$settings           = get_option( 'superdraft_settings', [] );
+		$enabled_taxonomies = $settings['tags_categories']['enabled_taxonomies'] ?? [ 'category', 'post_tag' ];
+
+		foreach ( $enabled_taxonomies as $taxonomy ) {
+			if ( ! taxonomy_exists( $taxonomy ) ) {
+				continue;
+			}
+
+			$taxonomy_obj = get_taxonomy( $taxonomy );
+			$label        = $taxonomy_obj->labels->name ?? $taxonomy;
+
+			// Add bulk action for this taxonomy.
+			$action_key = "superdraft_auto_select_{$taxonomy}";
+			/* translators: %s: Taxonomy label */
+			$bulk_actions[ $action_key ] = sprintf( __( 'Auto-select %s', 'superdraft' ), $label );
+		}
+
 		return $bulk_actions;
 	}
 
@@ -526,7 +555,7 @@ class Tags_Categories {
 					?>
 				</h2>
 				<p><?php esc_html_e( 'AI-powered suggestions for new terms based on your content.', 'superdraft' ); ?></p>
-				<button type="button" class="button button-secondary" id="superdraft-suggest-terms">
+				<button type="button" class="button button-secondary" id="superdraft-suggest-terms" data-taxonomy="<?php echo esc_attr( $taxonomy ); ?>">
 					<?php esc_html_e( 'Generate Suggestions', 'superdraft' ); ?>
 				</button>
 				<div class="spinner"></div>
@@ -542,10 +571,6 @@ class Tags_Categories {
 	public function handle_suggest_terms() {
 		check_ajax_referer( 'superdraft-suggest-terms', 'nonce' );
 
-		if ( ! current_user_can( 'manage_categories' ) ) {
-			wp_send_json_error( 'Permission denied' );
-		}
-
 		if ( ! isset( $_POST['taxonomy'] ) ) {
 			wp_send_json_error( 'Missing parameters' );
 		}
@@ -553,6 +578,11 @@ class Tags_Categories {
 		$taxonomy = sanitize_text_field( wp_unslash( $_POST['taxonomy'] ) );
 		if ( ! taxonomy_exists( $taxonomy ) ) {
 			wp_send_json_error( 'Invalid taxonomy' );
+		}
+
+		$taxonomy_obj = get_taxonomy( $taxonomy );
+		if ( ! $taxonomy_obj || ! current_user_can( $taxonomy_obj->cap->manage_terms ) ) {
+			wp_send_json_error( 'Permission denied' );
 		}
 
 		// Get generated terms from request.
@@ -565,10 +595,8 @@ class Tags_Categories {
 		} elseif ( 'post_tag' === $taxonomy ) {
 			$post_type = 'post';
 		} else {
-			$taxonomy_obj = get_taxonomy( $taxonomy );
-			if ( $taxonomy_obj ) {
-				$post_type = $taxonomy_obj->object_type[0];
-			}
+			$object_types = $taxonomy_obj->object_type;
+			$post_type    = reset( $object_types );
 		}
 
 		if ( ! post_type_exists( $post_type ) ) {
@@ -603,6 +631,10 @@ class Tags_Categories {
 				'fields'     => 'names',
 			]
 		);
+		if ( is_wp_error( $existing_terms ) ) {
+			wp_send_json_error( $existing_terms->get_error_message() );
+		}
+
 		$existing_terms = array_merge( $existing_terms, $generated_terms );
 		$existing_terms = array_unique( $existing_terms );
 
@@ -610,6 +642,10 @@ class Tags_Categories {
 		$settings = get_option( 'superdraft_settings', [] );
 		$model    = ! empty( $settings['tags_categories']['model'] ) ? $settings['tags_categories']['model'] : 'default-model';
 		$api      = Admin::get_api( $model );
+
+		if ( ! $api ) {
+			wp_send_json_error( __( 'No API provider/key is configured for the selected model.', 'superdraft' ) );
+		}
 
 		$prompt_template = $api->get_prompt_template( 'add-terms' );
 		$prompt          = $api->replace_vars(
@@ -626,7 +662,7 @@ class Tags_Categories {
 			$response = $api->send_prompt( $prompt );
 
 			if ( is_wp_error( $response ) ) {
-				return $response;
+				wp_send_json_error( $response->get_error_message() );
 			}
 
 			Admin::log_api_request(

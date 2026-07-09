@@ -45,6 +45,21 @@ class OpenAI_API extends API {
 				'temperature' => 0.7,
 				'max_tokens'  => 4096,
 			],
+			'gpt-5.1'           => [
+				'max_tokens' => 4096,
+			],
+			'gpt-5'             => [
+				'max_tokens' => 4096,
+			],
+			'gpt-5-mini'        => [
+				'max_tokens' => 4096,
+			],
+			'gpt-5-nano'        => [
+				'max_tokens' => 4096,
+			],
+			'gpt-5-chat-latest' => [
+				'max_tokens' => 4096,
+			],
 			'chatgpt-4o-latest' => [
 				'temperature' => 0.7,
 				'max_tokens'  => 16384,
@@ -64,9 +79,52 @@ class OpenAI_API extends API {
 		];
 
 		if ( isset( $model_params[ $model ] ) ) {
-			$this->temperature = $model_params[ $model ]['temperature'];
-			$this->max_tokens  = $model_params[ $model ]['max_tokens'];
+			if ( isset( $model_params[ $model ]['temperature'] ) ) {
+				$this->temperature = $model_params[ $model ]['temperature'];
+			}
+
+			$this->max_tokens = $model_params[ $model ]['max_tokens'];
 		}
+	}
+
+	/**
+	 * Check whether the selected model uses max_completion_tokens.
+	 *
+	 * @return bool True if max_completion_tokens should be used.
+	 */
+	protected function uses_max_completion_tokens() {
+		return (bool) preg_match( '/^(gpt-5(?:[.-]|$)|o[0-9])/', $this->model );
+	}
+
+	/**
+	 * Check whether the selected model supports custom temperature.
+	 *
+	 * @return bool True if temperature can be sent.
+	 */
+	protected function supports_custom_temperature() {
+		return ! (bool) preg_match( '/^(gpt-5(?:[.-]|$)|o[0-9])/', $this->model );
+	}
+
+	/**
+	 * Normalize request parameters for the selected OpenAI model family.
+	 *
+	 * @param array $body The request body.
+	 * @return array The normalized request body.
+	 */
+	protected function normalize_body_for_model( $body ) {
+		if ( $this->uses_max_completion_tokens() ) {
+			if ( isset( $body['max_tokens'] ) && ! isset( $body['max_completion_tokens'] ) ) {
+				$body['max_completion_tokens'] = $body['max_tokens'];
+			}
+
+			unset( $body['max_tokens'] );
+		}
+
+		if ( ! $this->supports_custom_temperature() ) {
+			unset( $body['temperature'] );
+		}
+
+		return $body;
 	}
 
 	/**
@@ -95,16 +153,26 @@ class OpenAI_API extends API {
 		];
 
 		$body = [
-			'model'       => $this->model,
-			'messages'    => $messages,
-			'temperature' => isset( $this->temperature ) ? $this->temperature : 0.7,
-			'max_tokens'  => isset( $this->max_tokens ) ? $this->max_tokens : 1500,
+			'model'    => $this->model,
+			'messages' => $messages,
 		];
+
+		if ( $this->supports_custom_temperature() ) {
+			$body['temperature'] = isset( $this->temperature ) ? $this->temperature : 0.7;
+		}
+
+		if ( $this->uses_max_completion_tokens() ) {
+			$body['max_completion_tokens'] = isset( $this->max_tokens ) ? $this->max_tokens : 1500;
+		} else {
+			$body['max_tokens'] = isset( $this->max_tokens ) ? $this->max_tokens : 1500;
+		}
 
 		// Merge override_body if provided.
 		if ( ! empty( $override_body ) && is_array( $override_body ) ) {
 			$body = array_merge( $body, $override_body );
 		}
+
+		$body = $this->normalize_body_for_model( $body );
 
 		$headers = [
 			'Authorization' => 'Bearer ' . $this->api_key,
@@ -118,6 +186,7 @@ class OpenAI_API extends API {
 		 * @param object $this The current instance of the API class.
 		 */
 		$body = apply_filters( 'superdraft_api_request_body', $body, $this );
+		$body = $this->normalize_body_for_model( $body );
 
 		/**
 		 * Filters the headers of the request to the OpenAI API.

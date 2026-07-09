@@ -56,6 +56,19 @@ div.form-field.term-suggest-wrap {
 	border-radius: 3px;
 }
 
+/* Error message styling */
+#superdraft-term-suggestions .error {
+	margin: 0;
+	padding: 12px 14px;
+	background: #fcf0f1;
+	border-left: 4px solid #d63638;
+	color: #1d2327;
+	font-size: 13px;
+	line-height: 1.5;
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+}
+
 /* Individual suggestion styling */
 .term-suggestion {
 	display: flex;

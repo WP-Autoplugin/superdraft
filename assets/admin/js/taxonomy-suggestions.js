@@ -8,7 +8,23 @@
 			const $button      = $( '#superdraft-suggest-terms' );
 			const $spinner     = $button.siblings( '.spinner' );
 			const $suggestions = $( '#superdraft-term-suggestions' );
+			const urlParams    = new URLSearchParams( window.location.search );
+			const taxonomy     = $button.data( 'taxonomy' ) || urlParams.get( 'taxonomy' ) || 'category';
 			let generatedTerms = [];
+
+			function getErrorMessage(response) {
+				if (response && response.data) {
+					if ('string' === typeof response.data) {
+						return response.data;
+					}
+
+					if (response.data.message) {
+						return response.data.message;
+					}
+				}
+
+				return 'Failed to get suggestions';
+			}
 
 			$button.on(
 				'click',
@@ -24,7 +40,7 @@
 							data: {
 								action: 'superdraft_suggest_terms',
 								nonce: superdraftTax.nonce,
-								taxonomy: window.location.href.includes( 'taxonomy=post_tag' ) ? 'post_tag' : 'category',
+								taxonomy: taxonomy,
 								generatedTerms: generatedTerms
 							},
 							success: function (response) {
@@ -58,6 +74,8 @@
 											$suggestions.append( $termEl );
 										}
 									);
+								} else {
+									$suggestions.html( $( '<p class="error">' ).text( getErrorMessage( response ) ) );
 								}
 							},
 							error: function () {
