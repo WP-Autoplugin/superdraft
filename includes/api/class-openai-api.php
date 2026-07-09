@@ -113,7 +113,7 @@ class OpenAI_API extends API {
 
 		$this->last_response = $response;
 		$data                = json_decode( wp_remote_retrieve_body( $response ), true );
-		$content = $this->uses_responses_api ? $this->get_responses_content( $data ) : ( $data['choices'][0]['message']['content'] ?? '' );
+		$content             = $this->uses_responses_api ? $this->get_responses_content( $data ) : ( $data['choices'][0]['message']['content'] ?? '' );
 		if ( empty( $content ) ) {
 			return new \WP_Error(
 				'api_error',

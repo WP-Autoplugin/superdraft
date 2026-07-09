@@ -220,7 +220,7 @@ class Admin {
 	 * @return void
 	 */
 	public function enqueue_assets( $hook ) {
-		$settings = get_option( 'superdraft_settings', [] );
+		$settings          = get_option( 'superdraft_settings', [] );
 		$image_edit_models = [];
 		foreach ( Model_Catalog::get_image_models( 'edit' ) as $models ) {
 			$image_edit_models = array_merge( $image_edit_models, array_keys( $models ) );
@@ -425,8 +425,8 @@ class Admin {
 	 * @return API|null
 	 */
 	public static function get_api( $model ) {
-		$api_keys          = get_option( 'superdraft_api_keys', [] );
-		$custom_models     = get_option( 'superdraft_custom_models', [] );
+		$api_keys      = get_option( 'superdraft_api_keys', [] );
+		$custom_models = get_option( 'superdraft_custom_models', [] );
 
 		// Check custom models.
 		if ( ! empty( $custom_models ) ) {
@@ -478,19 +478,19 @@ class Admin {
 	 * @return string The model select dropdown.
 	 */
 	public static function get_model_select( $module, $model_key = 'model' ) {
-		$settings = get_option( 'superdraft_settings', [] );
-		$selected = $settings[ $module ][ $model_key ] ?? '';
-		$models   = self::get_models();
-		$empty    = [];
+		$settings          = get_option( 'superdraft_settings', [] );
+		$selected          = $settings[ $module ][ $model_key ] ?? '';
+		$models            = self::get_models();
+		$empty             = [];
 		$unavailable_label = __( '(Unavailable)', 'superdraft' );
 
 		if ( 'image_model' === $model_key ) {
-			$models = Model_Catalog::get_image_models( 'generate' );
-			$selected = $selected ?: 'gemini-3.1-flash-image';
+			$models            = Model_Catalog::get_image_models( 'generate' );
+			$selected          = $selected ?: 'gemini-3.1-flash-image';
 			$unavailable_label = '';
 		} elseif ( 'image_edit_model' === $model_key ) {
-			$models = Model_Catalog::get_image_models( 'edit' );
-			$empty  = [ '' => __( 'No image edits', 'superdraft' ) ];
+			$models            = Model_Catalog::get_image_models( 'edit' );
+			$empty             = [ '' => __( 'No image edits', 'superdraft' ) ];
 			$unavailable_label = '';
 		}
 
@@ -527,7 +527,7 @@ class Admin {
 		}
 
 		foreach ( $models as $provider => $model_list ) {
-			$label = 'Custom Models' === $provider ? __( 'Custom Models', 'superdraft' ) : $provider;
+			$label   = 'Custom Models' === $provider ? __( 'Custom Models', 'superdraft' ) : $provider;
 			$output .= '<optgroup label="' . esc_attr( $label ) . '" class="superdraft-models-group superdraft-models-group-' . esc_attr( sanitize_title( $provider ) ) . '">' . "\n";
 			foreach ( $model_list as $model => $label ) {
 				$output .= '<option value="' . esc_attr( $model ) . '" ' . selected( $selected, $model, false ) . '>' . esc_html( $label ) . '</option>' . "\n";
