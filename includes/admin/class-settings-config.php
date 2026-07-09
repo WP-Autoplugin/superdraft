@@ -30,7 +30,7 @@ class Settings_Config {
 				],
 				'model'               => [
 					'type'     => 'string',
-					'default'  => 'gpt-4o-mini',
+					'default'  => 'gpt-5.6-luna',
 					'sanitize' => 'sanitize_text_field',
 				],
 				'never_deselect'      => [
@@ -55,7 +55,7 @@ class Settings_Config {
 				],
 				'model'       => [
 					'type'     => 'string',
-					'default'  => 'gpt-4o-mini',
+					'default'  => 'gpt-5.6-luna',
 					'sanitize' => 'sanitize_text_field',
 				],
 				'auto_update' => [
@@ -76,7 +76,7 @@ class Settings_Config {
 				],
 				'model'                    => [
 					'type'     => 'string',
-					'default'  => 'gpt-4o-mini',
+					'default'  => 'gpt-5.6-luna',
 					'sanitize' => 'sanitize_text_field',
 				],
 				'prefix'                   => [
@@ -109,7 +109,7 @@ class Settings_Config {
 				],
 				'smart_compose_model'      => [
 					'type'     => 'string',
-					'default'  => 'gpt-4o-mini',
+					'default'  => 'gpt-5.6-luna',
 					'sanitize' => 'sanitize_text_field',
 				],
 				'smart_compose_delay'      => [
@@ -130,7 +130,7 @@ class Settings_Config {
 				],
 				'image_model'      => [
 					'type'     => 'string',
-					'default'  => 'gemini-2.5-flash-image-preview',
+					'default'  => 'gemini-3.1-flash-image',
 					'sanitize' => 'sanitize_text_field',
 				],
 				'image_edit_model' => [
@@ -140,7 +140,7 @@ class Settings_Config {
 				],
 				'prompt_model'     => [
 					'type'     => 'string',
-					'default'  => 'gpt-4o-mini',
+					'default'  => 'gpt-5.6-luna',
 					'sanitize' => 'sanitize_text_field',
 				],
 			],

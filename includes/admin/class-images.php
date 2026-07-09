@@ -165,7 +165,8 @@ class Images {
 		$response = null;
 
 		// Determine API and call edit.
-		if ( 'gpt-image-1' === $image_model ) {
+		$image_provider = Model_Catalog::get_image_provider( $image_model );
+		if ( 'OpenAI' === $image_provider ) {
 			$openai_key = $api_keys['openai'] ?? '';
 			if ( empty( $openai_key ) ) {
 				return new \WP_Error( 'missing_api_key', __( 'OpenAI API key is missing', 'superdraft' ) );
@@ -176,7 +177,7 @@ class Images {
 			// Pass the single file path directly.
 			$response = $api->edit_image( $prompt, $file_path ); // Pass single path string.
 
-		} elseif ( str_starts_with( $image_model, 'gemini-' ) ) { // Check for Gemini models.
+		} elseif ( 'Google' === $image_provider ) {
 
 			$google_key = $api_keys['google'] ?? '';
 			if ( empty( $google_key ) ) {
@@ -223,7 +224,7 @@ class Images {
 					return new \WP_Error( 'decode_error', __( 'Failed to decode base64 image data from Google Gemini.', 'superdraft' ) );
 				}
 			}
-		} elseif ( str_contains( $image_model, '/' ) ) { // Replicate image editor models, e.g., qwen/qwen-image-edit
+		} elseif ( 'Replicate' === $image_provider ) {
 
 			$replicate_key = $api_keys['replicate'] ?? '';
 			if ( empty( $replicate_key ) ) {
@@ -355,7 +356,7 @@ class Images {
 			return new \WP_Error( 'invalid_post', __( 'Invalid post ID', 'superdraft' ) );
 		}
 		$settings     = get_option( 'superdraft_settings', [] );
-		$prompt_model = $settings['images']['prompt_model'] ?? 'gpt-4o-mini';
+		$prompt_model = $settings['images']['prompt_model'] ?? 'gpt-5.6-luna';
 		$api          = \Superdraft\Admin::get_api( $prompt_model );
 		if ( ! $api ) {
 			return new \WP_Error( 'invalid_model', __( 'Invalid prompt model', 'superdraft' ) );
@@ -424,13 +425,14 @@ class Images {
 			return new \WP_Error( 'module_disabled', __( 'Image generation module is disabled', 'superdraft' ) );
 		}
 
-		$image_model = $settings['images']['image_model'] ?? 'gemini-2.5-flash-image-preview'; // Or your chosen default.
+		$image_model = $settings['images']['image_model'] ?? 'gemini-3.1-flash-image';
 		$api_keys    = get_option( 'superdraft_api_keys', [] );
 		$api         = null;
 		$response    = null; // Will hold raw image data or WP_Error.
 
 		// Determine API and call generate.
-		if ( 'gpt-image-1' === $image_model ) {
+		$image_provider = Model_Catalog::get_image_provider( $image_model );
+		if ( 'OpenAI' === $image_provider ) {
 			$openai_key = $api_keys['openai'] ?? '';
 			if ( empty( $openai_key ) ) {
 				return new \WP_Error( 'missing_api_key', __( 'OpenAI API key is missing', 'superdraft' ) );
@@ -440,7 +442,7 @@ class Images {
 			$api->set_model( $image_model );
 			$response = $api->send_prompt( $prompt ); // Returns raw bytes or WP_Error.
 
-		} elseif ( str_starts_with( $image_model, 'gemini-' ) ) { // Google Gemini.
+		} elseif ( 'Google' === $image_provider ) {
 			$google_key = $api_keys['google'] ?? '';
 			if ( empty( $google_key ) ) {
 				return new \WP_Error( 'missing_api_key', __( 'Google API key is missing', 'superdraft' ) );
@@ -457,7 +459,7 @@ class Images {
 					return new \WP_Error( 'decode_error', __( 'Failed to decode base64 image data from Google Gemini.', 'superdraft' ) );
 				}
 			}
-		} elseif ( str_contains( $image_model, '/' ) ) { // Replicate.
+		} elseif ( 'Replicate' === $image_provider ) {
 			$replicate_key = $api_keys['replicate'] ?? '';
 			if ( empty( $replicate_key ) ) {
 				return new \WP_Error( 'missing_api_key', __( 'Replicate API key is missing', 'superdraft' ) );
