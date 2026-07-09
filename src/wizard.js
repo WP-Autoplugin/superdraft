@@ -19,6 +19,7 @@
 		enabledModules: {},
 		currentSlide: 0,
 		totalSlides: 0,
+		carouselDrag: null,
 
 		init: function() {
 			this.bindEvents();
@@ -109,6 +110,19 @@
 				var slide = $(this).data('slide');
 				Wizard.goToSlide(slide);
 			});
+
+			// Swipe or drag between feature cards. Pointer events cover mouse, touch, and pen input.
+			$(document).on('pointerdown', '.carousel-slides', function(e) {
+				Wizard.startCarouselDrag(e);
+			});
+
+			$(document).on('pointermove', '.carousel-slides', function(e) {
+				Wizard.moveCarouselDrag(e);
+			});
+
+			$(document).on('pointerup pointercancel', '.carousel-slides', function(e) {
+				Wizard.endCarouselDrag(e);
+			});
 		},
 
 		initModules: function() {
@@ -139,6 +153,66 @@
 			}
 		},
 
+		startCarouselDrag: function(e) {
+			var originalEvent = e.originalEvent;
+			var $target = $(e.target);
+
+			if (this.totalSlides <= 1 || (originalEvent.pointerType === 'mouse' && originalEvent.button !== 0) || $target.closest('input, button, a, label').length) {
+				return;
+			}
+
+			this.carouselDrag = {
+				pointerId: originalEvent.pointerId,
+				startX: originalEvent.clientX,
+				startY: originalEvent.clientY,
+				deltaX: 0
+			};
+			$(e.currentTarget).addClass('is-dragging');
+			e.currentTarget.setPointerCapture(originalEvent.pointerId);
+		},
+
+		moveCarouselDrag: function(e) {
+			var originalEvent = e.originalEvent;
+			var drag = this.carouselDrag;
+			if (!drag || drag.pointerId !== originalEvent.pointerId) {
+				return;
+			}
+
+			drag.deltaX = originalEvent.clientX - drag.startX;
+			var deltaY = originalEvent.clientY - drag.startY;
+			if (Math.abs(drag.deltaX) <= Math.abs(deltaY)) {
+				return;
+			}
+
+			e.preventDefault();
+			this.updateCarousel(drag.deltaX);
+		},
+
+		endCarouselDrag: function(e) {
+			var originalEvent = e.originalEvent;
+			var drag = this.carouselDrag;
+			if (!drag || drag.pointerId !== originalEvent.pointerId) {
+				return;
+			}
+
+			this.carouselDrag = null;
+			$(e.currentTarget).removeClass('is-dragging');
+			if (e.currentTarget.hasPointerCapture(originalEvent.pointerId)) {
+				e.currentTarget.releasePointerCapture(originalEvent.pointerId);
+			}
+
+			if (Math.abs(drag.deltaX) >= 50 && Math.abs(drag.deltaX) > Math.abs(originalEvent.clientY - drag.startY)) {
+				if (drag.deltaX > 0) {
+					this.prevSlide();
+				} else {
+					this.nextSlide();
+				}
+				return;
+			}
+
+			this.updateCarousel();
+		},
+
 		showSlide: function(index) {
 			if (index < 0) {
 				index = this.totalSlides - 1;
@@ -161,10 +235,14 @@
 			this.showSlide(index);
 		},
 
-		updateCarousel: function() {
+		updateCarousel: function(dragOffset) {
 			var $wrapper = $('.carousel-slide-wrapper');
 			var offset = -this.currentSlide * 100;
-			$wrapper.css('transform', 'translateX(' + offset + '%)');
+			var transform = 'translateX(' + offset + '%)';
+			if (dragOffset) {
+				transform = 'translateX(calc(' + offset + '% + ' + dragOffset + 'px))';
+			}
+			$wrapper.css('transform', transform);
 
 			// Update dots
 			$('.carousel-dot').removeClass('active').attr('aria-current', 'false');
