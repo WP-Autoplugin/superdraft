@@ -264,14 +264,16 @@ class Model_Catalog {
 	public static function get_image_models( $capability ) {
 		$models = [
 			'Google'    => [
-				'gemini-3-pro-image'     => 'Gemini 3 Pro Image (Nano Banana Pro)',
-				'gemini-3.1-flash-image' => 'Gemini 3.1 Flash Image (Nano Banana 2)',
+				'gemini-3-pro-image'          => 'Gemini 3 Pro Image (Nano Banana Pro)',
+				'gemini-3.1-flash-image'      => 'Gemini 3.1 Flash Image (Nano Banana 2)',
+				'gemini-3.1-flash-lite-image' => 'Gemini 3.1 Flash-Lite Image (Nano Banana 2 Lite)',
 			],
 			'OpenAI'    => [
 				'gpt-image-2' => 'GPT Image 2',
 				'gpt-image-1' => 'GPT Image 1',
 			],
 			'Replicate' => [
+				'google/nano-banana-2-lite'        => 'Nano Banana 2 Lite',
 				'google/nano-banana-2'             => 'Nano Banana 2',
 				'google/nano-banana-pro'           => 'Nano Banana Pro',
 				'google/imagen-4'                  => 'Imagen 4',
