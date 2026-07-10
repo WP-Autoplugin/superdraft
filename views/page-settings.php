@@ -31,23 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<form method="post" action="options.php" id="superdraft-settings-form">
 		<?php
 		settings_fields( 'superdraft_settings' );
-		$settings = get_option(
-			'superdraft_settings',
-			[
-				'tags_categories' => [
-					'enabled' => false,
-					'model'   => 'gpt-4o-mini',
-				],
-				'writing_tips'    => [
-					'enabled' => false,
-					'model'   => 'gpt-4o-mini',
-				],
-				'autocomplete'    => [
-					'enabled' => false,
-					'model'   => 'gpt-4o-mini',
-				],
-			]
-		);
+		$settings = get_option( 'superdraft_settings', Settings_Config::get_default_module_settings() );
 		?>
 		<div id="tags-categories" class="tab-content">
 			<h3><?php esc_html_e( 'Auto Tags & Categories', 'superdraft' ); ?></h3>

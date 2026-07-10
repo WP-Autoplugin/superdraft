@@ -21,6 +21,7 @@ class Wizard {
 	 * Constructor: Set up hooks and actions.
 	 */
 	public function __construct() {
+		add_action( 'admin_menu', [ $this, 'add_wizard_page' ] );
 		add_action( 'admin_init', [ $this, 'maybe_redirect_to_wizard' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_assets' ], 20 );
 		add_action( 'rest_api_init', [ $this, 'register_rest_routes' ] );
@@ -30,6 +31,37 @@ class Wizard {
 		add_action( 'wp_ajax_superdraft_wizard_test_api', [ $this, 'ajax_test_api' ] );
 		add_action( 'wp_ajax_superdraft_wizard_dismiss', [ $this, 'ajax_dismiss' ] );
 		add_action( 'wp_ajax_superdraft_wizard_save_modules', [ $this, 'ajax_save_modules' ] );
+	}
+
+	/**
+	 * Register the setup wizard as a hidden admin page.
+	 *
+	 * The wizard is accessed through direct links and activation redirects, so it
+	 * must be registered even though it should not appear in the admin menu.
+	 */
+	public function add_wizard_page() {
+		$hook = add_submenu_page(
+			null,
+			__( 'Superdraft Setup Wizard', 'superdraft' ),
+			__( 'Setup Wizard', 'superdraft' ),
+			'manage_options',
+			'superdraft-wizard',
+			[ $this, 'render_wizard_page' ]
+		);
+
+		if ( $hook ) {
+			add_action( "load-{$hook}", [ $this, 'set_page_title' ] );
+		}
+	}
+
+	/**
+	 * Set the title for the hidden wizard page.
+	 */
+	public function set_page_title() {
+		global $title;
+
+		// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- Hidden pages do not have a menu item from which WordPress can determine a title.
+		$title = __( 'Superdraft Setup Wizard', 'superdraft' );
 	}
 
 	/**
@@ -94,7 +126,7 @@ class Wizard {
 	 * @param string $hook The current admin page.
 	 */
 	public function enqueue_assets( $hook ) {
-		if ( 'superdraft_page_superdraft-wizard' !== $hook ) {
+		if ( 'admin_page_superdraft-wizard' !== $hook ) {
 			return;
 		}
 

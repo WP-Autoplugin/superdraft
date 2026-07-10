@@ -32,13 +32,12 @@ class OpenAI_Image_API extends API {
 	protected $edit_url = 'https://api.openai.com/v1/images/edits';
 
 	/**
-	 * Set the model (currently only gpt-image-1).
+	 * Set the image model.
 	 *
 	 * @param string $model The model.
 	 */
 	public function set_model( $model ) {
-		// For now, we hardcode or just validate it's the expected one.
-		$this->model = 'gpt-image-1';
+		$this->model = sanitize_text_field( $model );
 	}
 
 	/**

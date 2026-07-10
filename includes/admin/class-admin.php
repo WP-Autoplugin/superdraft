@@ -47,14 +47,16 @@ class Admin {
 			'autocomplete',
 			'images',
 		];
+		$settings = get_option( 'superdraft_settings', [] );
 		foreach ( $modules as $module ) {
-			$enabled        = get_option( 'superdraft_settings', [] );
-			$module_enabled = isset( $enabled[ $module ]['enabled'] ) && $enabled[ $module ]['enabled'];
-			if ( 'autocomplete' === $module && ! empty( $enabled['autocomplete']['smart_compose_enabled'] ) ) {
-				$module_enabled = true;
+			$is_enabled = isset( $settings[ $module ]['enabled'] ) && $settings[ $module ]['enabled'];
+
+			// Also instantiate the Autocomplete module when Smart Compose is enabled independently.
+			if ( ! $is_enabled && 'autocomplete' === $module ) {
+				$is_enabled = isset( $settings['autocomplete']['smart_compose_enabled'] ) && $settings['autocomplete']['smart_compose_enabled'];
 			}
 
-			if ( $module_enabled ) {
+			if ( $is_enabled ) {
 				$module_class = 'Superdraft\\' . str_replace( ' ', '_', ucwords( str_replace( [ '-', '_' ], ' ', $module ) ) );
 				if ( class_exists( $module_class ) ) {
 					new $module_class();
@@ -86,28 +88,6 @@ class Admin {
 			'manage_options',
 			'superdraft-logs',
 			[ $this, 'render_api_logs_page' ]
-		);
-
-		// Add wizard page (accessible via URL, hidden from menu via CSS).
-		add_submenu_page(
-			'superdraft-settings',
-			__( 'Setup Wizard', 'superdraft' ),
-			__( 'Setup Wizard', 'superdraft' ),
-			'manage_options',
-			'superdraft-wizard',
-			[ $this, 'render_wizard_page' ]
-		);
-
-		// Hide the wizard menu item via CSS.
-		add_action(
-			'admin_head',
-			function () {
-				echo '<style>
-				li a[href="admin.php?page=superdraft-wizard"] {
-					display: none !important;
-				}
-			</style>';
-			}
 		);
 
 		// Modify the first submenu item to show "Settings" instead of "Superdraft".
@@ -248,7 +228,12 @@ class Admin {
 	 * @return void
 	 */
 	public function enqueue_assets( $hook ) {
-		$settings = get_option( 'superdraft_settings', [] );
+		$settings          = get_option( 'superdraft_settings', [] );
+		$image_edit_models = [];
+		foreach ( Model_Catalog::get_image_models( 'edit' ) as $models ) {
+			$image_edit_models = array_merge( $image_edit_models, array_keys( $models ) );
+		}
+		$settings['images']['edit_models'] = $image_edit_models;
 
 		// Add extra items to the settings array to be used in JS.
 		$settings['writing_tips']['nonce'] = wp_create_nonce( 'superdraft_writing_tips' );
@@ -304,13 +289,6 @@ class Admin {
 	 */
 	public function render_settings_page() {
 		include SUPERDRAFT_DIR . 'views/page-settings.php';
-	}
-
-	/**
-	 * Render the wizard page.
-	 */
-	public function render_wizard_page() {
-		include SUPERDRAFT_DIR . 'views/page-wizard.php';
 	}
 
 	/**
@@ -456,65 +434,7 @@ class Admin {
 	 * @return array Models.
 	 */
 	public static function get_models() {
-		self::$models = [
-			'OpenAI'    => [
-				'gpt-5.2'                 => 'GPT-5.2',
-				'gpt-5.2-pro'             => 'GPT-5.2 Pro',
-				'gpt-5.2-codex'           => 'GPT-5.2 Codex',
-				'gpt-5.1-instant'         => 'GPT-5.1 Instant',
-				'gpt-5.1-thinking'        => 'GPT-5.1 Thinking',
-				'gpt-5'                   => 'GPT-5',
-				'gpt-5-mini'              => 'GPT-5 mini',
-				'gpt-5-nano'              => 'GPT-5 nano',
-				'gpt-4.1-2025-04-14'      => 'GPT-4.1',
-				'gpt-4.1-mini-2025-04-14' => 'GPT-4.1 mini',
-				'gpt-4.1-nano-2025-04-14' => 'GPT-4.1 nano',
-				'gpt-4o'                  => 'GPT-4o',
-				'gpt-4o-mini'             => 'GPT-4o mini',
-				'gpt-4o-latest'           => 'GPT-4o-latest',
-				'chatgpt-4o-latest'       => 'ChatGPT-4o-latest',
-				'o3'                      => 'o3',
-				'o3-pro'                  => 'o3-pro',
-				'o3-mini'                 => 'o3-mini',
-				'o4-mini'                 => 'o4-mini',
-				'o1'                      => 'o1',
-				'gpt-4-turbo'             => 'GPT-4 Turbo',
-				'gpt-3.5-turbo'           => 'GPT-3.5 Turbo',
-			],
-			'Anthropic' => [
-				'claude-opus-4-5-20251101'   => 'Claude Opus 4.5',
-				'claude-sonnet-4-5-20250929' => 'Claude Sonnet 4.5',
-				'claude-haiku-4-5-20251001'  => 'Claude Haiku 4.5',
-				'claude-opus-4-1-20250805'   => 'Claude Opus 4.1',
-				'claude-opus-4-20250514'     => 'Claude Opus 4',
-				'claude-sonnet-4-20250514'   => 'Claude Sonnet 4',
-				'claude-3-7-sonnet-latest'   => 'Claude 3.7 Sonnet Latest',
-				'claude-3-7-sonnet-20250219' => 'Claude 3.7 Sonnet',
-				'claude-3-5-sonnet-latest'   => 'Claude 3.5 Sonnet Latest',
-				'claude-4-5-haiku-latest'    => 'Claude 4.5 Haiku Latest',
-				'claude-3-5-haiku-latest'    => 'Claude 3.5 Haiku Latest',
-			],
-			'Google'    => [
-				'gemini-3-pro-preview'   => 'Gemini 3 Pro Preview',
-				'gemini-3-flash-preview' => 'Gemini 3 Flash Preview',
-				'gemini-2.5-pro'         => 'Gemini 2.5 Pro',
-				'gemini-2.5-flash'       => 'Gemini 2.5 Flash',
-				'gemini-2.5-flash-lite'  => 'Gemini 2.5 Flash Lite',
-				'gemini-2.0-flash'       => 'Gemini 2.0 Flash',
-				'gemini-2.0-flash-lite'  => 'Gemini 2.0 Flash Lite',
-				'gemma-3-27b-it'         => 'Gemma 3 27B',
-			],
-			'xAI'       => [
-				'grok-4-1-fast-reasoning'     => 'Grok 4.1 Fast Reasoning',
-				'grok-4-1-fast-non-reasoning' => 'Grok 4.1 Fast Non-Reasoning',
-				'grok-code-fast-1'            => 'Grok Code Fast 1',
-				'grok-4'                      => 'Grok 4',
-				'grok-4-latest'               => 'Grok 4 Latest',
-				'grok-3'                      => 'Grok 3',
-				'grok-3-mini'                 => 'Grok 3 Mini',
-				'grok-2-1212'                 => 'Grok 2',
-			],
-		];
+		self::$models = Model_Catalog::get_text_models();
 
 		$custom_models = get_option( 'superdraft_custom_models', [] );
 		$group_label   = 'Custom Models'; // Note: this is mapped to a translation later.
@@ -543,33 +463,8 @@ class Admin {
 	 * @return API|null
 	 */
 	public static function get_api( $model ) {
-		$openai_api_key    = get_option( 'superdraft_api_keys' )['openai'];
-		$anthropic_api_key = get_option( 'superdraft_api_keys' )['anthropic'];
-		$google_api_key    = get_option( 'superdraft_api_keys' )['google'];
-		$xai_api_key       = get_option( 'superdraft_api_keys' )['xai'];
-		$custom_models     = get_option( 'superdraft_custom_models', [] );
-
-		$api = null;
-
-		$models = self::get_models();
-
-		if ( ! empty( $openai_api_key ) && array_key_exists( $model, $models['OpenAI'] ) ) {
-			$api = new OpenAI_API();
-			$api->set_api_key( $openai_api_key );
-			$api->set_model( $model );
-		} elseif ( ! empty( $anthropic_api_key ) && array_key_exists( $model, $models['Anthropic'] ) ) {
-			$api = new Anthropic_API();
-			$api->set_api_key( $anthropic_api_key );
-			$api->set_model( $model );
-		} elseif ( ! empty( $google_api_key ) && array_key_exists( $model, $models['Google'] ) ) {
-			$api = new Google_Gemini_API();
-			$api->set_api_key( $google_api_key );
-			$api->set_model( $model );
-		} elseif ( ! empty( $xai_api_key ) && array_key_exists( $model, $models['xAI'] ) ) {
-			$api = new XAI_API();
-			$api->set_api_key( $xai_api_key );
-			$api->set_model( $model );
-		}
+		$api_keys      = get_option( 'superdraft_api_keys', [] );
+		$custom_models = get_option( 'superdraft_custom_models', [] );
 
 		// Check custom models.
 		if ( ! empty( $custom_models ) ) {
@@ -588,7 +483,27 @@ class Admin {
 			}
 		}
 
-		// If nothing matches, $api will be null.
+		$model_config = Model_Catalog::get_text_model( $model );
+		if ( ! $model_config ) {
+			$models = self::get_models();
+			foreach ( Model_Catalog::get_text_catalog() as $provider => $provider_config ) {
+				if ( isset( $models[ $provider ][ $model ] ) ) {
+					$model_config = [
+						'api_key'   => $provider_config['api_key'],
+						'api_class' => $provider_config['api_class'],
+					];
+					break;
+				}
+			}
+		}
+		if ( ! $model_config || empty( $api_keys[ $model_config['api_key'] ] ) ) {
+			return null;
+		}
+
+		$api = new $model_config['api_class']();
+		$api->set_api_key( $api_keys[ $model_config['api_key'] ] );
+		$api->set_model( $model );
+
 		return $api;
 	}
 
@@ -601,178 +516,64 @@ class Admin {
 	 * @return string The model select dropdown.
 	 */
 	public static function get_model_select( $module, $model_key = 'model' ) {
+		$settings          = get_option( 'superdraft_settings', [] );
+		$selected          = $settings[ $module ][ $model_key ] ?? '';
+		$models            = self::get_models();
+		$empty             = [];
+		$unavailable_label = __( '(Unavailable)', 'superdraft' );
+
 		if ( 'image_model' === $model_key ) {
-			$image_models = [
-				'Google'    => [
-					'gemini-2.5-flash-image'     => 'Gemini 2.5 Flash Image (Nano-Banana)',
-					'gemini-3-pro-image-preview' => 'Gemini 3 Pro Image (Nano-Banana Pro)',
-				],
-				'OpenAI'    => [
-					'gpt-image-1'      => 'GPT Image 1',
-					'gpt-image-1-mini' => 'GPT Image 1 Mini',
-				],
-				'Replicate' => [
-					'google/nano-banana-pro'           => 'Gemini 3 Pro Image (Nano-Banana Pro)',
-					'google/nano-banana'               => 'Gemini 2.5 Flash Image (Nano-Banana)',
-					'google/imagen-4'                  => 'Imagen 4',
-					'google/imagen-4-ultra'            => 'Imagen 4 Ultra',
-					'google/imagen-4-fast'             => 'Imagen 4 Fast',
-					'google/imagen-3'                  => 'Imagen 3',
-					'google/imagen-3-fast'             => 'Imagen 3 Fast',
-					'black-forest-labs/flux-2-pro'     => 'Flux 2 Pro',
-					'black-forest-labs/flux-2-dev'     => 'Flux 2 Dev',
-					'black-forest-labs/flux-2-flex'    => 'Flux 2 Flex',
-					'black-forest-labs/flux-1.1-pro'   => 'Flux 1.1 Pro',
-					'black-forest-labs/flux-dev'       => 'Flux Dev',
-					'black-forest-labs/flux-schnell'   => 'Flux Schnell',
-					'black-forest-labs/flux-pro'       => 'Flux Pro',
-					'recraft-ai/recraft-v3'            => 'Recraft v3',
-					'ideogram-ai/ideogram-v2a'         => 'Ideogram v2a',
-					'ideogram-ai/ideogram-v3-turbo'    => 'Ideogram v3 Turbo',
-					'ideogram-ai/ideogram-v3-quality'  => 'Ideogram v3 Quality',
-					'ideogram-ai/ideogram-v3-balanced' => 'Ideogram v3 Balanced',
-					'bytedance/seedream-4.5'           => 'Seedream 4.5',
-					'bytedance/seedream-4'             => 'Seedream 4',
-					'qwen/qwen-image'                  => 'Qwen Image',
-				],
-			];
-
-			$settings = get_option( 'superdraft_settings', [] );
-			$selected = $settings['images']['image_model'] ?? 'gemini-2.5-flash-image';
-
-			// Check if selected model exists in the list.
-			$model_exists = false;
-			foreach ( $image_models as $provider => $models ) {
-				if ( array_key_exists( $selected, $models ) ) {
-					$model_exists = true;
-					break;
-				}
-			}
-
-			$out = '<select name="superdraft_settings[images][image_model]" class="regular-text superdraft-models">' . "\n";
-
-			// Add the selected model as an option if it doesn't exist in the list.
-			if ( ! $model_exists && ! empty( $selected ) ) {
-				$out .= '<option value="' . esc_attr( $selected ) . '" selected>' . esc_html( $selected ) . '</option>' . "\n";
-			}
-
-			foreach ( $image_models as $provider => $models ) {
-				$out .= '<optgroup label="' . esc_attr( $provider ) . '">' . "\n";
-				foreach ( $models as $value => $label ) {
-					$out .= '<option value="' . esc_attr( $value ) . '" ' .
-						selected( $selected, $value, false ) . '>' .
-						esc_html( $label ) . '</option>' . "\n";
-				}
-				$out .= '</optgroup>' . "\n";
-			}
-
-			$out .= '</select>';
-			return $out;
+			$models            = Model_Catalog::get_image_models( 'generate' );
+			$selected          = $selected ?: 'gemini-3.1-flash-image';
+			$unavailable_label = '';
+		} elseif ( 'image_edit_model' === $model_key ) {
+			$models            = Model_Catalog::get_image_models( 'edit' );
+			$empty             = [ '' => __( 'No image edits', 'superdraft' ) ];
+			$unavailable_label = '';
 		}
 
-		// Only a subset of models can be used for image editing.
-		if ( 'image_edit_model' === $model_key ) {
-			// Grouped edit models to mirror other dropdowns (optgroups) while keeping a top "no edits" option.
-			$no_edit_option      = [ '' => __( 'No image edits', 'superdraft' ) ]; // phpcs:ignore WordPress.Arrays.ArrayDeclarationSpacing.AssignmentAlignment -- Single assignment clarity.
-			$grouped_edit_models = [
-				'Google'    => [
-					'gemini-3-pro-image-preview' => 'Gemini 3 Pro Image (Nano-Banana Pro)',
-					'gemini-2.5-flash-image'     => 'Gemini 2.5 Flash Image (Nano-Banana)',
-				],
-				'OpenAI'    => [
-					'gpt-image-1'      => 'GPT Image 1',
-					'gpt-image-1-mini' => 'GPT Image 1 Mini',
-				],
-				'Replicate' => [
-					'google/nano-banana-pro'             => 'Gemini 3 Pro Image (Nano-Banana Pro)',
-					'qwen/qwen-image-edit'               => 'Qwen Image Edit',
-					'bytedance/seededit-3.0'             => 'SeedEdit 3.0',
-					'bytedance/seedream-4'               => 'Seedream 4',
-					'bytedance/seedream-4.5'             => 'Seedream 4.5',
-					'google/nano-banana'                 => 'Nano-Banana',
-					'black-forest-labs/flux-kontext-max' => 'FLUX Kontext Max',
-					'black-forest-labs/flux-kontext-dev' => 'FLUX Kontext Dev',
-					'black-forest-labs/flux-2-pro'       => 'Flux 2 Pro',
-					'black-forest-labs/flux-2-dev'       => 'Flux 2 Dev',
-					'black-forest-labs/flux-2-flex'      => 'Flux 2 Flex',
-				],
-			];
+		return self::render_model_select( $module, $model_key, $selected, $models, $empty, $unavailable_label );
+	}
 
-			$settings = get_option( 'superdraft_settings', [] );
-			$selected = $settings['images']['image_edit_model'] ?? '';
-
-			// Detect if selected model exists inside grouped providers (ignore the empty/no-edit option which is always present).
-			$model_exists = ( '' === $selected );
-			if ( ! $model_exists ) {
-				foreach ( $grouped_edit_models as $provider => $models ) {
-					if ( array_key_exists( $selected, $models ) ) {
-						$model_exists = true;
-						break;
-					}
-				}
-			}
-
-			$out = '<select name="superdraft_settings[images][image_edit_model]" class="regular-text superdraft-models">' . "\n";
-
-			// Always render the no-edit option first (not in an optgroup).
-			foreach ( $no_edit_option as $value => $label ) {
-				$out .= '<option value="' . esc_attr( $value ) . '" ' . selected( $selected, $value, false ) . '>' . esc_html( $label ) . '</option>' . "\n";
-			}
-
-			// Add the selected model as a standalone option if it's unknown (back-compat / custom filter additions).
-			if ( ! $model_exists && ! empty( $selected ) ) {
-				$out .= '<option value="' . esc_attr( $selected ) . '" selected>' . esc_html( $selected ) . '</option>' . "\n";
-			}
-
-			// Output grouped providers.
-			foreach ( $grouped_edit_models as $provider => $models ) {
-				$out .= '<optgroup label="' . esc_attr( $provider ) . '">' . "\n";
-				foreach ( $models as $value => $label ) {
-					$out .= '<option value="' . esc_attr( $value ) . '" ' . selected( $selected, $value, false ) . '>' . esc_html( $label ) . '</option>' . "\n";
-				}
-				$out .= '</optgroup>' . "\n";
-			}
-
-			$out .= '</select>';
-			return $out;
-		}
-
-		$models   = self::get_models();
-		$settings = get_option( 'superdraft_settings', [] );
-		$selected = $settings[ $module ][ $model_key ] ?? '';
-
-		// Check if selected model exists in the models list.
-		$model_exists = false;
-		foreach ( $models as $provider => $model_list ) {
+	/**
+	 * Render a grouped model select while preserving unknown saved selections.
+	 *
+	 * @param string $module              Settings module.
+	 * @param string $model_key           Settings key.
+	 * @param string $selected            Selected model ID.
+	 * @param array  $models              Grouped model labels.
+	 * @param array  $empty_options       Standalone options rendered first.
+	 * @param string $unavailable_label   Optional label for unknown selections.
+	 * @return string
+	 */
+	private static function render_model_select( $module, $model_key, $selected, $models, $empty_options = [], $unavailable_label = '' ) {
+		$model_exists = array_key_exists( $selected, $empty_options );
+		foreach ( $models as $model_list ) {
 			if ( array_key_exists( $selected, $model_list ) ) {
 				$model_exists = true;
 				break;
 			}
 		}
 
-		$output = '<select name="superdraft_settings[' . esc_attr( $module ) . '][' . $model_key . ']" class="regular-text superdraft-models">' . "\n";
-
-		// Add the selected model as an option if it doesn't exist in the list.
-		if ( ! $model_exists && ! empty( $selected ) ) {
-			$output .= '<option value="' . esc_attr( $selected ) . '" selected>' . esc_html( $selected ) . ' ' . __( '(Unavailable)', 'superdraft' ) . '</option>' . "\n";
+		$output = '<select name="superdraft_settings[' . esc_attr( $module ) . '][' . esc_attr( $model_key ) . ']" class="regular-text superdraft-models">' . "\n";
+		foreach ( $empty_options as $value => $label ) {
+			$output .= '<option value="' . esc_attr( $value ) . '" ' . selected( $selected, $value, false ) . '>' . esc_html( $label ) . '</option>' . "\n";
 		}
 
-		foreach ( $models as $provider => $model ) {
-			$label = $provider;
-			if ( 'Custom Models' === $provider ) {
-				$label = __( 'Custom Models', 'superdraft' );
-			}
+		if ( ! $model_exists && ! empty( $selected ) ) {
+			$output .= '<option value="' . esc_attr( $selected ) . '" selected>' . esc_html( trim( $selected . ' ' . $unavailable_label ) ) . '</option>' . "\n";
+		}
+
+		foreach ( $models as $provider => $model_list ) {
+			$label   = 'Custom Models' === $provider ? __( 'Custom Models', 'superdraft' ) : $provider;
 			$output .= '<optgroup label="' . esc_attr( $label ) . '" class="superdraft-models-group superdraft-models-group-' . esc_attr( sanitize_title( $provider ) ) . '">' . "\n";
-			foreach ( $model as $key => $value ) {
-				$output .= '<option value="' . esc_attr( $key ) . '" ' .
-					selected( $settings[ $module ][ $model_key ], $key, false ) . '>' .
-					esc_html( $value ) . '</option>' . "\n";
+			foreach ( $model_list as $model => $label ) {
+				$output .= '<option value="' . esc_attr( $model ) . '" ' . selected( $selected, $model, false ) . '>' . esc_html( $label ) . '</option>' . "\n";
 			}
 			$output .= '</optgroup>' . "\n";
 		}
-		$output .= '</select>';
 
-		return $output;
+		return $output . '</select>';
 	}
 
 	/**

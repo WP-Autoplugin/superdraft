@@ -39,6 +39,13 @@ class Anthropic_API extends API {
 	protected $max_tokens = 4096;
 
 	/**
+	 * Whether the selected model accepts a non-default temperature.
+	 *
+	 * @var bool
+	 */
+	protected $supports_temperature = true;
+
+	/**
 	 * API URL.
 	 *
 	 * @var string
@@ -53,44 +60,9 @@ class Anthropic_API extends API {
 	public function set_model( $model ) {
 		$this->model = sanitize_text_field( $model );
 
-		$model_params = [
-			'claude-3-5-sonnet-20240620' => [
-				'temperature' => 0.2,
-				'max_tokens'  => 8192,
-			],
-			'claude-3-5-sonnet-latest'   => [
-				'temperature' => 0.2,
-				'max_tokens'  => 8192,
-			],
-			'claude-4-5-haiku-latest'    => [
-				'temperature' => 0.2,
-				'max_tokens'  => 8192,
-			],
-			'claude-3-5-haiku-latest'    => [
-				'temperature' => 0.2,
-				'max_tokens'  => 8192,
-			],
-			'claude-3-5-haiku-20241022'  => [
-				'temperature' => 0.2,
-				'max_tokens'  => 8192,
-			],
-			'claude-3-opus-20240229'     => [
-				'temperature' => 0.2,
-				'max_tokens'  => 4096,
-			],
-			'claude-3-sonnet-20240229'   => [
-				'temperature' => 0.2,
-				'max_tokens'  => 4096,
-			],
-			'claude-3-haiku-20240307'    => [
-				'temperature' => 0.2,
-				'max_tokens'  => 4096,
-			],
-		];
-
-		if ( isset( $model_params[ $model ] ) ) {
-			$this->temperature = $model_params[ $model ]['temperature'];
-			$this->max_tokens  = $model_params[ $model ]['max_tokens'];
+		$config = Model_Catalog::get_request_config( 'Anthropic', $this->model );
+		if ( isset( $config['supports_temperature'] ) ) {
+			$this->supports_temperature = $config['supports_temperature'];
 		}
 	}
 
@@ -106,39 +78,37 @@ class Anthropic_API extends API {
 	public function send_prompt( $prompt, $system_message = '', $override_body = [] ) {
 		$prompt = $this->trim_prompt( $prompt );
 
-		$messages = [];
-		if ( ! empty( $system_message ) ) {
-			$messages[] = [
-				'role'    => 'system',
-				'content' => $system_message,
-			];
-		}
-		$messages[] = [
-			'role'    => 'user',
-			'content' => $prompt,
+		$messages = [
+			[
+				'role'    => 'user',
+				'content' => $prompt,
+			],
 		];
 
 		$body = [
-			'model'       => $this->model,
-			'temperature' => $this->temperature,
-			'max_tokens'  => $this->max_tokens,
-			'messages'    => $messages,
+			'model'      => $this->model,
+			'max_tokens' => $this->max_tokens,
+			'messages'   => $messages,
 		];
+		if ( $system_message ) {
+			$body['system'] = $system_message;
+		}
+		if ( $this->supports_temperature ) {
+			$body['temperature'] = $this->temperature;
+		}
 
-		$allowed_keys  = [ 'model', 'temperature', 'max_tokens', 'messages', 'thinking' ];
+		$allowed_keys  = [ 'model', 'temperature', 'max_tokens', 'messages', 'system', 'thinking', 'output_config' ];
 		$override_body = array_intersect_key( $override_body, array_flip( $allowed_keys ) );
 		$body          = array_merge( $body, $override_body );
+		if ( ! $this->supports_temperature ) {
+			unset( $body['temperature'] );
+		}
 
 		$headers = [
 			'X-API-Key'         => $this->api_key,
 			'Anthropic-Version' => '2023-06-01',
 			'Content-Type'      => 'application/json',
 		];
-
-		// Optional beta header example (extend if needed).
-		if ( 'claude-3-5-sonnet-20240620' === $this->model ) {
-			$headers['Anthropic-Beta'] = 'max-tokens-3-5-sonnet-2024-07-15';
-		}
 
 		/**
 		 * Filters the body of the request sent to the Anthropic API.

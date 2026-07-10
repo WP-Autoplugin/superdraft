@@ -87,23 +87,10 @@ import TurndownService from 'turndown';
 		const [ prompt, setPrompt ] = useState( '' );
 
 		// Get image models from settings
-		const imageModel = window.superdraftSettings?.images?.image_model || 'gemini-2.5-flash-image-preview'; // Use same default as PHP
 		const editModel = window.superdraftSettings?.images?.image_edit_model || '';
 
-		// Determine if the selected edit model supports editing
-		const imageEditorModels = [
-			'gemini-2.5-flash-image-preview',
-			'gpt-image-1',
-			'qwen/qwen-image-edit',
-			'bytedance/seededit-3.0',
-			'bytedance/seedream-4',
-			'google/nano-banana',
-			'black-forest-labs/flux-kontext-max',
-			'black-forest-labs/flux-kontext-dev',
-			'black-forest-labs/flux-2-pro',
-			'black-forest-labs/flux-2-dev',
-			'black-forest-labs/flux-2-flex'
-		];
+		// Keep the editor in sync with the PHP model catalog.
+		const imageEditorModels = window.superdraftSettings?.images?.edit_models || [];
 		const modelSupportsEditing = editModel && imageEditorModels.includes( editModel );
 
 		const { postId, featuredImageId } = useSelect( state => ({

@@ -26,7 +26,10 @@ define( 'SUPERDRAFT_URL', plugin_dir_url( __FILE__ ) );
 // Include the autoloader.
 require_once SUPERDRAFT_DIR . 'vendor/autoload.php';
 
-// Include wizard class explicitly (in case autoloader hasn't been regenerated).
+// The catalog is shared by the admin UI and provider clients.
+require_once SUPERDRAFT_DIR . 'includes/class-model-catalog.php';
+
+// Include wizard classes explicitly (in case the autoloader has not been regenerated).
 require_once SUPERDRAFT_DIR . 'includes/admin/class-api-key-tester.php';
 require_once SUPERDRAFT_DIR . 'includes/admin/class-wizard.php';
 
