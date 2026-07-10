@@ -47,7 +47,7 @@ class OpenAI_API extends API {
 		$this->model = sanitize_text_field( $model );
 
 		$config                   = Model_Catalog::get_request_config( 'OpenAI', $this->model );
-		$this->uses_responses_api = isset( $config['transport'] ) && 'responses' === $config['transport'];
+		$this->uses_responses_api = ( isset( $config['transport'] ) && 'responses' === $config['transport'] ) || (bool) preg_match( '/^(gpt-5(?:[.-]|$)|o[0-9])/', $this->model );
 		if ( isset( $config['max_tokens'] ) ) {
 			$this->max_tokens = $config['max_tokens'];
 		}
