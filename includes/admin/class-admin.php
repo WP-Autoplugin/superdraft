@@ -46,9 +46,16 @@ class Admin {
 			'autocomplete',
 			'images',
 		];
+		$settings = get_option( 'superdraft_settings', [] );
 		foreach ( $modules as $module ) {
-			$enabled = get_option( 'superdraft_settings', [] );
-			if ( isset( $enabled[ $module ]['enabled'] ) && $enabled[ $module ]['enabled'] ) {
+			$is_enabled = isset( $settings[ $module ]['enabled'] ) && $settings[ $module ]['enabled'];
+
+			// Also instantiate the Autocomplete module when Smart Compose is enabled independently.
+			if ( ! $is_enabled && 'autocomplete' === $module ) {
+				$is_enabled = isset( $settings['autocomplete']['smart_compose_enabled'] ) && $settings['autocomplete']['smart_compose_enabled'];
+			}
+
+			if ( $is_enabled ) {
 				$module_class = 'Superdraft\\' . str_replace( ' ', '_', ucwords( str_replace( [ '-', '_' ], ' ', $module ) ) );
 				if ( class_exists( $module_class ) ) {
 					new $module_class();
