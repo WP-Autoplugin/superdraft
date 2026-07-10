@@ -248,7 +248,7 @@ class Admin {
 			wp_enqueue_style( 'superdraft-admin-css', SUPERDRAFT_URL . 'assets/admin/css/settings.css', [], SUPERDRAFT_VERSION );
 
 			// Enqueue JS.
-			wp_enqueue_script( 'superdraft-admin-js', SUPERDRAFT_URL . 'assets/admin/js/settings.js', [], SUPERDRAFT_VERSION, true );
+			wp_enqueue_script( 'superdraft-admin-js', SUPERDRAFT_URL . 'assets/admin/js/settings.js', [ 'jquery' ], SUPERDRAFT_VERSION, true );
 
 			// Localize script for AJAX and i18n.
 			wp_localize_script(
