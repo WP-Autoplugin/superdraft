@@ -51,9 +51,9 @@ class OpenAI_API extends API {
 		if ( isset( $config['max_tokens'] ) ) {
 			$this->max_tokens = $config['max_tokens'];
 		}
-		if ( $this->uses_responses_api ) {
-			$this->api_url = 'https://api.openai.com/v1/responses';
-		}
+		$this->api_url = $this->uses_responses_api ?
+			'https://api.openai.com/v1/responses' :
+			'https://api.openai.com/v1/chat/completions';
 	}
 
 	/**
