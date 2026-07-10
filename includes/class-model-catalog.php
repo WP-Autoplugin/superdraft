@@ -74,8 +74,8 @@ class Model_Catalog {
 						'label'      => 'GPT-4o Mini',
 						'max_tokens' => 4096,
 					],
-					'o3'            => [ 'label' => 'o3' ],
-					'o4-mini'       => [ 'label' => 'o4 Mini' ],
+					'o3'            => [ 'label' => 'o3', 'transport' => 'responses', 'max_tokens' => 4096 ],
+					'o4-mini'       => [ 'label' => 'o4 Mini', 'transport' => 'responses', 'max_tokens' => 4096 ],
 				],
 			],
 			'Anthropic' => [
